@@ -138,7 +138,7 @@
     <!-- Background Atmosphere -->
     <div class="bg-glow animate-pulse-slow"></div>
 
-    <!-- Sticky Action Bar (Conversion Engine) -->
+    <!-- Fixed Hire Me Card -->
     <div class="fixed bottom-6 left-4 right-4 z-50 justify-self-center md:w-[420px] md:-translate-x-1/2 animate-fade-in-up" style="animation-delay: 0.8s; opacity: 0;">
         <div class="glass-card rounded-full p-2 pl-5 flex items-center justify-between shadow-2xl !border-white/10 !bg-[#121212]/90">
             <div class="flex items-center gap-3">
@@ -439,6 +439,28 @@
                 setTimeout(() => toast.classList.remove("show"), 3000);
             });
         }
+
+        // Stop sticky bar above footer
+        // Improved sticky bar positioning above footer
+        window.addEventListener('scroll', function() {
+            const stickyBar = document.querySelector('.fixed.bottom-6');
+            const footer = document.querySelector('footer');
+            
+            if (stickyBar && footer) {
+                const footerRect = footer.getBoundingClientRect();
+                const stickyBarHeight = stickyBar.offsetHeight;
+                const windowHeight = window.innerHeight;
+                
+                // Check if footer is entering viewport
+                if (footerRect.top < windowHeight) {
+                    const overlap = windowHeight - footerRect.top;
+                    stickyBar.style.bottom = `${overlap + 75}px`; // 24px = original bottom-6
+                    stickyBar.style.transition = 'bottom 0.3s ease';
+                } else {
+                    stickyBar.style.bottom = '24px';
+                }
+            }
+        });
     </script>
 </body>
 </html>
