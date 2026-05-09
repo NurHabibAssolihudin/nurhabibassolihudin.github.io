@@ -1,466 +1,228 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Front-End Specialist - High Impact Interfaces</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- font awesome -->
-    <script src="https://kit.fontawesome.com/201da065c2.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nur — Systems Engineer</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Outfit"', 'sans-serif'],
-                        mono: ['"Space Grotesk"', 'sans-serif'], // More stylized mono font
-                    },
-                    colors: {
-                        brand: {
-                            bg: '#080808', 
-                            card: '#121212',
-                            accent: '#6d28d9', // Deep Purple
-                            accentLight: '#a78bfa', // Light Purple
-                            success: '#10b981',
-                            text: '#ededed',
-                            muted: '#888888'
-                        }
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'spotlight': 'spotlight 2s ease .75s 1 forwards',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: 0, transform: 'translateY(20px)' },
-                            '100%': { opacity: 1, transform: 'translateY(0)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        spotlight: {
-                            '0%': { opacity: 0, transform: 'scale(0.8)' },
-                            '100%': { opacity: 1, transform: 'scale(1)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <style>
-        body { background-color: #080808; color: #ededed; overflow-x: hidden; }
-        
-        /* Abstract Gradient Background */
-        .bg-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(109, 40, 217, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(60px);
-        }
-
-        /* Glassmorphism Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(167, 139, 250, 0.3);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -10px rgba(109, 40, 217, 0.1);
-        }
-
-        /* Gradient Text */
-        .text-gradient {
-            background: linear-gradient(to right, #fff, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Tech Pill */
-        .tech-pill {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.75rem;
-            padding: 4px 12px;
-            border-radius: 6px;
-            background: rgba(255,255,255,0.05);
-            color: #ccc;
-            border: 1px solid transparent;
-        }
-        .tech-pill:hover {
-            border-color: #a78bfa;
-            color: #fff;
-        }
-
-        /* Toast */
-        #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #1e1e1e;
-            color: #fff;
-            border: 1px solid #333;
-            text-align: center;
-            border-radius: 12px;
-            padding: 12px 16px;
-            position: fixed;
-            z-index: 100;
-            left: 50%;
-            bottom: 100px;
-            transform: translateX(-50%);
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s, bottom 0.3s;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-        #toast.show { visibility: visible; opacity: 1; bottom: 110px; }
-    </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
-<body class="selection:bg-brand-accent selection:text-white">
 
-    <!-- Background Atmosphere -->
-    <div class="bg-glow animate-pulse-slow"></div>
+<body>
 
-    <!-- Fixed Hire Me Card -->
-    <div class="fixed bottom-6 left-4 right-4 z-50 justify-self-center md:w-[420px] md:-translate-x-1/2 animate-fade-in-up" style="animation-delay: 0.8s; opacity: 0;">
-        <div class="glass-card rounded-full p-2 pl-5 flex items-center justify-between shadow-2xl !border-white/10 !bg-[#121212]/90">
-            <div class="flex items-center gap-3">
-                <div class="relative flex h-2.5 w-2.5">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-success opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-success"></span>
-                </div>
-                <span class="text-xs font-bold tracking-wide uppercase text-gray-300">Available</span>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="copyEmail()" class="p-3 rounded-full hover:bg-white/10 transition-colors text-gray-400 hover:text-white" aria-label="Copy Email">
-                    <i data-lucide="copy" class="w-4 h-4"></i>
-                </button>
-                <a href="mailto:nurhabibassolihudin12@gmail.com" class="px-6 py-2.5 rounded-full bg-white text-black font-bold text-sm hover:bg-gray-200 transition-all flex items-center gap-2">
-                    Hire Me
-                    <!-- <i data-lucide="arrow-right" class="w-4 h-4"></i> -->
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
+  <div class="noise"></div>
+
+  <header class="navbar">
+    <div class="logo">NUR</div>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#projects">Projects</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content fade-up">
+
+        <p class="eyebrow">SYSTEMS-ORIENTED SOFTWARE ENGINEER</p>
+
+        <h1>
+          Building reliable systems,<br>
+          exploring communication between machines,<br>
+          and understanding what exists beneath abstraction layers.
+        </h1>
+
+        <p class="hero-description">
+          Backend engineer focused on distributed systems,
+          infrastructure engineering, realtime communication,
+          automation, and low-level software architecture.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary">View Projects</a>
+          <a href="#contact" class="btn-secondary">Contact</a>
         </div>
-    </div>
 
-    <div id="toast">
-        <i data-lucide="check-circle" class="inline w-4 h-4 mr-2 text-brand-success"></i> Email Copied!
-    </div>
+      </div>
+    </section>
 
-    <!-- Main Content -->
-    <main class="relative z-10 max-w-5xl mx-auto px-6 pb-32">
-        
-        <!-- Header -->
-        <header class="py-8 flex justify-between items-center">
-            <div class="font-mono text-lg font-bold tracking-tight text-white">
-                nurhabibassolihudin<span class="text-brand-accentLight">.github.io</span>
-            </div>
-            <nav class="hidden md:flex gap-6 text-sm text-brand-muted font-medium">
-                <a href="#work" class="hover:text-white transition-colors">Work</a>
-                <a href="#skills" class="hover:text-white transition-colors">Skills</a>
-            </nav>
-        </header>
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <div class="section-header fade-up">
+        <span>01</span>
+        <h2>About</h2>
+      </div>
 
-        <!-- Hero Section: Impact First -->
-        <section class="pt-16 pb-24 md:pt-28 md:pb-32">
-            <!-- Tagline Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-brand-accentLight font-mono text-xs font-medium mb-8 animate-fade-in-up">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Crafting Digital Experiences
-            </div>
-            
-            <!-- Main Headline -->
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 leading-[1] animate-fade-in-up" style="animation-delay: 0.1s;">
-                I build <span class="text-gradient">high-performance</span> <br> web interfaces.
-            </h1>
-            
-            <p class="text-xl text-brand-muted max-w-2xl leading-relaxed mb-12 animate-fade-in-up" style="animation-delay: 0.2s;">
-                I help brands convert visitors into customers through <strong>responsive design</strong>, <strong>fluid interactions</strong>, and <strong>clean, maintainable code</strong>.
-            </p>
+      <div class="content-grid fade-up">
+        <p>
+          I work primarily in backend engineering with strong interest in
+          how systems behave internally — not only how to use them.
+        </p>
 
-            <!-- Visual Proof Grid (Lazy Reader Hooks) -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
-                
-                <!-- Hook 1: Interaction -->
-                <div class="glass-card p-6 rounded-2xl text-center group cursor-default">
-                    <div class="mb-3 flex justify-center text-brand-muted group-hover:text-white transition-colors">
-                        <i data-lucide="mouse-pointer-click" class="w-6 h-6"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-white mb-1">Fluid</div>
-                    <div class="text-xs text-brand-muted uppercase tracking-wider font-mono">Interactions</div>
-                </div>
+        <p>
+          My curiosity naturally moves toward distributed coordination,
+          asynchronous systems, networking, infrastructure reliability,
+          automation, and low-level architecture.
+        </p>
 
-                <!-- Hook 2: Responsive -->
-                <div class="glass-card p-6 rounded-2xl text-center group cursor-default">
-                    <div class="mb-3 flex justify-center text-brand-muted group-hover:text-white transition-colors">
-                        <i data-lucide="smartphone" class="w-6 h-6"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-white mb-1">100%</div>
-                    <div class="text-xs text-brand-muted uppercase tracking-wider font-mono">Responsive</div>
-                </div>
+        <p>
+          I prefer understanding principles deeply rather than depending
+          entirely on frameworks and abstraction-heavy tooling.
+        </p>
+      </div>
+    </section>
 
-                <!-- Hook 3: Visuals -->
-                <div class="glass-card p-6 rounded-2xl text-center group cursor-default">
-                    <div class="mb-3 flex justify-center text-brand-muted group-hover:text-white transition-colors">
-                        <i data-lucide="palette" class="w-6 h-6"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-white mb-1">Modern</div>
-                    <div class="text-xs text-brand-muted uppercase tracking-wider font-mono">Aesthetics</div>
-                </div>
+    <!-- PHILOSOPHY -->
+    <section id="philosophy" class="section">
+      <div class="section-header fade-up">
+        <span>02</span>
+        <h2>Engineering Philosophy</h2>
+      </div>
 
-                <!-- Hook 4: Code Quality -->
-                <div class="glass-card p-6 rounded-2xl text-center group cursor-default">
-                    <div class="mb-3 flex justify-center text-brand-muted group-hover:text-white transition-colors">
-                        <i data-lucide="layers" class="w-6 h-6"></i>
-                    </div>
-                    <div class="text-3xl font-bold text-white mb-1">Clean</div>
-                    <div class="text-xs text-brand-muted uppercase tracking-wider font-mono">Architecture</div>
-                </div>
-            </div>
-        </section>
+      <div class="philosophy-card fade-up">
+        <blockquote>
+          Reliable systems are built from understanding,
+          not abstraction alone.
+        </blockquote>
 
-        <!-- Tech Stack (Visual Scannable) -->
-        <section id="skills" class="mb-24 animate-fade-in-up" style="animation-delay: 0.4s;">
-            <div class="flex items-center gap-4 mb-8">
-                <h3 class="text-lg font-bold text-white">My Arsenal</h3>
-                <div class="h-[1px] bg-white/10 flex-grow"></div>
-            </div>
-            
-            <!-- Scrolling or Grid Icons -->
-            <div class="flex flex-wrap gap-6 md:gap-10 items-center justify-start opacity-80">
-                <!-- HTML/CSS -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-orange-400 transition-colors cursor-default" title="HTML5 & CSS3">
-                     <i class="fa-solid fa-code"></i> <span class="hidden md:inline font-mono text-sm">HTML/CSS</span>
-                </div>
-                <!-- JavaScript -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-yellow-400 transition-colors cursor-default" title="JavaScript">
-                    <i class="fa-brands fa-square-js"></i> <span class="hidden md:inline font-mono text-sm">JavaScript</span>
-                </div>
-                <!-- TypeScript -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-blue-400 transition-colors cursor-default" title="TypeScript">
-                    <i class="fa-solid fa-t"></i> <span class="hidden md:inline font-mono text-sm">TypeScript</span>
-                </div>
-                <!-- SCSS/SASS -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-pink-400 transition-colors cursor-default" title="SCSS/SASS">
-                    <i class="fa-brands fa-sass"></i> <span class="hidden md:inline font-mono text-sm">SCSS/SASS</span>
-                </div>
-                <!-- Tailwind -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-cyan-400 transition-colors cursor-default" title="Tailwind CSS">
-                    <i class="fa-solid fa-wind"></i> <span class="hidden md:inline font-mono text-sm">Tailwind</span>
-                </div>
-                <!-- React -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-white transition-colors cursor-default" title="React">
-                    <i class="fa-brands fa-react"></i> <span class="hidden md:inline font-mono text-sm">React</span>
-                </div>
-                <!-- Next.js -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-white transition-colors cursor-default" title="Next.js">
-                    <i class="fa-solid fa-n"></i> <span class="hidden md:inline font-mono text-sm">Next.js</span>
-                </div>
-                <!-- Figma -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-pink-400 transition-colors cursor-default" title="Figma">
-                    <i class="fa-brands fa-figma"></i> <span class="hidden md:inline font-mono text-sm">Figma</span>
-                </div>
-                <!-- Python -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-yellow-400 transition-colors cursor-default" title="Python">
-                    <i class="fa-brands fa-python"></i> <span class="hidden md:inline font-mono text-sm">Python</span>
-                </div>
-                <!-- Django -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-green-400 transition-colors cursor-default" title="Django">
-                    <i class="fa-solid fa-d"></i> <span class="hidden md:inline font-mono text-sm">Django</span>
-                </div>
-                <!-- FastAPI -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-blue-400 transition-colors cursor-default" title="FastAPI">
-                    <i class="fa-solid fa-rocket"></i> <span class="hidden md:inline font-mono text-sm">FastAPI</span>
-                </div>
-                <!-- PostgreSQL -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-blue-600 transition-colors cursor-default" title="PostgreSQL">
-                    <i class="fa-solid fa-database"></i> <span class="hidden md:inline font-mono text-sm">PostgreSQL</span>
-                </div>
-                <!-- Supabase -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-blue-500 transition-colors cursor-default" title="Supabase">
-                    <i class="fa-solid fa-bolt"></i> <span class="hidden md:inline font-mono text-sm">Supabase</span>
-                </div>
-                <!-- Docker -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-blue-500 transition-colors cursor-default" title="Docker">
-                    <i class="fa-brands fa-docker"></i> <span class="hidden md:inline font-mono text-sm">Docker</span>
-                </div>
-                <!-- Git -->
-                <div class="flex items-center gap-2 text-brand-muted hover:text-red-400 transition-colors cursor-default" title="Git">
-                    <i class="fa-solid fa-code-branch"></i> <span class="hidden md:inline font-mono text-sm">Git</span>
-                </div>
-            </div>
-        </section>
+        <ul>
+          <li>Clarity over unnecessary complexity</li>
+          <li>Deep understanding over shallow speed</li>
+          <li>Reliable architecture over trend-driven engineering</li>
+          <li>Systems thinking over isolated feature thinking</li>
+          <li>Long-term maintainability over short-term hype</li>
+        </ul>
+      </div>
+    </section>
 
-        <!-- Featured Projects -->
-        <section id="work" class="mb-32">
-            <div class="flex justify-between items-end mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold">Featured Projects</h2>
-                <div class="text-brand-muted text-sm font-mono hidden md:block">Scroll to explore ↓</div>
-            </div>
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+      <div class="section-header fade-up">
+        <span>03</span>
+        <h2>Projects</h2>
+      </div>
 
-            <div class="space-y-24">
-                
-                <!-- Project 1 (Right Aligned Image) -->
-                <div class="group grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-                    <div class="order-2 md:order-1">
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="tech-pill">React</span>
-                            <span class="tech-pill">Framer Motion</span>
-                        </div>
-                        <h3 class="text-3xl font-bold mb-4 text-white group-hover:text-brand-accentLight transition-colors">Agency Landing Page</h3>
-                        <p class="text-brand-muted mb-6 leading-relaxed">
-                            A highly interactive landing page featuring scroll-triggered animations and a custom cursor. Designed to increase dwell time and engagement.
-                        </p>
-                        <div class="flex items-center gap-6">
-                            <div class="flex flex-col">
-                                <span class="text-2xl font-bold text-white">98</span>
-                                <span class="text-xs text-brand-muted uppercase">Performance</span>
-                            </div>
-                            <div class="w-[1px] h-8 bg-white/10"></div>
-                            <div class="flex flex-col">
-                                <span class="text-2xl font-bold text-white">A+</span>
-                                <span class="text-xs text-brand-muted uppercase">Accessibility</span>
-                            </div>
-                        </div>
-                        <div class="mt-8">
-                            <a href="#" class="text-white font-bold border-b border-brand-accentLight/50 hover:border-brand-accentLight pb-0.5 transition-colors">View Live Demo</a>
-                        </div>
-                    </div>
-                    <div class="order-1 md:order-2 relative rounded-2xl overflow-hidden border border-white/5 bg-[#1a1a1a] aspect-[4/3] group-hover:shadow-[0_0_50px_-20px_rgba(167,139,250,0.3)] transition-all">
-                        <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" alt="Project 1" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                    </div>
-                </div>
+      <div class="project-grid">
 
-                <!-- Project 2 (Left Aligned Image) -->
-                <div class="group grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-                    <div class="relative rounded-2xl overflow-hidden border border-white/5 bg-[#1a1a1a] aspect-[4/3] group-hover:shadow-[0_0_50px_-20px_rgba(167,139,250,0.3)] transition-all">
-                        <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2000&auto=format&fit=crop" alt="Project 2" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                    </div>
-                    <div>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="tech-pill">Next.js</span>
-                            <span class="tech-pill">Tailwind CSS</span>
-                        </div>
-                        <h3 class="text-3xl font-bold mb-4 text-white group-hover:text-brand-accentLight transition-colors">E-Commerce Dashboard</h3>
-                        <p class="text-brand-muted mb-6 leading-relaxed">
-                            A responsive admin dashboard focused on data visualization and ease of use on mobile devices. Modular component architecture makes it easy to scale.
-                        </p>
-                        <div class="flex items-center gap-6">
-                            <div class="flex flex-col">
-                                <span class="text-2xl font-bold text-white">Modular</span>
-                                <span class="text-xs text-brand-muted uppercase">Structure</span>
-                            </div>
-                            <div class="w-[1px] h-8 bg-white/10"></div>
-                            <div class="flex flex-col">
-                                <span class="text-2xl font-bold text-white">Dark</span>
-                                <span class="text-xs text-brand-muted uppercase">Mode Ready</span>
-                            </div>
-                        </div>
-                         <div class="mt-8">
-                            <a href="#" class="text-white font-bold border-b border-brand-accentLight/50 hover:border-brand-accentLight pb-0.5 transition-colors">View Live Demo</a>
-                        </div>
-                    </div>
-                </div>
+        <article class="project-card fade-up">
+          <div class="project-number">01</div>
+          <h3>Redis Clone</h3>
+          <p>
+            Experimental in-memory datastore to study persistence,
+            networking, concurrency, and internal data structures.
+          </p>
+        </article>
 
-            </div>
-        </section>
+        <article class="project-card fade-up">
+          <div class="project-number">02</div>
+          <h3>Realtime Communication System</h3>
+          <p>
+            Secure communication architecture exploring routing,
+            coordination, and distributed endpoint interaction.
+          </p>
+        </article>
 
-        <!-- "Why Me" (The Closer) -->
-        <section class="mb-20">
-            <div class="glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden">
-                <!-- Subtle bg decoration -->
-                <div class="absolute -right-20 -top-20 w-64 h-64 bg-brand-accent/20 blur-[80px] rounded-full pointer-events-none"></div>
+        <article class="project-card fade-up">
+          <div class="project-number">03</div>
+          <h3>Async Workflow Engine</h3>
+          <p>
+            Event-driven processing system using queues, workers,
+            retries, orchestration, and failure recovery patterns.
+          </p>
+        </article>
 
-                <div class="relative z-10 grid md:grid-cols-2 gap-10">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-4">Not Just Another Coder.</h2>
-                        <p class="text-brand-muted text-lg mb-8">
-                            I bridge the gap between design and engineering. I understand that a website must look good AND work flawlessly to drive results.
-                        </p>
-                        <a href="mailto:nurhabibassolihudin12@gmail.com" class="hidden md:inline-flex px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors items-center gap-2">
-                            Start a Project
-                        </a>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
-                            <div class="w-10 h-10 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accentLight">
-                                <i data-lucide="eye" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white">Attention to Detail</div>
-                                <div class="text-sm text-brand-muted">Pixel-perfect implementation from Figma.</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
-                            <div class="w-10 h-10 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accentLight">
-                                <i data-lucide="code-2" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white">Clean Code</div>
-                                <div class="text-sm text-brand-muted">Easy to read, maintain, and scale.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <article class="project-card fade-up">
+          <div class="project-number">04</div>
+          <h3>Terminal Simulation Environment</h3>
+          <p>
+            Interactive terminal-inspired system interface
+            designed around operational infrastructure aesthetics.
+          </p>
+        </article>
 
-    </main>
+      </div>
+    </section>
 
-    <footer class="text-center py-8 text-brand-muted text-sm border-t border-white/5">
-        <p>© 2025 Nurhabib Assolihudin. Focused on Quality.</p>
-    </footer>
+    <!-- EXPLORATION -->
+    <section class="section">
+      <div class="section-header fade-up">
+        <span>04</span>
+        <h2>Current Exploration</h2>
+      </div>
 
-    <script>
-        lucide.createIcons();
+      <div class="exploration-list fade-up">
+        <span>Distributed Coordination</span>
+        <span>RabbitMQ</span>
+        <span>Realtime Networking</span>
+        <span>Low-Level Systems</span>
+        <span>Infrastructure Reliability</span>
+        <span>Automation</span>
+        <span>Robotics</span>
+        <span>Simulation Systems</span>
+      </div>
+    </section>
 
-        function copyEmail() {
-            navigator.clipboard.writeText("nurhabibassolihudin12@gmail.com").then(() => {
-                const toast = document.getElementById("toast");
-                toast.className = "show";
-                setTimeout(() => toast.classList.remove("show"), 3000);
-            });
-        }
+    <!-- STACK -->
+    <section id="stack" class="section">
+      <div class="section-header fade-up">
+        <span>05</span>
+        <h2>Tech Stack</h2>
+      </div>
 
-        // Stop sticky bar above footer
-        // Improved sticky bar positioning above footer
-        window.addEventListener('scroll', function() {
-            const stickyBar = document.querySelector('.fixed.bottom-6');
-            const footer = document.querySelector('footer');
-            
-            if (stickyBar && footer) {
-                const footerRect = footer.getBoundingClientRect();
-                const stickyBarHeight = stickyBar.offsetHeight;
-                const windowHeight = window.innerHeight;
-                
-                // Check if footer is entering viewport
-                if (footerRect.top < windowHeight) {
-                    const overlap = windowHeight - footerRect.top;
-                    stickyBar.style.bottom = `${overlap + 75}px`; // 24px = original bottom-6
-                    stickyBar.style.transition = 'bottom 0.3s ease';
-                } else {
-                    stickyBar.style.bottom = '24px';
-                }
-            }
-        });
-    </script>
+      <div class="stack-grid fade-up">
+
+        <div class="stack-item">Python</div>
+        <div class="stack-item">Django</div>
+        <div class="stack-item">Docker</div>
+        <div class="stack-item">Redis</div>
+        <div class="stack-item">PostgreSQL</div>
+        <div class="stack-item">RabbitMQ</div>
+        <div class="stack-item">Linux</div>
+        <div class="stack-item">Git</div>
+        <div class="stack-item">JavaScript</div>
+        <div class="stack-item">C</div>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+      <div class="section-header fade-up">
+        <span>06</span>
+        <h2>Contact</h2>
+      </div>
+
+      <div class="contact-box fade-up">
+        <p>
+          Interested in systems engineering, infrastructure,
+          distributed architectures, or experimental software projects?
+        </p>
+
+        <a href="mailto:your@email.com" class="btn-primary">
+          Get In Touch
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      Designed with focus, clarity, and systems thinking.
+    </p>
+  </footer>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
