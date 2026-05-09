@@ -1,228 +1,177 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nur — Systems Engineer</title>
-
-  <link rel="stylesheet" href="css/style.css"/>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Nur — Systems-oriented Software Engineer</title>
+<meta name="description" content="Engineering explorer building distributed systems, communication workflows, and experimental software." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
 
-  <div class="noise"></div>
-
-  <header class="navbar">
-    <div class="logo">NUR</div>
-
-    <nav>
+<header id="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand">
+      <span class="glow-dot"></span>
+      <span class="brand-text">nur<span class="muted">.sys</span></span>
+    </a>
+    <nav class="nav-links">
       <a href="#about">About</a>
-      <a href="#philosophy">Philosophy</a>
+      <a href="#exploration">Exploration</a>
       <a href="#projects">Projects</a>
+      <a href="#philosophy">Philosophy</a>
       <a href="#stack">Stack</a>
       <a href="#contact">Contact</a>
     </nav>
-  </header>
+    <div class="nav-actions">
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a class="btn-ghost" href="https://github.com" target="_blank" rel="noreferrer">GitHub →</a>
+    </div>
+  </div>
+</header>
 
-  <main>
+<main>
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-content fade-up">
-
-        <p class="eyebrow">SYSTEMS-ORIENTED SOFTWARE ENGINEER</p>
-
-        <h1>
-          Building reliable systems,<br>
-          exploring communication between machines,<br>
-          and understanding what exists beneath abstraction layers.
-        </h1>
-
-        <p class="hero-description">
-          Backend engineer focused on distributed systems,
-          infrastructure engineering, realtime communication,
-          automation, and low-level software architecture.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#projects" class="btn-primary">View Projects</a>
-          <a href="#contact" class="btn-secondary">Contact</a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section">
-      <div class="section-header fade-up">
-        <span>01</span>
-        <h2>About</h2>
-      </div>
-
-      <div class="content-grid fade-up">
-        <p>
-          I work primarily in backend engineering with strong interest in
-          how systems behave internally — not only how to use them.
-        </p>
-
-        <p>
-          My curiosity naturally moves toward distributed coordination,
-          asynchronous systems, networking, infrastructure reliability,
-          automation, and low-level architecture.
-        </p>
-
-        <p>
-          I prefer understanding principles deeply rather than depending
-          entirely on frameworks and abstraction-heavy tooling.
-        </p>
-      </div>
-    </section>
-
-    <!-- PHILOSOPHY -->
-    <section id="philosophy" class="section">
-      <div class="section-header fade-up">
-        <span>02</span>
-        <h2>Engineering Philosophy</h2>
-      </div>
-
-      <div class="philosophy-card fade-up">
-        <blockquote>
-          Reliable systems are built from understanding,
-          not abstraction alone.
-        </blockquote>
-
-        <ul>
-          <li>Clarity over unnecessary complexity</li>
-          <li>Deep understanding over shallow speed</li>
-          <li>Reliable architecture over trend-driven engineering</li>
-          <li>Systems thinking over isolated feature thinking</li>
-          <li>Long-term maintainability over short-term hype</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="section">
-      <div class="section-header fade-up">
-        <span>03</span>
-        <h2>Projects</h2>
-      </div>
-
-      <div class="project-grid">
-
-        <article class="project-card fade-up">
-          <div class="project-number">01</div>
-          <h3>Redis Clone</h3>
-          <p>
-            Experimental in-memory datastore to study persistence,
-            networking, concurrency, and internal data structures.
-          </p>
-        </article>
-
-        <article class="project-card fade-up">
-          <div class="project-number">02</div>
-          <h3>Realtime Communication System</h3>
-          <p>
-            Secure communication architecture exploring routing,
-            coordination, and distributed endpoint interaction.
-          </p>
-        </article>
-
-        <article class="project-card fade-up">
-          <div class="project-number">03</div>
-          <h3>Async Workflow Engine</h3>
-          <p>
-            Event-driven processing system using queues, workers,
-            retries, orchestration, and failure recovery patterns.
-          </p>
-        </article>
-
-        <article class="project-card fade-up">
-          <div class="project-number">04</div>
-          <h3>Terminal Simulation Environment</h3>
-          <p>
-            Interactive terminal-inspired system interface
-            designed around operational infrastructure aesthetics.
-          </p>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- EXPLORATION -->
-    <section class="section">
-      <div class="section-header fade-up">
-        <span>04</span>
-        <h2>Current Exploration</h2>
-      </div>
-
-      <div class="exploration-list fade-up">
-        <span>Distributed Coordination</span>
-        <span>RabbitMQ</span>
-        <span>Realtime Networking</span>
-        <span>Low-Level Systems</span>
-        <span>Infrastructure Reliability</span>
-        <span>Automation</span>
-        <span>Robotics</span>
-        <span>Simulation Systems</span>
-      </div>
-    </section>
-
-    <!-- STACK -->
-    <section id="stack" class="section">
-      <div class="section-header fade-up">
-        <span>05</span>
-        <h2>Tech Stack</h2>
-      </div>
-
-      <div class="stack-grid fade-up">
-
-        <div class="stack-item">Python</div>
-        <div class="stack-item">Django</div>
-        <div class="stack-item">Docker</div>
-        <div class="stack-item">Redis</div>
-        <div class="stack-item">PostgreSQL</div>
-        <div class="stack-item">RabbitMQ</div>
-        <div class="stack-item">Linux</div>
-        <div class="stack-item">Git</div>
-        <div class="stack-item">JavaScript</div>
-        <div class="stack-item">C</div>
-
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section">
-      <div class="section-header fade-up">
-        <span>06</span>
-        <h2>Contact</h2>
-      </div>
-
-      <div class="contact-box fade-up">
-        <p>
-          Interested in systems engineering, infrastructure,
-          distributed architectures, or experimental software projects?
-        </p>
-
-        <a href="mailto:your@email.com" class="btn-primary">
-          Get In Touch
-        </a>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <p>
-      Designed with focus, clarity, and systems thinking.
+<!-- HERO -->
+<section id="top" class="hero">
+  <div class="container hero-inner">
+    <div class="row-tag fade-up"><span class="glow-dot"></span><span class="label-mono">node // active · uptime 24+ years</span></div>
+    <h1 class="fade-up">Nur<span class="muted">.</span><br/><span class="muted">Systems-oriented</span><br/>software engineer.</h1>
+    <p class="lead fade-up" style="animation-delay:.1s">
+      Building distributed systems, communication workflows, and experimental software.
+      I like understanding how things actually work — from message brokers to packet
+      flows to the small details that hold systems together.
     </p>
-  </footer>
+    <div class="cta-row fade-up" style="animation-delay:.2s">
+      <a href="#projects" class="btn-primary">View Projects <span>→</span></a>
+      <a href="#exploration" class="btn-outline">Explore Experiments</a>
+      <a href="#contact" class="btn-link mono">./contact</a>
+    </div>
 
-  <script src="js/app.js"></script>
+    <div class="terminal fade-up" style="animation-delay:.3s">
+      <div class="term-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="term-path">~/lab/whoami</span>
+      </div>
+      <div><span class="prompt">$</span> whoami --verbose</div>
+      <div class="muted">name        : nur</div>
+      <div class="muted">role        : engineer / explorer</div>
+      <div class="muted">interests   : distributed_systems, networking, realtime, low_level</div>
+      <div class="muted">currently   : redis_internals, rabbitmq_patterns, robotics</div>
+      <div><span class="prompt">$</span> <span class="caret"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">01 // about</span></div>
+      <h2>An engineer who likes to take systems apart and put them back together.</h2>
+      <p class="sub">I gravitate toward the parts of software where coordination, communication, and constraints actually matter — protocols, brokers, schedulers, the quiet machinery underneath products.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="label-mono mb">// curiosity</div><h3>Read the source</h3><p>I prefer reading internals over reading abstractions. Half my notes are annotated codebases of tools I use every day.</p></div>
+      <div class="card"><div class="label-mono mb">// experimentation</div><h3>Small, deliberate experiments</h3><p>Tiny prototypes — a clone, a simulator, a custom protocol — are how I really understand a concept. Most never ship. They all teach something.</p></div>
+      <div class="card"><div class="label-mono mb">// systems thinking</div><h3>Look at the seams</h3><p>Behavior lives between components: queues, retries, partial failures, timing. That's where I spend most of my engineering attention.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLORATION -->
+<section id="exploration" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">02 // exploration</span></div>
+      <h2>Engineering notebook — what I'm currently digging into.</h2>
+      <p class="sub">An informal log of experiments, reading lists, and half-built prototypes. Nothing here pretends to be production-ready. That's the point.</p>
+    </div>
+    <div id="exp-grid" class="grid-2"></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">03 // featured projects</span></div>
+      <h2>Things I've built to understand something deeper.</h2>
+      <p class="sub">Each project started as a question. The architecture is the answer I converged on after enough iterations.</p>
+    </div>
+    <div id="proj-list" class="stack"></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">04 // systems philosophy</span></div>
+      <h2>How I think about building software.</h2>
+    </div>
+    <div id="phil-grid" class="grid-2 phil"></div>
+
+    <div class="hairline node-card">
+      <svg viewBox="0 0 800 200" class="node-svg" fill="none" stroke="currentColor" stroke-width="1">
+        <line x1="100" y1="100" x2="300" y2="40"/>
+        <line x1="100" y1="100" x2="300" y2="160"/>
+        <line x1="300" y1="40" x2="500" y2="100"/>
+        <line x1="300" y1="160" x2="500" y2="100"/>
+        <line x1="500" y1="100" x2="700" y2="60"/>
+        <line x1="500" y1="100" x2="700" y2="140"/>
+        <g class="nodes">
+          <circle cx="100" cy="100" r="5"/><circle cx="300" cy="40" r="5"/>
+          <circle cx="300" cy="160" r="5"/><circle cx="500" cy="100" r="5"/>
+          <circle cx="700" cy="60" r="5"/><circle cx="700" cy="140" r="5"/>
+        </g>
+      </svg>
+      <div class="caption mono">// every node is a contract. every edge is a conversation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">05 // stack</span></div>
+      <h2>Tools I reach for.</h2>
+      <p class="sub">Chosen because they're boring in the best way: well-documented, observable, and well-understood failure modes.</p>
+    </div>
+    <div id="stack-grid" class="grid-3"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="container contact">
+    <div class="eyebrow"><span class="hr"></span><span class="label-mono">06 // contact</span></div>
+    <h2>Open a connection.</h2>
+    <p class="sub">If you're working on distributed systems, realtime infrastructure, or something genuinely curious — I'd like to hear about it.</p>
+    <div class="contact-actions">
+      <a class="btn-primary" href="mailto:hello@example.com">hello@example.com</a>
+      <a class="btn-outline" href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+      <a class="btn-outline" href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot">
+    <span class="mono muted">© <span id="year"></span> nur.sys — built with curiosity</span>
+    <span class="mono muted">v1.0 · static</span>
+  </div>
+</footer>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
