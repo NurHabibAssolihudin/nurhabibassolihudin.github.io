@@ -9,7 +9,7 @@
   --surface: #15151c;
   --ink: #ece9e2;
   --muted: #99958c;
-  --dim: #5d5a54;
+  --dim: #7a766d;
   --line: rgba(236, 233, 226, 0.12);
   --line-strong: rgba(236, 233, 226, 0.22);
   --accent: #f28a30;
@@ -23,7 +23,7 @@
   --surface: #ffffff;
   --ink: #17151a;
   --muted: #5f5a52;
-  --dim: #9a958c;
+  --dim: #6f6a61;
   --line: rgba(23, 21, 26, 0.12);
   --line-strong: rgba(23, 21, 26, 0.22);
   --accent: #df741f;
@@ -273,3 +273,17 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 2rem 0 3r
   .stack-grid { grid-template-columns: 1fr; }
 }
 
+
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .marquee-track { animation: none; }
+  .grain { animation: none; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
