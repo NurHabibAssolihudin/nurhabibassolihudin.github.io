@@ -2,12 +2,13 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Nur — Systems-oriented Software Engineer</title>
-<meta name="description" content="Engineering explorer building distributed systems, communication workflows, and experimental software." />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nur — AI Products & Platform Builder</title>
+<meta name="description" content="NurHabib Assolihudin. I build platforms, productize AI, and ship the occasional universe." />
+<meta name="color-scheme" content="dark light" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -16,14 +17,14 @@
   <div class="container nav-inner">
     <a href="#top" class="brand">
       <span class="glow-dot"></span>
-      <span class="brand-text">nur<span class="muted">.sys</span></span>
+      <span class="brand-text">nur<span class="muted">.build</span></span>
     </a>
     <nav class="nav-links">
       <a href="#about">About</a>
-      <a href="#exploration">Exploration</a>
+      <a href="#pillars">Pillars</a>
       <a href="#projects">Projects</a>
-      <a href="#philosophy">Philosophy</a>
       <a href="#stack">Stack</a>
+      <a href="#philosophy">Philosophy</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-actions">
@@ -41,29 +42,31 @@
 <!-- HERO -->
 <section id="top" class="hero">
   <div class="container hero-inner">
-    <div class="row-tag fade-up"><span class="glow-dot"></span><span class="label-mono">node // active · uptime 24+ years</span></div>
-    <h1 class="fade-up">Nur<span class="muted">.</span><br/><span class="muted">Systems-oriented</span><br/>software engineer.</h1>
+    <div class="row-tag fade-up"><span class="glow-dot"></span><span class="label-mono">builder // platforms · ai · games</span></div>
+    <h1 class="fade-up">Hi, I'm Nur<span class="accent">.</span><br/>
+      I <span class="typed-line"><span class="typed-text"></span><span class="cursor">&nbsp;</span></span>
+    </h1>
     <p class="lead fade-up" style="animation-delay:.1s">
-      Building distributed systems, communication workflows, and experimental software.
-      I like understanding how things actually work — from message brokers to packet
-      flows to the small details that hold systems together.
+      I build platforms, productize AI, and ship the occasional universe.
+      From modular e-commerce platforms to self-hosted AI agents, low-level web bridges, and narrative games —
+      I like understanding how things really work so I can build the next layer on top.
     </p>
     <div class="cta-row fade-up" style="animation-delay:.2s">
       <a href="#projects" class="btn-primary">View Projects <span>→</span></a>
-      <a href="#exploration" class="btn-outline">Explore Experiments</a>
+      <a href="#pillars" class="btn-outline">What I Build</a>
       <a href="#contact" class="btn-link mono">./contact</a>
     </div>
 
     <div class="terminal fade-up" style="animation-delay:.3s">
       <div class="term-bar">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="term-path">~/lab/whoami</span>
+        <span class="term-path">~/nur/whoami</span>
       </div>
-      <div><span class="prompt">$</span> whoami --verbose</div>
-      <div class="muted">name        : nur</div>
-      <div class="muted">role        : engineer / explorer</div>
-      <div class="muted">interests   : distributed_systems, networking, realtime, low_level</div>
-      <div class="muted">currently   : redis_internals, rabbitmq_patterns, robotics</div>
+      <div><span class="prompt">$</span> nur --whoami</div>
+      <div class="muted">name        : nurhabib assolihudin</div>
+      <div class="muted">role        : ai products & platform builder</div>
+      <div class="muted">focus       : platforms, ai, games, systems</div>
+      <div class="muted">shipping    : ocaty, tony, oxelot, genui</div>
       <div><span class="prompt">$</span> <span class="caret"></span></div>
     </div>
   </div>
@@ -74,38 +77,69 @@
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="hr"></span><span class="label-mono">01 // about</span></div>
-      <h2>An engineer who likes to take systems apart and put them back together.</h2>
-      <p class="sub">I gravitate toward the parts of software where coordination, communication, and constraints actually matter — protocols, brokers, schedulers, the quiet machinery underneath products.</p>
+      <h2>A builder who ships real things.</h2>
+      <p class="sub">I'm NurHabib Assolihudin — an engineer who turns ideas into working systems, products, and stories. My work spans full platforms, AI-assisted products, and games, held together by a love for the details underneath.</p>
     </div>
-    <div class="grid-3">
-      <div class="card"><div class="label-mono mb">// curiosity</div><h3>Read the source</h3><p>I prefer reading internals over reading abstractions. Half my notes are annotated codebases of tools I use every day.</p></div>
-      <div class="card"><div class="label-mono mb">// experimentation</div><h3>Small, deliberate experiments</h3><p>Tiny prototypes — a clone, a simulator, a custom protocol — are how I really understand a concept. Most never ship. They all teach something.</p></div>
-      <div class="card"><div class="label-mono mb">// systems thinking</div><h3>Look at the seams</h3><p>Behavior lives between components: queues, retries, partial failures, timing. That's where I spend most of my engineering attention.</p></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>What drives me</h3>
+        <p>Understanding how systems behave internally — not just how to use them — then using that understanding to build the next layer on top. I care about architecture, reliability, and the small details that hold products together.</p>
+      </div>
+      <div class="card">
+        <h3>Where I spend my time</h3>
+        <ul class="plain">
+          <li>· Designing modular platforms & micro-frontends</li>
+          <li>· Productizing AI — agents, AI-driven UIs, pipelines</li>
+          <li>· Building low-level web bridges & realtime systems</li>
+          <li>· Making narrative games & interactive stories</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- EXPLORATION -->
-<section id="exploration" class="section">
+<!-- PILLARS -->
+<section id="pillars" class="section">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow"><span class="hr"></span><span class="label-mono">02 // exploration</span></div>
-      <h2>Engineering notebook — what I'm currently digging into.</h2>
-      <p class="sub">An informal log of experiments, reading lists, and half-built prototypes. Nothing here pretends to be production-ready. That's the point.</p>
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">02 // pillars</span></div>
+      <h2>Three sides of the same builder.</h2>
+      <p class="sub">My work clusters into three pillars — each real, each shipped from scratch.</p>
     </div>
-    <div id="exp-grid" class="grid-2"></div>
-  </div>
-</section>
-
+    <div class="grid-3">
+      <div class="card pillar">
+        <div class="pillar-ico">🏗️</div>
+        <h3>Platforms</h3>
+        <p>Modular platform architecture — micro-frontends via Module Federation, design systems published as packages, and backend services that hold it together.</p>
+        <div class="chips"><span class="chip">Ocaty</span><span class="chip">Design Systems</span><span class="chip">FastAPI</span></div>
+      </div>
+      <div class="card pillar">
+        <div class="pillar-ico">🤖</div>
+        <h3>AI Products</h3>
+        <p>Turning AI into products people can run: self-hosted agents, dashboards whose UI is written by AI, and native-bridge libraries that give PWAs real power.</p>
+        <div class="chips"><span class="chip">Tony</span><span class="chip">GenUI</span><span class="chip">Oxelot</span></div>
+      </div>
 <!-- PROJECTS -->
 <section id="projects" class="section">
   <div class="container">
     <div class="section-head">
       <div class="eyebrow"><span class="hr"></span><span class="label-mono">03 // featured projects</span></div>
-      <h2>Things I've built to understand something deeper.</h2>
-      <p class="sub">Each project started as a question. The architecture is the answer I converged on after enough iterations.</p>
+      <h2>Things I've actually built.</h2>
+      <p class="sub">Real systems and products, shipped from scratch. Private projects are described without dead links.</p>
     </div>
     <div id="proj-list" class="stack"></div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">04 // stack</span></div>
+      <h2>Tools I reach for.</h2>
+      <p class="sub">Chosen because they're boring in the best way — well-documented, observable, with failure modes I understand.</p>
+    </div>
+    <div id="stack-grid" class="grid-3"></div>
   </div>
 </section>
 
@@ -113,8 +147,8 @@
 <section id="philosophy" class="section">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow"><span class="hr"></span><span class="label-mono">04 // systems philosophy</span></div>
-      <h2>How I think about building software.</h2>
+      <div class="eyebrow"><span class="hr"></span><span class="label-mono">05 // philosophy</span></div>
+      <h2>How I think about building.</h2>
     </div>
     <div id="phil-grid" class="grid-2 phil"></div>
 
@@ -132,20 +166,8 @@
           <circle cx="700" cy="60" r="5"/><circle cx="700" cy="140" r="5"/>
         </g>
       </svg>
-      <div class="caption mono">// every node is a contract. every edge is a conversation.</div>
+      <div class="caption mono">// every node is a product. every edge is the system that connects it.</div>
     </div>
-  </div>
-</section>
-
-<!-- STACK -->
-<section id="stack" class="section">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow"><span class="hr"></span><span class="label-mono">05 // stack</span></div>
-      <h2>Tools I reach for.</h2>
-      <p class="sub">Chosen because they're boring in the best way: well-documented, observable, and well-understood failure modes.</p>
-    </div>
-    <div id="stack-grid" class="grid-3"></div>
   </div>
 </section>
 
@@ -153,10 +175,10 @@
 <section id="contact" class="section">
   <div class="container contact">
     <div class="eyebrow"><span class="hr"></span><span class="label-mono">06 // contact</span></div>
-    <h2>Open a connection.</h2>
-    <p class="sub">If you're working on distributed systems, realtime infrastructure, or something genuinely curious — I'd like to hear about it.</p>
+    <h2>Let's build something.</h2>
+    <p class="sub">Platforms, AI products, games, or something in between — I'd like to hear about it.</p>
     <div class="contact-actions">
-      <a class="btn-primary" href="mailto:hello@example.com">nurhabibassolihudin12@gmail.com</a>
+      <a class="btn-primary" href="mailto:nurhabibassolihudin12@gmail.com">nurhabibassolihudin12@gmail.com</a>
       <a class="btn-outline" href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer">GitHub</a>
       <a class="btn-outline" href="https://linkedin.com/in/nurhabib-assolihudin" target="_blank" rel="noreferrer">LinkedIn</a>
     </div>
@@ -165,8 +187,8 @@
 
 <footer>
   <div class="container foot">
-    <span class="mono muted">© <span id="year"></span> nur.sys — built with curiosity</span>
-    <span class="mono muted">v1.0 · static</span>
+    <span class="mono muted">© <span id="year"></span> nur.build — built with curiosity</span>
+    <span class="mono muted">AI Products & Platform Builder</span>
   </div>
 </footer>
 
@@ -175,3 +197,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
