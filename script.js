@@ -14,6 +14,8 @@
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", next === "dark" ? "#0a0a0c" : "#f6f4ef");
   });
 })();
 
@@ -21,6 +23,9 @@
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const GSAP_OK = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
 let lenis = null;
+
+/* SMIL morph survives CSS reduced-motion — kill it explicitly */
+if (REDUCE) document.querySelectorAll(".core-morph animate").forEach((a) => { try { a.remove(); } catch (_) {} });
 
 /* ============ Year ============ */
 document.querySelectorAll(".year").forEach((el) => (el.textContent = new Date().getFullYear()));
