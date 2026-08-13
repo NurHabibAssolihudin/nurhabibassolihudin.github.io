@@ -134,13 +134,13 @@ if (!REDUCE && GSAP_OK) {
     y: 26, opacity: 0, duration: 0.9, ease: "power3.out",
     stagger: 0.09, delay: 0.1,
   });
-  gsap.from("#spec", { y: 30, opacity: 0, duration: 1, ease: "power3.out", delay: 0.35 });
-  gsap.from(".spec-stamp", { opacity: 0, duration: 0.6, delay: 1.1 });
+  gsap.from("#idcard", { y: 30, opacity: 0, duration: 1, ease: "power3.out", delay: 0.35 });
+  gsap.from(".idcard-stamp", { opacity: 0, duration: 0.6, delay: 1.1 });
 }
 
 /* ============ Spec panel parallax ============ */
 if (!REDUCE && GSAP_OK) {
-  gsap.to("#spec", {
+  gsap.to("#idcard", {
     yPercent: -8, ease: "none",
     scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
   });
