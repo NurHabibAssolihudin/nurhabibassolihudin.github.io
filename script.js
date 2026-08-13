@@ -385,11 +385,25 @@ if (!REDUCE && GSAP_OK) {
 (function () {
   if (REDUCE || !GSAP_OK) return;
   if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
-  const dot = document.querySelector(".cursor-dot");
-  if (!dot) return;
+  const grid = document.querySelector(".cursor-grid");
+  if (!grid) return;
   const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-  window.addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  gsap.ticker.add(() => gsap.set(dot, { x: mouse.x, y: mouse.y }));
+  let gx = mouse.x, gy = mouse.y;
+  let lastMove = 0;
+  let gridShown = false;
+
+  window.addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; lastMove = performance.now(); });
+  document.addEventListener("mouseover", (e) => grid.classList.toggle("is-hot", !!e.target.closest("a, button")));
+  document.addEventListener("mouseout", (e) => { if (e.target.closest("a, button")) grid.classList.remove("is-hot"); });
+
+  gsap.ticker.add(() => {
+    gx += (mouse.x - gx) * 0.18;
+    gy += (mouse.y - gy) * 0.18;
+    gsap.set(grid, { x: gx, y: gy });
+    const idle = performance.now() - lastMove;
+    if (!gridShown && idle < 550) { gridShown = true; gsap.to(grid, { opacity: 1, duration: 0.35, ease: "power2.out" }); }
+    else if (gridShown && idle >= 550) { gridShown = false; gsap.to(grid, { opacity: 0, duration: 0.4, ease: "power2.inOut" }); }
+  });
 })();
 
 if (!REDUCE && GSAP_OK) {
