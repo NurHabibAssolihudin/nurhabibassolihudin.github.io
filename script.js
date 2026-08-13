@@ -134,13 +134,12 @@ if (!REDUCE && GSAP_OK) {
     y: 26, opacity: 0, duration: 0.9, ease: "power3.out",
     stagger: 0.09, delay: 0.1,
   });
-  gsap.from("#idcard", { y: 30, opacity: 0, duration: 1, ease: "power3.out", delay: 0.35 });
-  gsap.from(".idcard-stamp", { opacity: 0, duration: 0.6, delay: 1.1 });
+  gsap.from("#orbit", { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out", delay: 0.35 });
 }
 
-/* ============ Spec panel parallax ============ */
+/* ============ Orbit parallax ============ */
 if (!REDUCE && GSAP_OK) {
-  gsap.to("#idcard", {
+  gsap.to("#orbit", {
     yPercent: -8, ease: "none",
     scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
   });
