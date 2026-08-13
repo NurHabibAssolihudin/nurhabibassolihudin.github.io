@@ -260,11 +260,11 @@ const waveFront = $(".wave-front", wave);
 const waveRing = $(".wave-ring", wave);
 let busy = false;
 
-/* Core variant switcher — try with ?core=cube | rings | morph */
+/* Core variant switcher: per-core default, or ?core=cube | rings | morph overrides all */
 (function setCoreVariant() {
   const param = new URLSearchParams(location.search).get("core");
-  const variant = ["cube", "rings", "morph"].includes(param) ? param : (document.querySelector(".core").dataset.variant || "cube");
   document.querySelectorAll(".core").forEach((c) => {
+    const variant = ["cube", "rings", "morph"].includes(param) ? param : (c.dataset.variant || "cube");
     c.classList.remove("is-cube", "is-rings", "is-morph");
     c.classList.add("is-" + variant);
     c.dataset.variant = variant;
