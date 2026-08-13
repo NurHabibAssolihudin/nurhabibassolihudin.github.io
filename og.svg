@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0a0c"/>
+  <ellipse cx="882" cy="315" rx="252" ry="96" fill="none" stroke="#f28a30" stroke-width="2" stroke-dasharray="6 9" opacity="0.55"/>
+  <ellipse cx="882" cy="315" rx="172" ry="66" fill="none" stroke="#f28a30" stroke-width="2" opacity="0.4"/>
+  <ellipse cx="882" cy="315" rx="118" ry="45" fill="none" stroke="#f28a30" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="882" cy="315" r="14" fill="#f28a30" opacity="0.9"/>
+  <g fill="none" stroke="#f28a30" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M882 272L930 296L882 320L834 296Z"/>
+    <path d="M882 320L930 296L930 340L882 364Z"/>
+    <path d="M882 320L834 296L834 340L882 364Z"/>
+  </g>
+  <g transform="translate(134 0)">
+    <text x="0" y="210" font-family="'Courier New', monospace" font-size="24" letter-spacing="10" fill="#99958c">NUR — TWO WORLDS, ONE BUILDER</text>
+    <text x="0" y="330" font-family="Georgia, 'Times New Roman', serif" font-size="86" fill="#ece9e2">Platforms, AI</text>
+    <text x="0" y="426" font-family="Georgia, 'Times New Roman', serif" font-size="86" fill="#ece9e2">and worlds.</text>
+    <text x="0" y="484" font-family="'Courier New', monospace" font-size="26" fill="#f28a30">nurhabibassolihudin.github.io</text>
+  </g>
+</svg>

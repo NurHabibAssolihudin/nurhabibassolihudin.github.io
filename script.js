@@ -24,8 +24,8 @@ const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const GSAP_OK = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
 let lenis = null;
 
-/* SMIL morph survives CSS reduced-motion — kill it explicitly */
-if (REDUCE) document.querySelectorAll(".core-morph animate").forEach((a) => { try { a.remove(); } catch (_) {} });
+/* SMIL morph + glyph moon survive CSS reduced-motion — kill them explicitly */
+if (REDUCE) document.querySelectorAll(".core-morph animate, .glyph-moon animateTransform").forEach((a) => { try { a.remove(); } catch (_) {} });
 
 /* ============ Year ============ */
 document.querySelectorAll(".year").forEach((el) => (el.textContent = new Date().getFullYear()));
