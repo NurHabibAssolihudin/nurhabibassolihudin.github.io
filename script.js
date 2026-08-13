@@ -189,6 +189,18 @@ const scrollPos = { builder: 0, creator: 0 };
 const motion = { builder: null, creator: null };
 const introDone = { builder: false, creator: false };
 
+/* Persist current world + scroll across refresh (sessionStorage) */
+const STATE_KEY = "overtaken-life-state";
+function saveState() {
+  scrollPos[currentWorld] = window.scrollY;
+  try { sessionStorage.setItem(STATE_KEY, JSON.stringify({ world: currentWorld, scroll: scrollPos })); } catch (_) {}
+}
+function loadState() {
+  try { return JSON.parse(sessionStorage.getItem(STATE_KEY)) || null; } catch (_) { return null; }
+}
+window.addEventListener("scroll", () => { scrollPos[currentWorld] = window.scrollY; }, { passive: true });
+window.addEventListener("pagehide", saveState);
+
 function initMotion(name, el, introDelay = 0) {
   if (REDUCE || !GSAP_OK) return () => {};
   const sts = [];
@@ -248,6 +260,7 @@ function doSwap(next) {
     window.scrollTo(0, scrollPos[next] || 0);
     if (lenis) lenis.scrollTo(scrollPos[next] || 0, { immediate: true });
     if (window.ScrollTrigger) ScrollTrigger.refresh();
+    saveState();
   });
 }
 
@@ -292,6 +305,7 @@ function runCrystalWave(next, origin) {
         window.scrollTo(0, scrollPos[next] || 0);
         if (lenis) lenis.scrollTo(scrollPos[next] || 0, { immediate: true });
         if (window.ScrollTrigger) ScrollTrigger.refresh();
+        saveState();
       });
     },
   });
@@ -386,7 +400,26 @@ if (!REDUCE && GSAP_OK) {
   });
 }
 
-motion.builder = initMotion("builder", worlds.builder, 0.15);
+/* Boot — restore last world + scroll after refresh */
+const bootState = loadState();
+if (bootState && bootState.world === "creator" && worlds.creator) {
+  currentWorld = "creator";
+  document.documentElement.dataset.world = "creator";
+  worlds.builder.classList.remove("is-active");
+  worlds.creator.classList.add("is-active");
+}
+if (bootState && bootState.scroll) {
+  scrollPos.builder = bootState.scroll.builder || 0;
+  scrollPos.creator = bootState.scroll.creator || 0;
+}
+
+motion[currentWorld] = initMotion(currentWorld, worlds[currentWorld], 0.15);
+
+requestAnimationFrame(() => {
+  window.scrollTo(0, scrollPos[currentWorld] || 0);
+  if (lenis) lenis.scrollTo(scrollPos[currentWorld] || 0, { immediate: true });
+  if (window.ScrollTrigger) ScrollTrigger.refresh();
+});
 
 if (GSAP_OK && window.ScrollTrigger) {
   window.addEventListener("load", () => ScrollTrigger.refresh());
