@@ -188,8 +188,6 @@ let currentWorld = "builder";
 const scrollPos = { builder: 0, creator: 0 };
 const motion = { builder: null, creator: null };
 const introDone = { builder: false, creator: false };
-const coreTag = document.querySelector(".core-tag");
-function updateCoreTag() { if (coreTag) coreTag.textContent = currentWorld; }
 
 function initMotion(name, el, introDelay = 0) {
   if (REDUCE || !GSAP_OK) return () => {};
@@ -204,7 +202,10 @@ function initMotion(name, el, introDelay = 0) {
       const introTargets = [$(".eyebrow", hero), $("h1", hero), $(".lead", hero), $(".cta-row", hero)].filter(Boolean);
       if (introTargets.length) tweens.push(gsap.from(introTargets, { y: 26, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.09, delay: introDelay }));
     }
-    if (visual) tweens.push(gsap.from(visual, { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out", delay: introDelay + 0.25 }));
+    if (visual) {
+      const visTargets = [visual, el.querySelector(".core")].filter(Boolean);
+      tweens.push(gsap.from(visTargets, { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out", delay: introDelay + 0.25 }));
+    }
     introDone[name] = true;
   }
 
@@ -243,7 +244,6 @@ function doSwap(next) {
   worlds[prev].classList.remove("is-active");
   worlds[next].classList.add("is-active");
   motion[next] = initMotion(next, worlds[next], 0.1);
-  updateCoreTag();
   requestAnimationFrame(() => {
     window.scrollTo(0, scrollPos[next] || 0);
     if (lenis) lenis.scrollTo(scrollPos[next] || 0, { immediate: true });
@@ -254,7 +254,7 @@ function doSwap(next) {
 /* ============================================================
    CORE + CRYSTAL WAVE
    ============================================================ */
-const core = document.getElementById("core");
+const cores = document.querySelectorAll(".core");
 const wave = document.getElementById("wave");
 const waveFront = $(".wave-front", wave);
 const waveRing = $(".wave-ring", wave);
@@ -263,15 +263,17 @@ let busy = false;
 /* Core variant switcher — try with ?core=cube | rings | morph */
 (function setCoreVariant() {
   const param = new URLSearchParams(location.search).get("core");
-  const variant = ["cube", "rings", "morph"].includes(param) ? param : core.dataset.variant || "cube";
-  core.classList.remove("is-cube", "is-rings", "is-morph");
-  core.classList.add("is-" + variant);
-  core.dataset.variant = variant;
+  const variant = ["cube", "rings", "morph"].includes(param) ? param : (document.querySelector(".core").dataset.variant || "cube");
+  document.querySelectorAll(".core").forEach((c) => {
+    c.classList.remove("is-cube", "is-rings", "is-morph");
+    c.classList.add("is-" + variant);
+    c.dataset.variant = variant;
+  });
 })();
 
-function runCrystalWave(next) {
+function runCrystalWave(next, origin) {
   const prev = currentWorld;
-  const rect = core.getBoundingClientRect();
+  const rect = origin.getBoundingClientRect();
   const x = rect.left + rect.width / 2;
   const y = rect.top + rect.height / 2;
   const cover = Math.hypot(window.innerWidth, window.innerHeight) / 16;
@@ -294,7 +296,7 @@ function runCrystalWave(next) {
     },
   });
 
-  tl.to(core, { scale: 1.5, opacity: 0, duration: 0.28, ease: "power2.out" }, 0)
+  tl.to(origin, { scale: 1.5, opacity: 0, duration: 0.28, ease: "power2.out" }, 0)
     .to(waveFront, { scale: cover, duration: 0.95, ease: "power3.inOut", transformOrigin: "0 0" }, 0)
     .to(waveRing, { scale: cover, opacity: 0, duration: 0.95, ease: "power3.inOut", transformOrigin: "0 0" }, 0)
     .add(() => {
@@ -305,27 +307,36 @@ function runCrystalWave(next) {
       worlds[prev].classList.remove("is-active");
       worlds[next].classList.add("is-active");
       motion[next] = initMotion(next, worlds[next], 0.5);
-      updateCoreTag();
     }, 0.4)
     .to(waveFront, { opacity: 0, duration: 0.3 }, 0.85)
-    .to(core, { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" }, 1.0);
+    .to(origin, { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" }, 1.0);
 }
 
-core.addEventListener("click", () => {
-  if (busy) return;
-  busy = true;
-  const next = currentWorld === "builder" ? "creator" : "builder";
-  if (!REDUCE && GSAP_OK) runCrystalWave(next); else doSwap(next);
-  setTimeout(() => { busy = false; }, 1500);
+cores.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (busy) return;
+    busy = true;
+    const next = currentWorld === "builder" ? "creator" : "builder";
+    if (!REDUCE && GSAP_OK) runCrystalWave(next, btn); else doSwap(next);
+    setTimeout(() => { busy = false; }, 1500);
+  });
 });
 
-/* core leans toward the pointer */
+/* core leans toward the pointer when it is near */
 if (!REDUCE && window.matchMedia("(hover: hover)").matches && GSAP_OK) {
-  const coreX = gsap.quickTo(core, "x", { duration: 0.8, ease: "power3.out" });
-  const coreY = gsap.quickTo(core, "y", { duration: 0.8, ease: "power3.out" });
+  const sets = Array.from(cores).map((c) => ({
+    byX: gsap.quickTo(c, "x", { duration: 0.8, ease: "power3.out" }),
+    byY: gsap.quickTo(c, "y", { duration: 0.8, ease: "power3.out" }),
+  }));
   window.addEventListener("mousemove", (e) => {
-    coreX((e.clientX - window.innerWidth / 2) * 0.04);
-    coreY((e.clientY - window.innerHeight / 2) * 0.04);
+    Array.from(cores).forEach((c, i) => {
+      const r = c.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const dx = e.clientX - cx, dy = e.clientY - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 240) { const t = 1 - dist / 240; sets[i].byX(dx * 0.12 * t); sets[i].byY(dy * 0.12 * t); }
+      else { sets[i].byX(0); sets[i].byY(0); }
+    });
   });
 }
 
@@ -376,7 +387,6 @@ if (!REDUCE && GSAP_OK) {
 }
 
 motion.builder = initMotion("builder", worlds.builder, 0.15);
-updateCoreTag();
 
 if (GSAP_OK && window.ScrollTrigger) {
   window.addEventListener("load", () => ScrollTrigger.refresh());
@@ -384,7 +394,7 @@ if (GSAP_OK && window.ScrollTrigger) {
 }
 
 /* core press feedback (CSS :active loses to GSAP inline transforms) */
-core.addEventListener("pointerdown", () => core.classList.add("is-pressed"));
-const releaseCore = () => core.classList.remove("is-pressed");
-core.addEventListener("pointerup", releaseCore);
-core.addEventListener("pointerleave", releaseCore);
+document.addEventListener("pointerdown", (e) => { const b = e.target.closest(".core"); if (b) b.classList.add("is-pressed"); });
+const releaseCore = (e) => { const b = e.target.closest(".core"); if (b) b.classList.remove("is-pressed"); };
+document.addEventListener("pointerup", releaseCore);
+document.addEventListener("pointerleave", releaseCore);

@@ -188,12 +188,6 @@ a { color: inherit; text-decoration: none; }
   border-radius: 50%; background: var(--accent);
 }
 .orb--b { width: 5px; height: 5px; margin-left: -2.5px; opacity: .8; }
-.orbit-core {
-  position: absolute; top: 50%; left: 50%;
-  width: 12px; height: 12px; margin: -6px 0 0 -6px;
-  border-radius: 50%; background: var(--accent);
-  box-shadow: 0 0 0 6px var(--accent-soft);
-}
 @keyframes orbit-spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 @media (max-width: 640px) { .orbit { width: min(100%, 240px); } }
 
@@ -309,15 +303,16 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 2rem 0 3r
    CORE — the doorway between worlds
    ============================================================ */
 .core {
-  position: fixed; right: 1.6rem; bottom: 1.6rem; z-index: 900;
-  width: 64px; height: 64px; border-radius: 50%;
+  position: absolute; inset: 0; margin: auto; z-index: 3;
+  width: 60px; height: 60px; border-radius: 50%;
   border: 1px solid var(--line-strong);
-  background: color-mix(in srgb, var(--bg) 84%, transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--bg) 26%, transparent);
+  backdrop-filter: blur(5px);
   color: var(--accent-text);
   cursor: pointer; padding: 0;
   display: grid; place-items: center;
-  perspective: 140px;
+  perspective: 150px;
+  pointer-events: auto;
   transition: border-color .3s, box-shadow .3s, background .35s, color .35s;
 }
 .core:hover { border-color: var(--accent); box-shadow: 0 0 46px -8px var(--accent-soft); }
@@ -358,7 +353,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 2rem 0 3r
 .core-morph svg path { fill: var(--accent-text); opacity: .9; }
 
 @media (max-width: 640px) {
-  .core { right: .9rem; bottom: .9rem; width: 56px; height: 56px; }
+  .core { width: 48px; height: 48px; }
 }
 
 /* ============================================================
@@ -374,15 +369,14 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 2rem 0 3r
 .wave-front.is-crystal { filter: url(#cryswave); }
 .wave-ring { width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 2px solid var(--accent-text); }
 
-/* world label under the core */
-.core-tag {
-  position: fixed; right: 1.6rem; bottom: 5.5rem; z-index: 899;
-  font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--muted); pointer-events: none; text-align: right;
-  transition: color .35s;
+/* world label under the hero visual */
+.visual-caption {
+  margin-top: .55rem; text-align: center;
+  font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--dim);
 }
 @media (max-width: 640px) {
-  .core-tag { right: .9rem; bottom: 5.1rem; }
+  .core { width: 48px; height: 48px; }
 }
 
 /* ---------- Reduced motion ---------- */
