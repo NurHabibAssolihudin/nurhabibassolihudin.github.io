@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-world="builder">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Nur — I build platforms, AI & games</title>
-<meta name="description" content="NurHabib Assolihudin. Systems, products, AI and games — built with curiosity." />
+<title>Nur — I build platforms, AI &amp; worlds</title>
+<meta name="description" content="NurHabib Assolihudin. Two worlds, one builder — platforms & AI products, and the worlds created with them." />
 <meta name="color-scheme" content="dark light" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0c'/%3E%3Cpath d='M9 8v16M9 8l14 15V8' stroke='%23f28a30' stroke-width='3.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='7' fill='%23f28a30'/%3E%3Cellipse cx='16' cy='16' rx='14' ry='6' fill='none' stroke='%23e5c878' stroke-width='2' transform='rotate(-20 16 16)'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Schibsted+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -14,188 +14,333 @@
 </head>
 <body>
 
-<!-- grain overlay -->
+<!-- global overlays -->
 <div class="grain" aria-hidden="true"></div>
-<!-- custom cursor -->
+<div class="scanlines" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
 
-<header id="nav">
-  <div class="container nav-inner">
-    <a href="#top" class="brand" aria-label="Nur — home">
-      <span class="brand-text">nurhabibassolihudin.github.io</span>
-    </a>
-    <nav class="nav-links mono">
-      <a href="#pillars">Pillars</a>
-      <a href="#projects">Projects</a>
-      <a href="#stack">Stack</a>
-      <a href="#philosophy">How I think</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div class="nav-actions">
-      <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
-        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-      <a class="btn-ghost mono" href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer">github ↗</a>
-    </div>
-  </div>
-</header>
+<!-- crystal wave filter -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="cryswave">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="80"/>
+    </filter>
+  </defs>
+</svg>
 
-<main>
+<div class="app">
 
-<!-- HERO -->
-<section id="top" class="hero">
-  <div class="container hero-grid">
-    <div class="hero-copy">
-      <div class="eyebrow"><span class="status">available for building — bandung, id</span></div>
-      <h1 class="display">
-        I build <span class="em">platforms</span>,
-        productize <span class="em">AI</span>,
-        and ship the occasional <span class="ti">universe</span>.
-      </h1>
-      <p class="lead">
-        I'm <strong>Nur</strong> — an engineer who turns ideas into working systems, products, and stories.
-        I like understanding how things really work, then building the next layer on top.
-      </p>
-      <div class="cta-row">
-        <a href="#projects" class="btn-primary" data-magnetic>View work <span>→</span></a>
-        <a href="#pillars" class="btn-outline" data-magnetic>What I build</a>
+  <!-- ================= WORLD A — BUILDER ================= -->
+  <div class="world world--builder is-active" id="world-builder">
+    <header id="nav-a" class="nav">
+      <div class="container nav-inner">
+        <a href="#a-top" class="brand" aria-label="Nur — home">
+          <span class="brand-text">nurhabibassolihudin.github.io</span>
+        </a>
+        <nav class="nav-links mono" aria-label="Primary">
+          <a href="#a-pillars">Pillars</a>
+          <a href="#a-work">Work</a>
+          <a href="#a-stack">Stack</a>
+          <a href="#a-notes">Notes</a>
+          <a href="#a-contact">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="theme-toggle icon-btn" aria-label="Toggle theme" title="Toggle theme">
+            <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <a class="btn-ghost mono" href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer">github ↗</a>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <div class="orbit-wrap">
-      <div class="orbit" id="orbit" aria-hidden="true">
-        <span class="ring ring--outer"><span class="orb orb--a"></span></span>
-        <span class="ring ring--mid"><span class="orb orb--b"></span></span>
-        <span class="ring ring--inner"></span>
-        <span class="orbit-core"></span>
+    <!-- Hero A -->
+    <section id="a-top" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="status">available for building — bandung, id</span></div>
+          <h1 class="display">
+            I build <span class="em">platforms</span>,
+            productize <span class="em">AI</span>,
+            and ship the occasional <span class="ti">universe</span>.
+          </h1>
+          <p class="lead">
+            I'm <strong>Nur</strong> — an engineer who turns ideas into working systems and products.
+            I like understanding how things really work, then building the next layer on top.
+          </p>
+          <div class="cta-row">
+            <a href="#a-work" class="btn-primary" data-magnetic>View work <span>→</span></a>
+            <a href="#a-pillars" class="btn-outline" data-magnetic>What I build</a>
+          </div>
+        </div>
+        <div class="orbit-wrap">
+          <div class="orbit" id="a-orbit" aria-hidden="true">
+            <span class="ring ring--outer"><span class="orb orb--a"></span></span>
+            <span class="ring ring--mid"><span class="orb orb--b"></span></span>
+            <span class="ring ring--inner"></span>
+            <span class="orbit-core"></span>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- About A -->
+    <section class="section">
+      <div class="container about-grid">
+        <div class="about-note">
+          <div class="eyebrow"><span class="label-mono">about</span></div>
+          <p class="big">I turn ideas into <span class="ti">systems, products, and stories</span> — building the things I want to understand.</p>
+        </div>
+        <div class="about-body">
+          <p>Hello — I'm Nur. My work spans full platforms and AI-assisted products, held together by a love for the details underneath. I care about how systems behave internally — not just how to use them — then use that understanding to build the next layer on top.</p>
+          <p class="muted">A lot of what I make starts as a question. The architecture is the answer I converge on after enough iterations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pillars A -->
+    <section id="a-pillars" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">pillars</span></div>
+          <h2 class="display">Three sides of the same builder.</h2>
+        </div>
+        <div class="pillars">
+          <article class="pillar reveal">
+            <svg class="icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/>
+              <rect x="6" y="22" width="12" height="12"/><rect x="22" y="22" width="12" height="12"/>
+              <path d="M12 18v4M28 18v4M18 12h4M18 28h4"/>
+            </svg>
+            <h3 class="display">Platforms</h3>
+            <p>Modular platform architecture — micro-frontends via Module Federation, a design system shipped as a package, and FastAPI services holding it together.</p>
+            <div class="tag mono">ocaty · module federation · fastapi</div>
+          </article>
+
+          <article class="pillar reveal">
+            <svg class="icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="20" cy="8" r="4"/><circle cx="8" cy="28" r="4"/><circle cx="32" cy="28" r="4"/>
+              <path d="M19 12l-9 12M21 12l9 12M12 28h16"/>
+            </svg>
+            <h3 class="display">AI Products</h3>
+            <p>Turning AI into products people can run — self-hosted agents with memory, dashboards whose UI is written by AI, and bridges that give PWAs real power.</p>
+            <div class="tag mono">tony · genui · oxelot</div>
+          </article>
+
+          <article class="pillar reveal">
+            <svg class="icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 8l18 12-18 12z"/>
+              <path d="M8 8v24" stroke-dasharray="2 3" opacity=".5"/>
+            </svg>
+            <h3 class="display">Systems</h3>
+            <p>The infrastructure end — realtime chat, storage engines, backtesting — the pieces that stay reliable even when you stop watching them.</p>
+            <div class="tag mono">rabbitmq · redis · backtesting · realtime</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work A -->
+    <section id="a-work" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">featured work</span></div>
+          <h2 class="display">Things I've actually built.</h2>
+        </div>
+        <div id="a-work-list" class="works"></div>
+      </div>
+    </section>
+
+    <!-- Stack A -->
+    <section id="a-stack" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">stack</span></div>
+          <h2 class="display">Tools I reach for.</h2>
+        </div>
+        <div id="a-stack-grid" class="stack-grid"></div>
+      </div>
+    </section>
+
+    <!-- Notes A -->
+    <section id="a-notes" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">notes</span></div>
+          <h2 class="display">Notes on building.</h2>
+        </div>
+        <div id="a-phil-list" class="phil"></div>
+        <div class="node-card">
+          <svg viewBox="0 0 900 220" class="node-svg" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M60 160C140 60 240 60 300 120S420 200 460 120 580 40 640 100 820 180 860 90"/>
+            <g class="nodes">
+              <circle cx="60" cy="160" r="5"/><circle cx="300" cy="120" r="5"/>
+              <circle cx="460" cy="120" r="5"/><circle cx="640" cy="100" r="5"/><circle cx="860" cy="90" r="5"/>
+            </g>
+          </svg>
+          <div class="caption">Every node is a product. Every edge is the system that connects it.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact A -->
+    <section id="a-contact" class="section">
+      <div class="container contact">
+        <div class="eyebrow"><span class="label-mono">contact</span></div>
+        <h2 class="display">Have a system you want to ship?</h2>
+        <p class="muted">Platforms, AI products, or something in between — I'd like to hear about it.</p>
+        <div class="contact-actions">
+          <a class="btn-primary" href="mailto:nurhabibassolihudin12@gmail.com" data-magnetic>nurhabibassolihudin12@gmail.com</a>
+          <a class="btn-outline" href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer" data-magnetic>github</a>
+          <a class="btn-outline" href="https://linkedin.com/in/nurhabib-assolihudin" target="_blank" rel="noreferrer" data-magnetic>linkedin</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container foot mono muted">
+        <span>© <span class="year"></span> nur — built with curiosity</span>
+        <span>platforms · ai products · systems</span>
+      </div>
+    </footer>
   </div>
-</section>
 
-<!-- ABOUT -->
-<section id="about" class="section">
-  <div class="container about-grid">
-    <div class="about-note">
-      <div class="eyebrow"><span class="label-mono">about</span></div>
-      <p class="big">I turn ideas into <span class="ti">systems, products, and stories</span> — building the things I want to understand.</p>
-    </div>
-    <div class="about-body">
-      <p>Hello — I'm Nur. My work spans full platforms, AI-assisted products, and games, held together by a love for the details underneath. I care about how systems behave internally — not just how to use them — then use that understanding to build the next layer on top.</p>
-      <p class="muted">A lot of what I make starts as a question. The architecture is the answer I converge on after enough iterations.</p>
-    </div>
+  <!-- ================= WORLD B — CREATOR ================= -->
+  <div class="world world--creator" id="world-creator">
+    <header id="nav-b" class="nav">
+      <div class="container nav-inner">
+        <a href="#b-top" class="brand" aria-label="Nur — world creator">
+          <span class="brand-text">alimagine — the studio</span>
+        </a>
+        <nav class="nav-links mono" aria-label="Primary">
+          <a href="#b-worlds">Worlds</a>
+          <a href="#b-craft">Craft</a>
+          <a href="#b-tools">Tools</a>
+          <a href="#b-play">Play</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="theme-toggle icon-btn" aria-label="Toggle theme" title="Toggle theme">
+            <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <a class="btn-ghost mono" href="https://alimaginegames.com" target="_blank" rel="noreferrer">studio ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero B -->
+    <section id="b-top" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="label-mono">world creator</span></div>
+          <h1 class="display">
+            I build worlds you can <span class="ti">get lost</span> in.
+          </h1>
+          <p class="lead">
+            I'm <strong>Nur</strong> — the creative side of the same builder. I make games and interactive stories
+            that chase a feeling, one world at a time.
+          </p>
+          <div class="cta-row">
+            <a href="https://alimaginegames.com" target="_blank" rel="noreferrer" class="btn-primary" data-magnetic>Explore the studio <span>→</span></a>
+            <a href="#b-worlds" class="btn-outline" data-magnetic>See the worlds</a>
+          </div>
+        </div>
+        <div class="world-glyph-wrap">
+          <div class="world-glyph" id="b-glyph" aria-hidden="true">
+            <svg viewBox="0 0 220 220" fill="none" stroke="currentColor">
+              <g class="glyph-orbit">
+                <ellipse cx="110" cy="110" rx="96" ry="36" transform="rotate(-16 110 110)"/>
+                <circle cx="110" cy="24" r="5" class="glyph-moon">
+                  <animateTransform attributeName="transform" type="rotate" from="0 110 110" to="360 110 110" dur="26s" repeatCount="indefinite"/>
+                </circle>
+              </g>
+              <g class="glyph-orbit glyph-orbit--b">
+                <ellipse cx="110" cy="110" rx="76" ry="30" transform="rotate(24 110 110)"/>
+              </g>
+              <circle cx="110" cy="110" r="40" class="glyph-body"/>
+              <path d="M110 70a32 32 0 0 1 0 80 20 20 0 0 0 0-40 32 32 0 0 0 0-40z" class="glyph-crescent"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Worlds B -->
+    <section id="b-worlds" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">the worlds</span></div>
+          <h2 class="display">Small universes, shipped one by one.</h2>
+        </div>
+        <div id="b-worlds-list" class="works"></div>
+      </div>
+    </section>
+
+    <!-- Craft B -->
+    <section id="b-craft" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">craft</span></div>
+          <h2 class="display">Notes on making worlds.</h2>
+        </div>
+        <div id="b-craft-list" class="phil"></div>
+      </div>
+    </section>
+
+    <!-- Tools B -->
+    <section id="b-tools" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow"><span class="label-mono">tools</span></div>
+          <h2 class="display">What the worlds are made of.</h2>
+        </div>
+        <div id="b-tools-grid" class="stack-grid"></div>
+      </div>
+    </section>
+
+    <!-- Play B -->
+    <section id="b-play" class="section">
+      <div class="container contact">
+        <div class="eyebrow"><span class="label-mono">enter a world</span></div>
+        <h2 class="display">Ready to step inside?</h2>
+        <p class="muted">Games, interactive stories, and worlds being shaped — come see what's running.</p>
+        <div class="contact-actions">
+          <a class="btn-primary" href="https://alimaginegames.com" target="_blank" rel="noreferrer" data-magnetic>alimaginegames.com <span>→</span></a>
+          <a class="btn-outline" href="https://github.com/alimagine" target="_blank" rel="noreferrer" data-magnetic>github : alimagine</a>
+          <a class="btn-outline" href="mailto:alimaginegame@gmail.com" data-magnetic>alimaginegame@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container foot mono muted">
+        <span>© <span class="year"></span> nur — world creator</span>
+        <span>story · visual · audio · worlds</span>
+      </div>
+    </footer>
   </div>
-</section>
 
-<!-- PILLARS -->
-<section id="pillars" class="section">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow"><span class="label-mono">pillars</span></div>
-      <h2 class="display">Three sides of the same builder.</h2>
-    </div>
-    <div class="pillars">
-      <article class="pillar reveal">
-        <svg class="icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/>
-          <rect x="6" y="22" width="12" height="12"/><rect x="22" y="22" width="12" height="12"/>
-          <path d="M12 18v4M28 18v4M18 12h4M18 28h4"/>
-        </svg>
-        <h3 class="display">Platforms</h3>
-        <p>Modular platform architecture — micro-frontends via Module Federation, a design system shipped as a package, and FastAPI services holding it together.</p>
-        <div class="tag mono">ocaty · module federation · fastapi</div>
-      </article>
+</div>
 
-      <article class="pillar reveal">
-        <svg class="icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="20" cy="8" r="4"/><circle cx="8" cy="28" r="4"/><circle cx="32" cy="28" r="4"/>
-          <path d="M19 12l-9 12M21 12l9 12M12 28h16"/>
-        </svg>
-        <h3 class="display">AI Products</h3>
-        <p>Turning AI into products people can run — self-hosted agents with memory, dashboards whose UI is written by AI, and bridges that give PWAs real power.</p>
-        <div class="tag mono">tony · genui · oxelot</div>
-      </article>
+<!-- Core — the doorway between worlds -->
+<button id="core" class="core is-cube" data-variant="cube" aria-label="Enter the other world" title="Switch world">
+  <span class="core-variant core-cube" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+  <span class="core-variant core-rings" aria-hidden="true"><i class="r r--1"></i><i class="r r--2"></i><i class="r r--3"></i><i class="core-dot"></i></span>
+  <span class="core-variant core-morph" aria-hidden="true">
+    <svg viewBox="0 0 64 64"><path d="M32 6C46 6 58 18 58 32C58 46 46 58 32 58C18 58 6 46 6 32C6 18 18 6 32 6Z">
+      <animate attributeName="d" dur="7s" repeatCount="indefinite"
+        values="M32 6C46 6 58 18 58 32C58 46 46 58 32 58C18 58 6 46 6 32C6 18 18 6 32 6Z;
+                M32 12C44 10 56 20 54 32C52 44 42 58 32 56C22 54 8 42 10 30C12 18 20 14 32 12Z;
+                M32 6C46 6 58 18 58 32C58 46 46 58 32 58C18 58 6 46 6 32C6 18 18 6 32 6Z"/>
+    </path></svg>
+  </span>
+</button>
 
-      <article class="pillar reveal">
-        <svg class="icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 8l18 12-18 12z"/>
-          <path d="M8 8v24" stroke-dasharray="2 3" opacity=".5"/>
-        </svg>
-        <h3 class="display">Games &amp; Systems</h3>
-        <p>The systems end — realtime chat, storage engines, backtesting — and the creative end: narrative games and interactive stories under the alimagine banner.</p>
-        <div class="tag mono">rabbitmq · redis · godot · alimagine</div>
-      </article>
-    </div>
-  </div>
-</section>
+<!-- crystal wave transition -->
+<div class="wave" id="wave" aria-hidden="true"><span class="wave-front"></span><span class="wave-ring"></span></div>
 
-<!-- PROJECTS -->
-<section id="projects" class="section">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow"><span class="label-mono">featured work</span></div>
-      <h2 class="display">Things I've actually built.</h2>
-    </div>
-    <div id="proj-list" class="works"></div>
-  </div>
-</section>
-
-<!-- STACK -->
-<section id="stack" class="section">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow"><span class="label-mono">stack</span></div>
-      <h2 class="display">Tools I reach for.</h2>
-    </div>
-    <div id="stack-grid" class="stack-grid"></div>
-  </div>
-</section>
-
-<!-- PHILOSOPHY -->
-<section id="philosophy" class="section">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow"><span class="label-mono">how I think</span></div>
-      <h2 class="display">Notes on building.</h2>
-    </div>
-    <div id="phil-list" class="phil"></div>
-
-    <div class="node-card">
-      <svg viewBox="0 0 900 220" class="node-svg" fill="none" stroke="currentColor" stroke-width="1">
-        <path d="M60 160C140 60 240 60 300 120S420 200 460 120 580 40 640 100 820 180 860 90"/>
-        <g class="nodes">
-          <circle cx="60" cy="160" r="5"/><circle cx="300" cy="120" r="5"/>
-          <circle cx="460" cy="120" r="5"/><circle cx="640" cy="100" r="5"/><circle cx="860" cy="90" r="5"/>
-        </g>
-      </svg>
-      <div class="caption">Every node is a product. Every edge is the system that connects it.</div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="section">
-  <div class="container contact">
-    <div class="eyebrow"><span class="label-mono">contact</span></div>
-    <h2 class="display">Have a system you want to ship?</h2>
-    <p class="muted">Platforms, AI products, games, or something in between — I'd like to hear about it.</p>
-    <div class="contact-actions">
-      <a class="btn-primary" href="mailto:nurhabibassolihudin12@gmail.com" data-magnetic>nurhabibassolihudin12@gmail.com</a>
-      <a class="btn-outline" href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer" data-magnetic>github</a>
-      <a class="btn-outline" href="https://linkedin.com/in/nurhabib-assolihudin" target="_blank" rel="noreferrer" data-magnetic>linkedin</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container foot mono muted">
-    <span>© <span id="year"></span> nur — built with curiosity</span>
-    <span>systems · products · ai · games</span>
-  </div>
-</footer>
-
-</main>
+<div class="core-tag mono" aria-hidden="true">builder</div>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>

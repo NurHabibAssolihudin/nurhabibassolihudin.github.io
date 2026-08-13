@@ -1,3 +1,7 @@
+/* ============================================================
+   OVERTAKEN-LIFE — two worlds, one core
+   ============================================================ */
+
 /* ============ Theme ============ */
 (function () {
   const root = document.documentElement;
@@ -5,7 +9,7 @@
   const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
   root.setAttribute("data-theme", saved || (prefersLight ? "light" : "dark"));
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest("#theme-toggle");
+    const btn = e.target.closest(".theme-toggle");
     if (!btn) return;
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
@@ -13,22 +17,25 @@
   });
 })();
 
-/* ============ Nav scroll state ============ */
-const nav = document.getElementById("nav");
-
-/* ============ Reduced-motion preference ============ */
+/* ============ Flags ============ */
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ============ GSAP availability ============ */
 const GSAP_OK = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+let lenis = null;
 
 /* ============ Year ============ */
-document.getElementById("year").textContent = new Date().getFullYear();
+document.querySelectorAll(".year").forEach((el) => (el.textContent = new Date().getFullYear()));
 
-/* ============ Data ============ */
+/* ============ Helpers ============ */
 const esc = (s) => String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+const $ = (s, p = document) => p.querySelector(s);
+const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+const lockScroll = () => { document.documentElement.classList.add("is-locked"); if (lenis) lenis.stop(); };
+const unlockScroll = () => { document.documentElement.classList.remove("is-locked"); if (lenis) lenis.start(); };
 
-const projects = [
+/* ============================================================
+   DATA — World A (builder)
+   ============================================================ */
+const projectsA = [
   { id: "OC", name: "Ocaty", tag: "platform / e-commerce", url: null,
     problem: "Design a product surface that multiple teams can ship to independently.",
     built: "Module Federation micro-frontends, a design system shipped as a package, and FastAPI services (account, notification) on PostgreSQL.",
@@ -53,13 +60,63 @@ const projects = [
     problem: "Feel how message brokers coordinate realtime services.",
     built: "A FastAPI chat over RabbitMQ quorum queues with a WebSocket broadcast hub — pub/sub & durability in practice.",
     stack: ["Python", "FastAPI", "RabbitMQ", "WebSocket"] },
-  { id: "GD", name: "alimagine", tag: "games / narrative", url: "https://github.com/alimagine",
-    problem: "Build moments and feelings through the combination of visual, audio, and story.",
-    built: "Godot games and interactive narratives — from a platformer to a world-building political thriller trilogy.",
-    stack: ["Godot", "GDScript", "Narrative"] },
 ];
 
-document.getElementById("proj-list").innerHTML = projects.map(p => `
+const stackA = [
+  { domain: "Languages", items: ["Python", "TypeScript", "JavaScript"] },
+  { domain: "Backend & AI", items: ["FastAPI", "Jinja2", "Letta", "LLM Agents", "WASM"] },
+  { domain: "Frontend & Platforms", items: ["React", "Next.js", "Vite", "Module Federation", "Design Systems"] },
+  { domain: "Data & Infra", items: ["PostgreSQL", "Redis", "RabbitMQ", "Docker", "WebSocket"] },
+  { domain: "Tooling", items: ["Bun", "uv", "pnpm", "Git"] },
+];
+
+const philosophyA = [
+  { t: "Ship, then understand deeper", d: "Plans are great, but shipping is where you learn what the system actually demands. Build real things, then dig into why they work." },
+  { t: "Productize AI, don't wrap it", d: "The value isn't a prompt box — it's turning models into products with real memory, real actions, and real interfaces." },
+  { t: "Prefer internals over abstractions", d: "Abstractions are easier to learn, internals are easier to debug. I want both, in that order." },
+  { t: "Make it observable before fast", d: "If you can't see what a system is doing, you can't make it reliable — let alone fast. Observability is the first optimization." },
+];
+
+/* ============================================================
+   DATA — World B (creator)
+   ============================================================ */
+const worldsB = [
+  { id: "STUDIO", name: "alimagine", tag: "the studio", url: "https://alimaginegames.com",
+    problem: "Bring imagination to life, one world at a time.",
+    built: "The studio I build with — games and interactive stories shaped by combining visual, audio, and story into a moment you feel.",
+    stack: ["Godot", "GDScript", "Story"] },
+  { id: "GOING-HOME", name: "Going Home", tag: "godot / narrative", url: "https://github.com/alimagine/Going-Home",
+    problem: "A quiet, bittersweet walk back.",
+    built: "A Godot game tethered to that feeling — grown in GDScript, one scene at a time.",
+    stack: ["Godot", "GDScript"] },
+  { id: "EREBUS", name: "0-Day Project Erebus", tag: "project / experiment", url: "https://github.com/alimagine/0-Day-Project-EREBUS",
+    problem: "A world with a name and a mystery.",
+    built: "A game project codenamed Erebus, and the site that documents its 0-day.",
+    stack: ["Story", "Web"] },
+  { id: "STORIES", name: "Interactive stories", tag: "narrative / trilogy", url: "https://alimaginegames.com",
+    problem: "Tell stories where the world reacts to you.",
+    built: "From a platformer to a world-building political thriller trilogy — narratives that grow as questions do.",
+    stack: ["Godot", "Narrative", "World-building"] },
+];
+
+const toolsB = [
+  { domain: "Engine", items: ["Godot", "GDScript"] },
+  { domain: "Story craft", items: ["Visual", "Audio", "Narrative", "World-building"] },
+  { domain: "Experiments", items: ["pyxel", "Interactive fiction"] },
+  { domain: "Studio", items: ["alimagine", "alimaginegames.com"] },
+];
+
+const craftB = [
+  { t: "Moment before mechanics", d: "Build the feeling first, then the systems that hold it up. A mechanic without a feeling is just a rule." },
+  { t: "Worlds are systems too", d: "Characters, rules, and consequences — narrative runs on cause & effect. The best worlds are the ones that answer back." },
+  { t: "Story under the surface", d: "What you see is the tip of the world built underneath. The rest lives in notes, failures, and the quiet details." },
+  { t: "Ship small worlds often", d: "Every project is a moon. The studio is the orbit they share." },
+];
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+document.getElementById("a-work-list").innerHTML = projectsA.map(p => `
   <article class="work">
     <div>
       <div class="work-id">[${esc(p.id)}]</div>
@@ -74,28 +131,14 @@ document.getElementById("proj-list").innerHTML = projects.map(p => `
   </article>
 `).join("");
 
-const stack = [
-  { domain: "Languages", items: ["Python", "TypeScript", "JavaScript", "GDScript"] },
-  { domain: "Backend & AI", items: ["FastAPI", "Jinja2", "Letta", "LLM Agents", "WASM"] },
-  { domain: "Frontend & Platforms", items: ["React", "Next.js", "Vite", "Module Federation", "Design Systems"] },
-  { domain: "Data & Infra", items: ["PostgreSQL", "Redis", "RabbitMQ", "Docker"] },
-  { domain: "Tooling", items: ["Bun", "uv", "pnpm", "Git"] },
-  { domain: "Games", items: ["Godot", "GDScript"] },
-];
-document.getElementById("stack-grid").innerHTML = stack.map(s => `
+document.getElementById("a-stack-grid").innerHTML = stackA.map(s => `
   <div class="stack-card">
     <span class="sdomain">${esc(s.domain)}</span>
     <div class="chips">${s.items.map(i => `<span class="chip">${esc(i)}</span>`).join("")}</div>
   </div>
 `).join("");
 
-const philosophy = [
-  { t: "Ship, then understand deeper", d: "Plans are great, but shipping is where you learn what the system actually demands. Build real things, then dig into why they work." },
-  { t: "Productize AI, don't wrap it", d: "The value isn't a prompt box — it's turning models into products with real memory, real actions, and real interfaces." },
-  { t: "Prefer internals over abstractions", d: "Abstractions are easier to learn, internals are easier to debug. I want both, in that order." },
-  { t: "Make it observable before fast", d: "If you can't see what a system is doing, you can't make it reliable — let alone fast. Observability is the first optimization." },
-];
-document.getElementById("phil-list").innerHTML = philosophy.map(p => `
+document.getElementById("a-phil-list").innerHTML = philosophyA.map(p => `
   <div class="phil-item">
     <span class="mark" aria-hidden="true"></span>
     <div>
@@ -105,18 +148,196 @@ document.getElementById("phil-list").innerHTML = philosophy.map(p => `
   </div>
 `).join("");
 
-/* ============ Motion (Lenis + GSAP) — only when supported & allowed ============ */
-if (!REDUCE && GSAP_OK) {
-  ScrollTrigger.create({
-    start: 24,
-    onUpdate: (self) => nav.classList.toggle("scrolled", self.scroll() > 24),
+document.getElementById("b-worlds-list").innerHTML = worldsB.map(p => `
+  <article class="work">
+    <div>
+      <div class="work-id">[${esc(p.id)}]</div>
+      <h3>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noreferrer">${esc(p.name)} ↗</a>` : esc(p.name)}</h3>
+      <div class="chip" style="margin-top:.6rem">${esc(p.tag)}</div>
+    </div>
+    <div>
+      <div class="wrow"><span class="wlabel">Why</span><p>${esc(p.problem)}</p></div>
+      <div class="wrow"><span class="wlabel">What it is</span><p>${esc(p.built)}</p></div>
+    </div>
+    <div><div class="wtags">${p.stack.map(s => `<span class="chip">${esc(s)}</span>`).join("")}</div></div>
+  </article>
+`).join("");
+
+document.getElementById("b-tools-grid").innerHTML = toolsB.map(s => `
+  <div class="stack-card">
+    <span class="sdomain">${esc(s.domain)}</span>
+    <div class="chips">${s.items.map(i => `<span class="chip">${esc(i)}</span>`).join("")}</div>
+  </div>
+`).join("");
+
+document.getElementById("b-craft-list").innerHTML = craftB.map(p => `
+  <div class="phil-item">
+    <span class="mark" aria-hidden="true"></span>
+    <div>
+      <h3>${esc(p.t)}</h3>
+      <p>${esc(p.d)}</p>
+    </div>
+  </div>
+`).join("");
+
+/* ============================================================
+   WORLD ENGINE
+   ============================================================ */
+const worlds = { builder: document.getElementById("world-builder"), creator: document.getElementById("world-creator") };
+let currentWorld = "builder";
+const scrollPos = { builder: 0, creator: 0 };
+const motion = { builder: null, creator: null };
+const introDone = { builder: false, creator: false };
+const coreTag = document.querySelector(".core-tag");
+function updateCoreTag() { if (coreTag) coreTag.textContent = currentWorld; }
+
+function initMotion(name, el, introDelay = 0) {
+  if (REDUCE || !GSAP_OK) return () => {};
+  const sts = [];
+  const tweens = [];
+  const hero = $(".hero", el);
+  const visual = $("#a-orbit, #b-glyph", el);
+  const visualWrap = $(".orbit-wrap, .world-glyph-wrap", el);
+
+  if (!introDone[name]) {
+    if (hero) {
+      const introTargets = [$(".eyebrow", hero), $("h1", hero), $(".lead", hero), $(".cta-row", hero)].filter(Boolean);
+      if (introTargets.length) tweens.push(gsap.from(introTargets, { y: 26, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.09, delay: introDelay }));
+    }
+    if (visual) tweens.push(gsap.from(visual, { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out", delay: introDelay + 0.25 }));
+    introDone[name] = true;
+  }
+
+  el.querySelectorAll(".section-head, .reveal, .work, .stack-card, .phil-item, .node-card").forEach((item) => {
+    gsap.set(item, { y: 24, opacity: 0 });
+    const st = ScrollTrigger.create({
+      trigger: item, start: "top 90%", once: true,
+      onEnter: () => tweens.push(gsap.to(item, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" })),
+    });
+    sts.push(st);
   });
-  const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+
+  if (hero && visualWrap) {
+    sts.push(ScrollTrigger.create({
+      trigger: hero, start: "top top", end: "bottom top", scrub: true,
+      onUpdate: (self) => gsap.set(visualWrap, { y: -10 * self.progress }),
+    }));
+  }
+
+  const nav = $(".nav", el);
+  if (nav) sts.push(ScrollTrigger.create({ start: 24, onUpdate: (self) => nav.classList.toggle("scrolled", self.scroll() > 24) }));
+
+  return () => {
+    tweens.forEach((t) => { try { t.kill(); } catch (_) {} });
+    sts.forEach((s) => { try { s.kill(); } catch (_) {} });
+    if (el) el.querySelectorAll(".section-head, .reveal, .work, .stack-card, .phil-item, .node-card, .eyebrow, h1, .lead, .cta-row, #a-orbit, #b-glyph").forEach((n) => gsap.set(n, { clearProps: "all" }));
+  };
+}
+
+function doSwap(next) {
+  const prev = currentWorld;
+  scrollPos[prev] = window.scrollY;
+  currentWorld = next;
+  document.documentElement.dataset.world = next;
+  if (motion[prev]) { motion[prev](); motion[prev] = null; }
+  worlds[prev].classList.remove("is-active");
+  worlds[next].classList.add("is-active");
+  motion[next] = initMotion(next, worlds[next], 0.1);
+  updateCoreTag();
+  requestAnimationFrame(() => {
+    window.scrollTo(0, scrollPos[next] || 0);
+    if (lenis) lenis.scrollTo(scrollPos[next] || 0, { immediate: true });
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  });
+}
+
+/* ============================================================
+   CORE + CRYSTAL WAVE
+   ============================================================ */
+const core = document.getElementById("core");
+const wave = document.getElementById("wave");
+const waveFront = $(".wave-front", wave);
+const waveRing = $(".wave-ring", wave);
+let busy = false;
+
+/* Core variant switcher — try with ?core=cube | rings | morph */
+(function setCoreVariant() {
+  const param = new URLSearchParams(location.search).get("core");
+  const variant = ["cube", "rings", "morph"].includes(param) ? param : core.dataset.variant || "cube";
+  core.classList.remove("is-cube", "is-rings", "is-morph");
+  core.classList.add("is-" + variant);
+  core.dataset.variant = variant;
+})();
+
+function runCrystalWave(next) {
+  const prev = currentWorld;
+  const rect = core.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  const cover = Math.hypot(window.innerWidth, window.innerHeight) / 16;
+
+  lockScroll();
+  wave.classList.add("is-run");
+  waveFront.classList.add("is-crystal");
+  gsap.set([waveFront, waveRing], { x, y, scale: 0, opacity: 1, transformOrigin: "0 0" });
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      waveFront.classList.remove("is-crystal");
+      wave.classList.remove("is-run");
+      unlockScroll();
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPos[next] || 0);
+        if (lenis) lenis.scrollTo(scrollPos[next] || 0, { immediate: true });
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+      });
+    },
+  });
+
+  tl.to(core, { scale: 1.5, opacity: 0, duration: 0.28, ease: "power2.out" }, 0)
+    .to(waveFront, { scale: cover, duration: 0.95, ease: "power3.inOut", transformOrigin: "0 0" }, 0)
+    .to(waveRing, { scale: cover, opacity: 0, duration: 0.95, ease: "power3.inOut", transformOrigin: "0 0" }, 0)
+    .add(() => {
+      scrollPos[prev] = window.scrollY;
+      currentWorld = next;
+      document.documentElement.dataset.world = next;
+      if (motion[prev]) { motion[prev](); motion[prev] = null; }
+      worlds[prev].classList.remove("is-active");
+      worlds[next].classList.add("is-active");
+      motion[next] = initMotion(next, worlds[next], 0.5);
+      updateCoreTag();
+    }, 0.4)
+    .to(waveFront, { opacity: 0, duration: 0.3 }, 0.85)
+    .to(core, { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" }, 1.0);
+}
+
+core.addEventListener("click", () => {
+  if (busy) return;
+  busy = true;
+  const next = currentWorld === "builder" ? "creator" : "builder";
+  if (!REDUCE && GSAP_OK) runCrystalWave(next); else doSwap(next);
+  setTimeout(() => { busy = false; }, 1500);
+});
+
+/* core leans toward the pointer */
+if (!REDUCE && window.matchMedia("(hover: hover)").matches && GSAP_OK) {
+  const coreX = gsap.quickTo(core, "x", { duration: 0.8, ease: "power3.out" });
+  const coreY = gsap.quickTo(core, "y", { duration: 0.8, ease: "power3.out" });
+  window.addEventListener("mousemove", (e) => {
+    coreX((e.clientX - window.innerWidth / 2) * 0.04);
+    coreY((e.clientY - window.innerHeight / 2) * 0.04);
+  });
+}
+
+/* ============================================================
+   LENIS + SCROLL
+   ============================================================ */
+if (!REDUCE && GSAP_OK) {
+  lenis = new Lenis({ duration: 1.15, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  // smooth anchor scrolling
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener("click", (e) => {
       const id = a.getAttribute("href");
@@ -128,58 +349,9 @@ if (!REDUCE && GSAP_OK) {
   });
 }
 
-/* ============ Hero intro ============ */
-if (!REDUCE && GSAP_OK) {
-  gsap.from(".hero .eyebrow, .hero h1, .hero .lead, .hero .cta-row", {
-    y: 26, opacity: 0, duration: 0.9, ease: "power3.out",
-    stagger: 0.09, delay: 0.1,
-  });
-  gsap.from("#orbit", { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out", delay: 0.35 });
-}
-
-/* ============ Orbit parallax ============ */
-if (!REDUCE && GSAP_OK) {
-  gsap.to("#orbit", {
-    yPercent: -8, ease: "none",
-    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
-  });
-}
-
-/* ============ Scroll reveals ============ */
-if (!REDUCE && GSAP_OK) {
-  gsap.utils.toArray(".reveal").forEach((el) => {
-    gsap.from(el, {
-      y: 40, opacity: 0, duration: 0.85, ease: "power3.out",
-      scrollTrigger: { trigger: el, start: "top 85%" },
-    });
-  });
-  gsap.utils.toArray(".section-head").forEach((el) => {
-    gsap.from(el, {
-      y: 24, opacity: 0, duration: 0.7, ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 88%" },
-    });
-  });
-  gsap.utils.toArray(".work").forEach((el, i) => {
-    gsap.from(el, {
-      y: 40, opacity: 0, duration: 0.8, ease: "power3.out", delay: (i % 3) * 0.06,
-      scrollTrigger: { trigger: el, start: "top 88%" },
-    });
-  });
-  gsap.utils.toArray(".stack-card").forEach((el) => {
-    gsap.from(el, {
-      y: 24, opacity: 0, duration: 0.6, ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 90%" },
-    });
-  });
-  gsap.utils.toArray(".phil-item").forEach((el) => {
-    gsap.from(el, {
-      y: 26, opacity: 0, duration: 0.6, ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 92%" },
-    });
-  });
-}
-
-/* ============ Custom cursor ============ */
+/* ============================================================
+   CURSOR + MAGNETIC + BOOT
+   ============================================================ */
 (function () {
   if (REDUCE || !GSAP_OK) return;
   if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
@@ -187,23 +359,32 @@ if (!REDUCE && GSAP_OK) {
   if (!dot) return;
   const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
   window.addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  gsap.ticker.add(() => {
-    gsap.set(dot, { x: mouse.x, y: mouse.y });
-  });
+  gsap.ticker.add(() => gsap.set(dot, { x: mouse.x, y: mouse.y }));
 })();
 
-/* ============ Magnetic buttons ============ */
 if (!REDUCE && GSAP_OK) {
   document.querySelectorAll("[data-magnetic]").forEach((btn) => {
     const strength = 12;
     btn.addEventListener("mousemove", (e) => {
       const r = btn.getBoundingClientRect();
-      const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2) * strength;
-      const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2) * strength;
+      const dx = ((e.clientX - (r.left + r.width / 2)) / (r.width / 2)) * strength;
+      const dy = ((e.clientY - (r.top + r.height / 2)) / (r.height / 2)) * strength;
       gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease: "power2.out" });
     });
-    btn.addEventListener("mouseleave", () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "power3.out" });
-    });
+    btn.addEventListener("mouseleave", () => gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "power3.out" }));
   });
 }
+
+motion.builder = initMotion("builder", worlds.builder, 0.15);
+updateCoreTag();
+
+if (GSAP_OK && window.ScrollTrigger) {
+  window.addEventListener("load", () => ScrollTrigger.refresh());
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+}
+
+/* core press feedback (CSS :active loses to GSAP inline transforms) */
+core.addEventListener("pointerdown", () => core.classList.add("is-pressed"));
+const releaseCore = () => core.classList.remove("is-pressed");
+core.addEventListener("pointerup", releaseCore);
+core.addEventListener("pointerleave", releaseCore);
