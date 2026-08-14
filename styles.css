@@ -101,13 +101,22 @@ a { color: inherit; text-decoration: none; }
   background-image:
     repeating-linear-gradient(var(--grid-line) 0 1px, transparent 1px 13px),
     repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 13px);
-  -webkit-mask-image: radial-gradient(circle var(--rr, 280px) at var(--gx, 50vw) var(--gy, 50vh), #000 0%, rgba(0,0,0,.75) 32%, transparent 62%);
-  mask-image: radial-gradient(circle var(--rr, 280px) at var(--gx, 50vw) var(--gy, 50vh), #000 0%, rgba(0,0,0,.75) 32%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle var(--rr, 280px) at var(--gx, 50vw) var(--gy, 50vh), #000 0%, rgba(0,0,0,.82) 28%, rgba(0,0,0,.4) 52%, transparent 68%);
+  mask-image: radial-gradient(circle var(--rr, 280px) at var(--gx, 50vw) var(--gy, 50vh), #000 0%, rgba(0,0,0,.82) 28%, rgba(0,0,0,.4) 52%, transparent 68%);
   opacity: 0;
   transition: opacity .4s ease;
 }
 .cursor-grid.is-hot { --rr: 340px; }
-@media (hover: none), (pointer: coarse) { .cursor-grid { display: none; } }
+/* wave ripple emitted from the cursor */
+.cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 10000; pointer-events: none;
+  width: 90px; height: 90px; margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-text);
+  box-shadow: 0 0 22px -6px var(--accent-soft);
+  opacity: 0;
+}
+@media (hover: none), (pointer: coarse) { .cursor-grid, .cursor-ring { display: none; } }
 
 /* ============================================================
    WORLDS SHELL
@@ -396,5 +405,5 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; padding: 2rem 0 3r
   .grain { animation: none; }
   .ring { animation: none; }
   .core-cube, .core-rings .r, .core-morph { animation: none; }
-  .cursor-grid { display: none; }
+  .cursor-grid, .cursor-ring { display: none; }
 }

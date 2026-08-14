@@ -386,21 +386,40 @@ if (!REDUCE && GSAP_OK) {
   if (REDUCE || !GSAP_OK) return;
   if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
   const grid = document.querySelector(".cursor-grid");
+  const rings = document.querySelectorAll(".cursor-ring");
   if (!grid) return;
   let lastMove = 0;
+  let lastRing = 0;
   let shown = false;
   let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+  let sx = tx, sy = ty;
   let gx = -1, gy = -1;
+  let ri = 0;
 
-  window.addEventListener("mousemove", (e) => { tx = e.clientX; ty = e.clientY; lastMove = performance.now(); }, { passive: true });
+  function emitRing(x, y) {
+    if (!rings.length) return;
+    const ring = rings[ri];
+    ri = (ri + 1) % rings.length;
+    gsap.killTweensOf(ring);
+    gsap.set(ring, { x, y, scale: 0.35, opacity: 0.55 });
+    gsap.to(ring, { scale: 1.6, opacity: 0, duration: 1.0, ease: "power3.out" });
+  }
+
+  window.addEventListener("mousemove", (e) => {
+    tx = e.clientX; ty = e.clientY; lastMove = performance.now();
+    const now = performance.now();
+    if (now - lastRing > 130) { lastRing = now; emitRing(tx, ty); }
+  }, { passive: true });
   document.addEventListener("mouseover", (e) => grid.classList.toggle("is-hot", !!e.target.closest("a, button")));
   document.addEventListener("mouseout", (e) => { if (e.target.closest("a, button")) grid.classList.remove("is-hot"); });
 
   gsap.ticker.add(() => {
-    if (gx !== tx || gy !== ty) {
-      gx = tx; gy = ty;
-      grid.style.setProperty("--gx", tx + "px");
-      grid.style.setProperty("--gy", ty + "px");
+    sx += (tx - sx) * 0.16;
+    sy += (ty - sy) * 0.16;
+    if (Math.round(gx) !== Math.round(sx) || Math.round(gy) !== Math.round(sy)) {
+      gx = sx; gy = sy;
+      grid.style.setProperty("--gx", sx + "px");
+      grid.style.setProperty("--gy", sy + "px");
     }
     const idle = performance.now() - lastMove;
     if (!shown && idle < 550) { shown = true; gsap.to(grid, { opacity: 1, duration: 0.35, ease: "power2.out" }); }
