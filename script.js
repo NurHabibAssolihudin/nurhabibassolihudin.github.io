@@ -437,59 +437,42 @@ if (!REDUCE && GSAP_OK) {
     return { x: outX, y: outY, a: falloff(d) };
   }
 
-  function drawWarpedVertical(x, cx, cy, h) {
-    const yA = Math.max(0, cy - RADIUS), yB = Math.min(h, cy + RADIUS);
-    if (yA > 0) { const a = falloff(Math.hypot(cx - x, yA)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, yA); ctx.stroke(); } }
-    if (yB < h) { const a = falloff(Math.hypot(cx - x, yB)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(x, yB); ctx.lineTo(x, h); ctx.stroke(); } }
-    const STEP = 14;
-    let prev = { x, y: yA, a: 0 };
-    for (let y = yA; y <= yB; y += STEP) {
-      const p = warpSegment(x, y, cx, cy);
-      if (p.a > 0.015 && (prev.a > 0.015 || y > yA)) {
-        ctx.strokeStyle = rgba(Math.max(p.a, prev.a) * 0.55);
-        ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
-      }
-      prev = p;
-    }
-  }
-
-  function drawWarpedHorizontal(y, cx, cy, w) {
-    const xA = Math.max(0, cx - RADIUS), xB = Math.min(w, cx + RADIUS);
-    if (xA > 0) { const a = falloff(Math.hypot(cx - xA, cy - y)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(xA, y); ctx.stroke(); } }
-    if (xB < w) { const a = falloff(Math.hypot(cx - xB, cy - y)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(xB, y); ctx.lineTo(w, y); ctx.stroke(); } }
-    const STEP = 14;
-    let prev = { x: xA, y, a: 0 };
-    for (let x = xA; x <= xB; x += STEP) {
-      const p = warpSegment(x, y, cx, cy);
-      if (p.a > 0.015 && (prev.a > 0.015 || x > xA)) {
-        ctx.strokeStyle = rgba(Math.max(p.a, prev.a) * 0.55);
-        ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
-      }
-      prev = p;
-    }
-  }
-
   function draw(cx, cy) {
     const w = innerWidth, h = innerHeight;
     ctx.clearRect(0, 0, w, h);
     ctx.lineWidth = 1;
+    const STEP = 14;
     for (let x = 0; x <= w; x += SPACING) {
       const ld = Math.abs(cx - x);
-      if (ld > RADIUS) {
-        const a = falloff(ld);
-        if (a < 0.02) continue;
-        ctx.strokeStyle = rgba(a * 0.55);
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-      } else drawWarpedVertical(x, cx, cy, h);
+      if (ld >= VIS) continue;
+      const r = Math.sqrt(VIS * VIS - ld * ld);
+      const yA = Math.max(0, cy - r), yB = Math.min(h, cy + r);
+      if (yB <= yA) continue;
+      let prev = null;
+      for (let y = yA; y <= yB; y += STEP) {
+        const p = warpSegment(x, y, cx, cy);
+        if (prev && p.a > 0.015 && prev.a > 0.015) {
+          ctx.strokeStyle = rgba(Math.max(p.a, prev.a) * 0.55);
+          ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+        }
+        prev = p;
+      }
     }
     for (let y = 0; y <= h; y += SPACING) {
       const ld = Math.abs(cy - y);
-      if (ld > RADIUS) {
-        const a = falloff(ld);
-        if (a < 0.02) continue;
-        ctx.strokeStyle = rgba(a * 0.55);
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-      } else drawWarpedHorizontal(y, cx, cy, w);
+      if (ld >= VIS) continue;
+      const r = Math.sqrt(VIS * VIS - ld * ld);
+      const xA = Math.max(0, cx - r), xB = Math.min(w, cx + r);
+      if (xB <= xA) continue;
+      let prev = null;
+      for (let x = xA; x <= xB; x += STEP) {
+        const p = warpSegment(x, y, cx, cy);
+        if (prev && p.a > 0.015 && prev.a > 0.015) {
+          ctx.strokeStyle = rgba(Math.max(p.a, prev.a) * 0.55);
+          ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+        }
+        prev = p;
+      }
     }
   }
 
