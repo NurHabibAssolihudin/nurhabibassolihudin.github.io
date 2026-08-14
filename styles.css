@@ -94,25 +94,19 @@ a { color: inherit; text-decoration: none; }
   opacity: .6;
 }
 
-/* ---------- Custom cursor: grid reticle ---------- */
+/* ---------- Custom cursor: grid reveal (spotlight, screen-anchored) ---------- */
 :root { --grid-line: color-mix(in srgb, var(--accent-text) 34%, transparent); }
 .cursor-grid {
-  position: fixed; top: 0; left: 0; z-index: 10000; pointer-events: none;
-  width: 104px; height: 104px;
-  opacity: 0;
-  transition: opacity .4s ease;
-}
-.cursor-grid::before {
-  content: ""; position: absolute; inset: 0;
+  position: fixed; inset: 0; z-index: 10000; pointer-events: none;
   background-image:
     repeating-linear-gradient(var(--grid-line) 0 1px, transparent 1px 13px),
     repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 13px);
-  -webkit-mask-image: radial-gradient(circle, #000 26%, rgba(0,0,0,.7) 42%, transparent 68%);
-  mask-image: radial-gradient(circle, #000 26%, rgba(0,0,0,.7) 42%, transparent 68%);
-  transform-origin: center;
-  transition: transform .3s ease, opacity .3s ease;
+  -webkit-mask-image: radial-gradient(circle at var(--gx, 50vw) var(--gy, 50vh), #000 0%, rgba(0,0,0,.75) 34%, transparent var(--gr, 62%));
+  mask-image: radial-gradient(circle at var(--gx, 50vw) var(--gy, 50vh), #000 0%, rgba(0,0,0,.75) 34%, transparent var(--gr, 62%));
+  opacity: 0;
+  transition: opacity .4s ease;
 }
-.cursor-grid.is-hot::before { transform: scale(1.12); opacity: 1; }
+.cursor-grid.is-hot { --gr: 74%; }
 @media (hover: none), (pointer: coarse) { .cursor-grid { display: none; } }
 
 /* ============================================================
