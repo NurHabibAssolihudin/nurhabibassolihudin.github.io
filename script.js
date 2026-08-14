@@ -382,7 +382,7 @@ if (!REDUCE && GSAP_OK) {
 /* ============================================================
    CURSOR + MAGNETIC + BOOT
    ============================================================ */
-/* Magnetic grid — grid lines bend toward the cursor like a magnet */
+/* Magnetic grid — grid lines push away from the cursor like repelling magnets */
 (function () {
   if (REDUCE || !GSAP_OK) return;
   if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
@@ -390,9 +390,9 @@ if (!REDUCE && GSAP_OK) {
   if (!cv || !cv.getContext) return;
   const ctx = cv.getContext("2d");
   const SPACING = 13;
-  const RADIUS = 240;
-  const STRENGTH = 15;
-  const VIS = 400;
+  const RADIUS = 120;
+  const STRENGTH = 12;
+  const VIS = 260;
   let lastMove = 0;
   let shown = false;
   let running = false;
@@ -431,8 +431,8 @@ if (!REDUCE && GSAP_OK) {
     let outX = px, outY = py;
     if (d < RADIUS) {
       const k = (1 - d / RADIUS) * (1 - d / RADIUS) * STRENGTH * (hot ? 1.35 : 1);
-      outX = px + ((cx - px) / (d || 1)) * k;
-      outY = py + ((cy - py) / (d || 1)) * k;
+      outX = px - ((cx - px) / (d || 1)) * k;
+      outY = py - ((cy - py) / (d || 1)) * k;
     }
     return { x: outX, y: outY, a: falloff(d) };
   }
