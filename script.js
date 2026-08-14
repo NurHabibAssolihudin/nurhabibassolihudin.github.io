@@ -382,49 +382,142 @@ if (!REDUCE && GSAP_OK) {
 /* ============================================================
    CURSOR + MAGNETIC + BOOT
    ============================================================ */
+/* Magnetic grid — grid lines bend toward the cursor like a magnet */
 (function () {
   if (REDUCE || !GSAP_OK) return;
   if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
-  const grid = document.querySelector(".cursor-grid");
-  const rings = document.querySelectorAll(".cursor-ring");
-  if (!grid) return;
+  const cv = document.querySelector("canvas.cursor-grid");
+  if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext("2d");
+  const SPACING = 13;
+  const RADIUS = 240;
+  const STRENGTH = 15;
+  const VIS = 400;
   let lastMove = 0;
-  let lastRing = 0;
   let shown = false;
+  let running = false;
   let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
   let sx = tx, sy = ty;
-  let gx = -1, gy = -1;
-  let ri = 0;
+  let hot = false;
+  let rgb = [242, 138, 48];
 
-  function emitRing(x, y) {
-    if (!rings.length) return;
-    const ring = rings[ri];
-    ri = (ri + 1) % rings.length;
-    gsap.killTweensOf(ring);
-    gsap.set(ring, { x, y, scale: 0.35, opacity: 0.55 });
-    gsap.to(ring, { scale: 1.6, opacity: 0, duration: 1.0, ease: "power3.out" });
+  const fit = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(innerWidth * dpr);
+    cv.height = Math.round(innerHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  fit();
+  window.addEventListener("resize", fit, { passive: true });
+
+  const readAccent = () => {
+    const v = getComputedStyle(document.documentElement).getPropertyValue("--accent-text").trim();
+    const m = v.match(/rgba?\(([^)]+)\)/);
+    if (m) {
+      const p = m[1].split(",").map((s) => parseFloat(s));
+      rgb = [p[0], p[1], p[2]];
+    } else if (/^#[0-9a-f]{6}$/i.test(v)) {
+      rgb = [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)];
+    }
+  };
+  readAccent();
+  new MutationObserver(() => readAccent()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const falloff = (d) => { if (d > VIS) return 0; const t = 1 - d / VIS; return t * t; };
+  const rgba = (a) => "rgba(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + a + ")";
+
+  function warpSegment(px, py, cx, cy) {
+    const d = Math.hypot(cx - px, cy - py);
+    let outX = px, outY = py;
+    if (d < RADIUS) {
+      const k = (1 - d / RADIUS) * (1 - d / RADIUS) * STRENGTH * (hot ? 1.35 : 1);
+      outX = px + ((cx - px) / (d || 1)) * k;
+      outY = py + ((cy - py) / (d || 1)) * k;
+    }
+    return { x: outX, y: outY, a: falloff(d) };
+  }
+
+  function drawWarpedVertical(x, cx, cy, h) {
+    const yA = Math.max(0, cy - RADIUS), yB = Math.min(h, cy + RADIUS);
+    if (yA > 0) { const a = falloff(Math.hypot(cx - x, yA)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, yA); ctx.stroke(); } }
+    if (yB < h) { const a = falloff(Math.hypot(cx - x, yB)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(x, yB); ctx.lineTo(x, h); ctx.stroke(); } }
+    const STEP = 14;
+    let prev = { x, y: yA, a: 0 };
+    for (let y = yA; y <= yB; y += STEP) {
+      const p = warpSegment(x, y, cx, cy);
+      if (p.a > 0.015 && (prev.a > 0.015 || y > yA)) {
+        ctx.strokeStyle = rgba(Math.max(p.a, prev.a) * 0.55);
+        ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      }
+      prev = p;
+    }
+  }
+
+  function drawWarpedHorizontal(y, cx, cy, w) {
+    const xA = Math.max(0, cx - RADIUS), xB = Math.min(w, cx + RADIUS);
+    if (xA > 0) { const a = falloff(Math.hypot(cx - xA, cy - y)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(xA, y); ctx.stroke(); } }
+    if (xB < w) { const a = falloff(Math.hypot(cx - xB, cy - y)); if (a > 0.02) { ctx.strokeStyle = rgba(a * 0.55); ctx.beginPath(); ctx.moveTo(xB, y); ctx.lineTo(w, y); ctx.stroke(); } }
+    const STEP = 14;
+    let prev = { x: xA, y, a: 0 };
+    for (let x = xA; x <= xB; x += STEP) {
+      const p = warpSegment(x, y, cx, cy);
+      if (p.a > 0.015 && (prev.a > 0.015 || x > xA)) {
+        ctx.strokeStyle = rgba(Math.max(p.a, prev.a) * 0.55);
+        ctx.beginPath(); ctx.moveTo(prev.x, prev.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      }
+      prev = p;
+    }
+  }
+
+  function draw(cx, cy) {
+    const w = innerWidth, h = innerHeight;
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= w; x += SPACING) {
+      const ld = Math.abs(cx - x);
+      if (ld > RADIUS) {
+        const a = falloff(ld);
+        if (a < 0.02) continue;
+        ctx.strokeStyle = rgba(a * 0.55);
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      } else drawWarpedVertical(x, cx, cy, h);
+    }
+    for (let y = 0; y <= h; y += SPACING) {
+      const ld = Math.abs(cy - y);
+      if (ld > RADIUS) {
+        const a = falloff(ld);
+        if (a < 0.02) continue;
+        ctx.strokeStyle = rgba(a * 0.55);
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      } else drawWarpedHorizontal(y, cx, cy, w);
+    }
+  }
+
+  function loop() {
+    if (!running) return;
+    sx += (tx - sx) * 0.16;
+    sy += (ty - sy) * 0.16;
+    draw(sx, sy);
+    const idle = performance.now() - lastMove;
+    if (idle > 700) {
+      running = false;
+      shown = false;
+      gsap.to(cv, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
+      return;
+    }
+    requestAnimationFrame(loop);
   }
 
   window.addEventListener("mousemove", (e) => {
     tx = e.clientX; ty = e.clientY; lastMove = performance.now();
-    const now = performance.now();
-    if (now - lastRing > 130) { lastRing = now; emitRing(tx, ty); }
-  }, { passive: true });
-  document.addEventListener("mouseover", (e) => grid.classList.toggle("is-hot", !!e.target.closest("a, button")));
-  document.addEventListener("mouseout", (e) => { if (e.target.closest("a, button")) grid.classList.remove("is-hot"); });
-
-  gsap.ticker.add(() => {
-    sx += (tx - sx) * 0.16;
-    sy += (ty - sy) * 0.16;
-    if (Math.round(gx) !== Math.round(sx) || Math.round(gy) !== Math.round(sy)) {
-      gx = sx; gy = sy;
-      grid.style.setProperty("--gx", sx + "px");
-      grid.style.setProperty("--gy", sy + "px");
+    if (!running) {
+      running = true;
+      if (!shown) { shown = true; gsap.to(cv, { opacity: 1, duration: 0.3, ease: "power2.out" }); }
+      requestAnimationFrame(loop);
     }
-    const idle = performance.now() - lastMove;
-    if (!shown && idle < 550) { shown = true; gsap.to(grid, { opacity: 1, duration: 0.35, ease: "power2.out" }); }
-    else if (shown && idle >= 550) { shown = false; gsap.to(grid, { opacity: 0, duration: 0.45, ease: "power2.inOut" }); }
-  });
+  }, { passive: true });
+  document.addEventListener("mouseover", (e) => { hot = !!e.target.closest("a, button"); });
+  document.addEventListener("mouseout", (e) => { if (e.target.closest("a, button")) hot = false; });
 })();
 
 if (!REDUCE && GSAP_OK) {
