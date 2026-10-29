@@ -1,209 +1,221 @@
-/* ============ Theme ============ */
+/* ============================================================
+   NUR — one builder, two worlds
+   Vanilla, static, no build step. One core, one iris.
+   ============================================================ */
 (function () {
-  const root = document.documentElement;
-  const saved = localStorage.getItem("theme");
-  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-  root.setAttribute("data-theme", saved || (prefersLight ? "light" : "dark"));
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("#theme-toggle");
+  "use strict";
+
+  var root = document.documentElement;
+  var IS_ID = root.lang === "id";
+  var REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function (s, p) { return (p || document).querySelector(s); };
+  var $$ = function (s, p) { return Array.prototype.slice.call((p || document).querySelectorAll(s)); };
+
+  /* ---------------- theme ---------------- */
+  var THEME_COLORS = { builder: { light: "#0b0c0f", dark: "#0b0c0f" }, creator: { light: "#0b0c0f", dark: "#0b0c0f" } };
+  function syncThemeColor() {
+    var meta = $('meta[name="theme-color"]');
+    if (!meta) return;
+    var w = root.getAttribute("data-world") || "builder";
+    var t = root.getAttribute("data-theme") || "light";
+    meta.setAttribute("content", THEME_COLORS[w][t]);
+  }
+  syncThemeColor();
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest ? e.target.closest("[data-theme-toggle]") : null;
     if (!btn) return;
-    const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    try { localStorage.setItem("theme", next); } catch (err) {}
+    syncThemeColor();
   });
-})();
 
-/* ============ Nav scroll state ============ */
-const nav = document.getElementById("nav");
+  /* Compact thumbnails retain access to the original image through a native dialog. */
+  if (typeof HTMLDialogElement !== "undefined" && HTMLDialogElement.prototype.showModal) {
+    var preview = document.createElement("dialog");
+    preview.className = "preview-dialog";
+    preview.setAttribute("aria-labelledby", "preview-title");
+    preview.innerHTML = '<div class="preview-dialog__bar"><p class="preview-dialog__title" id="preview-title"></p><button type="button" class="preview-dialog__close" autofocus aria-label="' + (IS_ID ? 'Tutup gambar' : 'Close image') + '">×</button></div><img alt="" />';
+    document.body.appendChild(preview);
+    $("button", preview).addEventListener("click", function () { preview.close(); });
+    preview.addEventListener("click", function (event) {
+      if (event.target !== preview) return;
+      var bounds = preview.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) preview.close();
+    });
+    preview.addEventListener("close", function () { root.classList.remove("is-previewing"); });
+    $$(".panel__media > img").forEach(function (image) {
+      var title = $(".panel__title", image.closest(".panel")).textContent;
+      var trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.className = "project-preview";
+      trigger.setAttribute("aria-label", (IS_ID ? "Perbesar gambar " : "Enlarge image of ") + title);
+      trigger.setAttribute("aria-haspopup", "dialog");
+      image.replaceWith(trigger);
+      trigger.appendChild(image);
+      var label = document.createElement("span");
+      label.className = "project-preview__label";
+      label.textContent = IS_ID ? "Perbesar" : "View image";
+      trigger.appendChild(label);
+      trigger.addEventListener("click", function () {
+        var enlarged = $("img", preview);
+        enlarged.src = image.currentSrc || image.src;
+        enlarged.alt = image.alt;
+        $(".preview-dialog__title", preview).textContent = title;
+        preview.showModal();
+        root.classList.add("is-previewing");
+      });
+    });
+  }
 
-/* ============ Reduced-motion preference ============ */
-const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* ---------------- year ---------------- */
+  $$(".year").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
-/* ============ GSAP availability ============ */
-const GSAP_OK = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+  /* ---------------- scroll state on the bar ---------------- */
+  var bar = $("#bar");
+  function onScroll() { if (bar) bar.classList.toggle("is-scrolled", window.scrollY > 8); }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 
-/* ============ Year ============ */
-document.getElementById("year").textContent = new Date().getFullYear();
+  /* ---------------- mobile menu ---------------- */
+  var menu = $("#menu");
+  var menuBtn = $("[data-menu]");
+  function closeMenu() {
+    if (!menu || !menuBtn) return;
+    menu.hidden = true;
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.setAttribute("aria-label", IS_ID ? "Buka menu" : "Open menu");
+  }
+  if (menuBtn && menu) {
+    menuBtn.addEventListener("click", function () {
+      var open = menuBtn.getAttribute("aria-expanded") === "true";
+      if (open) { closeMenu(); return; }
+      menu.hidden = false;
+      menuBtn.setAttribute("aria-expanded", "true");
+      menuBtn.setAttribute("aria-label", IS_ID ? "Tutup menu" : "Close menu");
+    });
+    menu.addEventListener("click", function (e) { if (e.target.closest("a")) closeMenu(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+  }
 
-/* ============ Data ============ */
-const esc = (s) => String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+  /* ============================================================
+     WORLD ENGINE — the split between worlds
+     ============================================================ */
+  var worlds = { builder: $('.world[data-world="builder"]'), creator: $('.world[data-world="creator"]') };
+  var rift = $("#rift");
+  var current = root.getAttribute("data-world") === "creator" ? "creator" : "builder";
+  var busy = false;
+  var STATE_KEY = "nur-world-state";
 
-const projects = [
-  { id: "OC", name: "Ocaty", tag: "platform / e-commerce", url: null,
-    problem: "Design a product surface that multiple teams can ship to independently.",
-    built: "Module Federation micro-frontends, a design system shipped as a package, and FastAPI services (account, notification) on PostgreSQL.",
-    stack: ["TypeScript", "React", "Module Federation", "FastAPI", "PostgreSQL"] },
-  { id: "AI.1", name: "Tony", tag: "ai / self-hosted assistant", url: "https://github.com/NurHabibAssolihudin/Tony",
-    problem: "Build an AI assistant I can run myself, that remembers and can act.",
-    built: "A stateful agent with memory (Letta) + a custom React UI + an automation layer, composed as one monorepo.",
-    stack: ["Letta", "React", "Activepieces", "TypeScript"] },
-  { id: "AI.2", name: "Oxelot", tag: "web / low-level library", url: "https://github.com/NurHabibAssolihudin/Oxelot",
-    problem: "Give PWAs native-level storage, background processing, and hardware access over the open web.",
-    built: "A spec-driven library @oxelot/core + @oxelot/react with WASM SQLite VFS, OPFS storage, a worker pool, and offline sync.",
-    stack: ["TypeScript", "WASM", "Workers", "OPFS"] },
-  { id: "AI.3", name: "GenUI", tag: "ai / configurable dashboard", url: "https://github.com/NurHabibAssolihudin/GenUI",
-    problem: "Let an AI reshape a dashboard's layout from plain language.",
-    built: "FastAPI + server-rendered Jinja2, where the AI emits JSON describing UI components rendered from a small library.",
-    stack: ["Python", "FastAPI", "Jinja2", "LLM"] },
-  { id: "BT", name: "Backtrade CLI", tag: "trading / backtesting", url: "https://github.com/NurHabibAssolihudin/ZeroGrowth_Backtrade",
-    problem: "Test crypto strategies before risking real capital.",
-    built: "A Python CLI with a menu-driven UI (rich + questionary): data collection & formatting, a backtest engine, and pluggable strategies (buy-and-hold, MA crossover, random).",
-    stack: ["Python", "Rich", "Questionary"] },
-  { id: "SY", name: "RabbitMQ-Chat-App", tag: "systems / realtime", url: "https://github.com/NurHabibAssolihudin/RabbitMQ-Chat-App",
-    problem: "Feel how message brokers coordinate realtime services.",
-    built: "A FastAPI chat over RabbitMQ quorum queues with a WebSocket broadcast hub — pub/sub & durability in practice.",
-    stack: ["Python", "FastAPI", "RabbitMQ", "WebSocket"] },
-  { id: "GD", name: "alimagine", tag: "games / narrative", url: "https://github.com/alimagine",
-    problem: "Build moments and feelings through the combination of visual, audio, and story.",
-    built: "Godot games and interactive narratives — from a platformer to a world-building political thriller trilogy.",
-    stack: ["Godot", "GDScript", "Narrative"] },
-];
+  function saveState() {
+    try { sessionStorage.setItem(STATE_KEY, JSON.stringify({ world: current, scroll: saveState.scroll || 0 })); } catch (err) {}
+  }
+  window.addEventListener("pagehide", saveState);
 
-document.getElementById("proj-list").innerHTML = projects.map(p => `
-  <article class="work">
-    <div>
-      <div class="work-id">[${esc(p.id)}]</div>
-      <h3>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noreferrer">${esc(p.name)} ↗</a>` : esc(p.name)}</h3>
-      <div class="chip" style="margin-top:.6rem">${esc(p.tag)}</div>
-    </div>
-    <div>
-      <div class="wrow"><span class="wlabel">Problem</span><p>${esc(p.problem)}</p></div>
-      <div class="wrow"><span class="wlabel">What I built</span><p>${esc(p.built)}</p></div>
-    </div>
-    <div><div class="wtags">${p.stack.map(s => `<span class="chip">${esc(s)}</span>`).join("")}</div></div>
-  </article>
-`).join("");
+  function setWorld(name) {
+    current = name;
+    root.setAttribute("data-world", name);
+    worlds.builder.classList.toggle("is-live", name === "builder");
+    worlds.creator.classList.toggle("is-live", name === "creator");
+    worlds.builder.inert = name !== "builder";
+    worlds.creator.inert = name !== "creator";
+    $(".brand").setAttribute("href", name === "creator" ? "#ctop" : "#top");
+    syncThemeColor();
+  }
 
-const stack = [
-  { domain: "Languages", items: ["Python", "TypeScript", "JavaScript", "GDScript"] },
-  { domain: "Backend & AI", items: ["FastAPI", "Jinja2", "Letta", "LLM Agents", "WASM"] },
-  { domain: "Frontend & Platforms", items: ["React", "Next.js", "Vite", "Module Federation", "Design Systems"] },
-  { domain: "Data & Infra", items: ["PostgreSQL", "Redis", "RabbitMQ", "Docker"] },
-  { domain: "Tooling", items: ["Bun", "uv", "pnpm", "Git"] },
-  { domain: "Games", items: ["Godot", "GDScript"] },
-];
-document.getElementById("stack-grid").innerHTML = stack.map(s => `
-  <div class="stack-card">
-    <span class="sdomain">${esc(s.domain)}</span>
-    <div class="chips">${s.items.map(i => `<span class="chip">${esc(i)}</span>`).join("")}</div>
-  </div>
-`).join("");
+  /* The entire world changes together: brand, navigation, content and material. */
+  function applySwap(name, focusHeading) {
+    var next = name;
+    if (next === current) return;
+    setWorld(next);
+    window.scrollTo(0, 0);
+    saveState.scroll = 0;
+    closeMenu();
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search + (name === "creator" ? "#ctop" : "#top"));
+    if (focusHeading) {
+      var heading = $(".hero__h1", worlds[name]);
+      heading.setAttribute("tabindex", "-1");
+      heading.focus({ preventScroll: true });
+    }
+    armReveals(true);
+    if (window.NurField) window.NurField.sync();
+  }
 
-const philosophy = [
-  { t: "Ship, then understand deeper", d: "Plans are great, but shipping is where you learn what the system actually demands. Build real things, then dig into why they work." },
-  { t: "Productize AI, don't wrap it", d: "The value isn't a prompt box — it's turning models into products with real memory, real actions, and real interfaces." },
-  { t: "Prefer internals over abstractions", d: "Abstractions are easier to learn, internals are easier to debug. I want both, in that order." },
-  { t: "Make it observable before fast", d: "If you can't see what a system is doing, you can't make it reliable — let alone fast. Observability is the first optimization." },
-];
-document.getElementById("phil-list").innerHTML = philosophy.map(p => `
-  <div class="phil-item">
-    <span class="mark" aria-hidden="true"></span>
-    <div>
-      <h3>${esc(p.t)}</h3>
-      <p>${esc(p.d)}</p>
-    </div>
-  </div>
-`).join("");
+  async function runRift(name, origin) {
+    if(window.NurTransit)return window.NurTransit.run({root:root,rift:rift,worlds:worlds,name:name,origin:origin,swap:applySwap,closeMenu:closeMenu});
+    applySwap(name, origin && origin.matches(":focus-visible"));
+  }
 
-/* ============ Motion (Lenis + GSAP) — only when supported & allowed ============ */
-if (!REDUCE && GSAP_OK) {
-  ScrollTrigger.create({
-    start: 24,
-    onUpdate: (self) => nav.classList.toggle("scrolled", self.scroll() > 24),
+  $$("[data-cross]").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      if (busy) return;
+      busy = true;
+      var next = current === "builder" ? "creator" : "builder";
+      try { await runRift(next, btn); }
+      finally { busy = false; }
+    });
   });
-  const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
 
-  // smooth anchor scrolling
-  document.querySelectorAll('a[href^="#"]').forEach((a) => {
-    a.addEventListener("click", (e) => {
-      const id = a.getAttribute("href");
-      if (id.length > 1) {
-        e.preventDefault();
-        lenis.scrollTo(id, { offset: -70, duration: 1.2 });
+
+  /* restore the last world after a refresh */
+  try {
+    var st = JSON.parse(sessionStorage.getItem(STATE_KEY));
+    if (st && st.world && worlds[st.world]) setWorld(st.world);
+  } catch (err) {}
+
+  // Direct links select the world that owns the requested section.
+  try {
+    var anchor = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    var anchorWorld = anchor && anchor.closest(".world");
+    if (anchorWorld) current = anchorWorld.getAttribute("data-world");
+  } catch (err) {}
+  setWorld(current);
+
+  /* ============================================================
+     MOTION — section entrances, staggered, once
+     ============================================================ */
+  var REVEAL_SELECTOR = [
+    ".hero__h1", ".hero__lead", ".hero__actions", ".hero__core",
+    ".band__cap", ".about__statement", ".about__body p",
+    ".platforms__lead > p", ".build", ".work__lead",
+    ".panel__media", ".panel__text", ".more__h", ".more__list li",
+    ".stack__grid > div", ".table", ".card"
+  ].join(",");
+
+  var revealObserver;
+  function armReveals(rearm) {
+    if(revealObserver)revealObserver.disconnect();
+    var list = $$(REVEAL_SELECTOR);
+    list.forEach(function (el, i) {
+      if (!el.classList.contains("reveal")) {
+        el.classList.add("reveal");
+        el.style.setProperty("--i", String(Math.min(i % 4, 3)));
       }
+      if (rearm) el.classList.remove("in");
     });
-  });
-}
+    if (REDUCE || !("IntersectionObserver" in window)) {
+      list.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add("in"); io.unobserve(entry.target); }
+      });
+    }, { rootMargin: "0px", threshold: 0.08 });
+    list.forEach(function (el) { if (!el.classList.contains("in")) io.observe(el); });
+  }
 
-/* ============ Hero intro ============ */
-if (!REDUCE && GSAP_OK) {
-  gsap.from(".hero .eyebrow, .hero h1, .hero .lead, .hero .cta-row", {
-    y: 26, opacity: 0, duration: 0.9, ease: "power3.out",
-    stagger: 0.09, delay: 0.1,
-  });
-  gsap.from("#orbit", { scale: 0.92, opacity: 0, duration: 1.1, ease: "power3.out", delay: 0.35 });
-}
+  armReveals(false);
 
-/* ============ Orbit parallax ============ */
-if (!REDUCE && GSAP_OK) {
-  gsap.to("#orbit", {
-    yPercent: -8, ease: "none",
-    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
-  });
-}
-
-/* ============ Scroll reveals ============ */
-if (!REDUCE && GSAP_OK) {
-  gsap.utils.toArray(".reveal").forEach((el) => {
-    gsap.from(el, {
-      y: 40, opacity: 0, duration: 0.85, ease: "power3.out",
-      scrollTrigger: { trigger: el, start: "top 85%" },
-    });
-  });
-  gsap.utils.toArray(".section-head").forEach((el) => {
-    gsap.from(el, {
-      y: 24, opacity: 0, duration: 0.7, ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 88%" },
-    });
-  });
-  gsap.utils.toArray(".work").forEach((el, i) => {
-    gsap.from(el, {
-      y: 40, opacity: 0, duration: 0.8, ease: "power3.out", delay: (i % 3) * 0.06,
-      scrollTrigger: { trigger: el, start: "top 88%" },
-    });
-  });
-  gsap.utils.toArray(".stack-card").forEach((el) => {
-    gsap.from(el, {
-      y: 24, opacity: 0, duration: 0.6, ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 90%" },
-    });
-  });
-  gsap.utils.toArray(".phil-item").forEach((el) => {
-    gsap.from(el, {
-      y: 26, opacity: 0, duration: 0.6, ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 92%" },
-    });
-  });
-}
-
-/* ============ Custom cursor ============ */
-(function () {
-  if (REDUCE || !GSAP_OK) return;
-  if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
-  const dot = document.querySelector(".cursor-dot");
-  if (!dot) return;
-  const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-  window.addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  gsap.ticker.add(() => {
-    gsap.set(dot, { x: mouse.x, y: mouse.y });
+  /* anchors inside the active world: close the menu, keep focus sane */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    var id = a.getAttribute("href");
+    if (!id || id === "#") return;
+    var target = document.querySelector(id);
+    if (!target) { e.preventDefault(); return; }
+    closeMenu();
   });
 })();
-
-/* ============ Magnetic buttons ============ */
-if (!REDUCE && GSAP_OK) {
-  document.querySelectorAll("[data-magnetic]").forEach((btn) => {
-    const strength = 12;
-    btn.addEventListener("mousemove", (e) => {
-      const r = btn.getBoundingClientRect();
-      const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2) * strength;
-      const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2) * strength;
-      gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease: "power2.out" });
-    });
-    btn.addEventListener("mouseleave", () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "power3.out" });
-    });
-  });
-}
