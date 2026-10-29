@@ -16,7 +16,7 @@ export function worldMarkup(language: Language) {
     }).join('').replaceAll('src="assets/', 'src="/assets/').trim();
   }
   const nav = [
-    ['summary', 'Overview', 'Ringkasan'], ['work', 'Work', 'Pekerjaan'],
+    ['summary', 'About', 'Sekilas'], ['work', 'Projects', 'Proyek'],
     ['experience-work', 'Experience', 'Pengalaman'], ['contact', 'Contact', 'Kontak'],
   ].map(([hash, en, id]) => `<a href="#${hash}">${language === 'id' ? id : en}</a>`).join('\n');
   return {

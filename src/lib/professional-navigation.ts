@@ -10,7 +10,7 @@ export function initProfessionalNavigation() {
   const contents = panels.map(panel => panel.querySelector<HTMLElement>('.pro-content')!);
   const wheelNavigation = createWheelNavigation(chapterIds.length);
   const aliases: Record<string, string> = { platforms: 'summary', stack: 'approach', about: 'summary' };
-  let current = 0, offsets: number[] = [], width = 0, height = 0, frame = 0, disposed = false;
+  let current = 0, offsets: number[] = [], readingEnds: number[] = [], width = 0, height = 0, frame = 0, disposed = false;
   let timer: ReturnType<typeof setTimeout>;
   const offset = (index: number) => offsets[index] ?? panels[index].offsetTop - scrollArea.offsetTop;
   const activate = (index: number) => { current = index; shell.dataset.active = chapterIds[index]; };
@@ -43,13 +43,19 @@ export function initProfessionalNavigation() {
     const aligned = hadOffsets && Math.abs(scrollArea.scrollTop - offset(current)) <= 1;
     const viewportChanged = width !== scrollArea.clientWidth || height !== scrollArea.clientHeight;
     const style = getComputedStyle(panels[0]);
-    const available = shell.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
-    const needsFlow = contents.some(content => content.scrollHeight > available);
-    const modeChanged = shell.classList.contains('pro-flow') !== needsFlow;
-    shell.classList.toggle('pro-flow', needsFlow);
+    const available = scrollArea.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    let modeChanged = false;
+    // A long translation must not disable section navigation for the whole page.
+    // Only the section that needs extra reading space grows beyond the viewport.
+    contents.forEach((content, index) => {
+      const overflow = content.scrollHeight > available;
+      if (panels[index].classList.contains('pro-panel--flow') !== overflow) modeChanged = true;
+      panels[index].classList.toggle('pro-panel--flow', overflow);
+    });
     const top = scrollArea.offsetTop;
     offsets = panels.map(panel => panel.offsetTop - top);
     width = scrollArea.clientWidth; height = scrollArea.clientHeight;
+    readingEnds = panels.map((panel, index) => offsets[index] + Math.max(0, panel.offsetHeight - height));
     // Content measurement never routes through readHash. Only a structural layout
     // change may preserve an already aligned section at its new position.
     if (viewportChanged || modeChanged) {
@@ -60,7 +66,8 @@ export function initProfessionalNavigation() {
   function settle() {
     if (document.documentElement.dataset.world !== 'builder' || !offsets.length) return;
     const top = scrollArea.scrollTop;
-    const nearest = offsets.reduce((best, value, index) => Math.abs(value - top) < Math.abs(offsets[best] - top) ? index : best, 0);
+    const distance = (index: number) => Math.max(offsets[index] - top, top - readingEnds[index], 0);
+    const nearest = offsets.reduce((best, _value, index) => distance(index) < distance(best) ? index : best, 0);
     if (nearest !== current) {
       activate(nearest);
       // Reading a section is independent from choosing a work preview.
@@ -86,16 +93,28 @@ export function initProfessionalNavigation() {
     }
   }
   function historyChange() { wheelNavigation.reset(); measure(); readHash(); }
+  function readWithinSection(delta: number) {
+    if (!panels[current].classList.contains('pro-panel--flow')) return false;
+    const top = scrollArea.scrollTop, start = offset(current), end = readingEnds[current];
+    // While travelling between sections, let the gesture controller handle
+    // interruption/reversal instead of treating that travel as reading.
+    if (top < start - 1 || top > end + 1) return false;
+    if (delta > 0 ? top >= end - 1 : top <= start + 1) return false;
+    scrollArea.scrollTo({ top: Math.max(start, Math.min(end, top + delta)), behavior: 'instant' });
+    return true;
+  }
   function keys(event: KeyboardEvent) {
     const target = event.target as Element;
-    if (event.altKey || event.metaKey || event.ctrlKey || event.shiftKey || target.closest('input,textarea,select,button,a,[contenteditable],dialog') || document.documentElement.dataset.world !== 'builder' || shell.classList.contains('pro-flow')) return;
+    if (event.altKey || event.metaKey || event.ctrlKey || event.shiftKey || target.closest('input,textarea,select,button,a,[contenteditable],dialog') || document.documentElement.dataset.world !== 'builder') return;
     const step = ['ArrowDown','PageDown',' '].includes(event.key) ? 1 : ['ArrowUp','PageUp'].includes(event.key) ? -1 : 0;
     if (!step && event.key !== 'Home' && event.key !== 'End') return;
     event.preventDefault(); wheelNavigation.reset();
+    const readingStep = event.key.startsWith('Arrow') ? 40 : height * .8;
+    if (step && readWithinSection(step * readingStep)) return;
     jump(event.key === 'Home' ? 0 : event.key === 'End' ? panels.length - 1 : Math.max(0, Math.min(panels.length - 1, current + step)), true, true);
   }
   function wheel(event: WheelEvent) {
-    if (event.ctrlKey || event.metaKey || document.documentElement.dataset.world !== 'builder' || shell.classList.contains('pro-flow') || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    if (event.ctrlKey || event.metaKey || document.documentElement.dataset.world !== 'builder' || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
     let node = event.target as HTMLElement | null;
     while (node && node !== scrollArea) {
       if (/auto|scroll/.test(getComputedStyle(node).overflowY) && node.scrollHeight > node.clientHeight + 1) return;
@@ -103,6 +122,7 @@ export function initProfessionalNavigation() {
     }
     event.preventDefault();
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? height : 1);
+    if (delta && readWithinSection(delta)) return;
     const destination = wheelNavigation.input(delta, event.timeStamp, current);
     if (destination !== null) {
       jump(destination);

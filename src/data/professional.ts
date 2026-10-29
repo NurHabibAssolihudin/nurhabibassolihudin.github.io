@@ -2,49 +2,86 @@ export type Locale = 'en' | 'id';
 export type Copy = { en: string; id: string };
 export const t = (value: Copy, language: Locale) => value[language];
 export const words = {
-  hello: { en: "Hello, I'm Nur.", id: 'Halo, saya Nur.' },
-  introduction: { en: 'I work on web applications, integrations and tools. I also make games with alimagine.', id: 'Saya mengerjakan aplikasi web, integrasi, dan perangkat bantu. Saya juga membuat game bersama alimagine.' },
-  summary: { en: 'Overview', id: 'Ringkasan' }, work: { en: 'Selected work', id: 'Pekerjaan terpilih' },
-  experience: { en: 'Experience', id: 'Pengalaman' }, approach: { en: 'How I work', id: 'Cara bekerja' },
-  contact: { en: 'Get in touch', id: 'Mari berbincang' },
-  view: { en: 'View selected work', id: 'Lihat pekerjaan' }, detail: { en: 'View project details', id: 'Lihat detail proyek' },
-  back: { en: 'Back to selected work', id: 'Kembali ke pilihan pekerjaan' },
-  next: { en: 'Next section', id: 'Bagian berikutnya' }, previous: { en: 'Previous section', id: 'Bagian sebelumnya' },
+  introduction: { en: 'I develop web applications, system integrations and tools for developers. I also make games with alimagine.', id: 'Saya mengembangkan aplikasi web, integrasi sistem, dan library untuk pengembang. Di alimagine, saya juga membuat game.' },
+  summary: { en: 'About my work', id: 'Sekilas' }, work: { en: 'Selected projects', id: 'Proyek pilihan' },
+  experience: { en: 'Experience', id: 'Pengalaman' }, approach: { en: 'How I work', id: 'Cara saya bekerja' },
+  view: { en: 'Explore my projects', id: 'Lihat proyek saya' }, detail: { en: 'Explore this project', id: 'Tentang proyek ini' },
+  back: { en: 'Back to projects', id: 'Kembali ke daftar proyek' },
   personal: { en: 'Personal project', id: 'Proyek pribadi' },
-  contribution: { en: 'My contribution', id: 'Kontribusi saya' },
-  responsibility: { en: 'I handle the branding, planning, code, deployment and marketing of this personal project.', id: 'Saya menangani branding, perencanaan, kode, deployment, dan marketing proyek pribadi ini.' },
-  evidence: { en: 'What you can explore', id: 'Yang dapat ditinjau' },
+  contribution: { en: 'My role', id: 'Peran saya' },
+  responsibility: { en: 'I develop this project independently, handling its planning, branding, development, release and marketing.', id: 'Ini proyek yang saya kerjakan sendiri, mulai dari perencanaan dan identitas merek hingga pengembangan, rilis, dan pemasaran.' },
+};
+// Keep picker-only copy separate so the island does not ship all static sections.
+export const workCopy = {
+  instruction: { en: 'Select a project to see what it does and my role in building it.', id: 'Pilih proyek untuk melihat kegunaan dan peran saya di dalamnya.' },
+  select: { en: 'Select a project', id: 'Pilih proyek' },
+};
+// Each language is written for its readers rather than matched word for word.
+export const sections = {
+  portal: { en: 'Explore my game projects.', id: 'Jelajahi dunia game saya.' },
+  summary: {
+    lead: { en: 'I take my personal projects from product planning and brand identity through development, release and marketing.', id: 'Untuk proyek pribadi, saya menangani perencanaan produk, pengembangan, rilis, dan pemasarannya.' },
+    body: { en: 'ORCA is a project workspace, Ocaty brings together business applications, and Oxelot provides tools for building web apps.', id: 'ORCA membantu mengatur proyek, Ocaty menyediakan modul aplikasi bisnis, dan Oxelot menyediakan alat bantu untuk membuat aplikasi web.' },
+    background: { en: 'View my experience', id: 'Lihat pengalaman saya' },
+    scope: [
+      { name: { en: 'Product', id: 'Produk' }, description: { en: 'Planning and brand identity', id: 'Perencanaan dan identitas merek' } },
+      { name: { en: 'Development', id: 'Teknis' }, description: { en: 'Code and release', id: 'Pengembangan dan rilis' } },
+      { name: { en: 'Marketing', id: 'Pemasaran' }, description: { en: 'Introducing the product', id: 'Memperkenalkan produk' } },
+    ],
+  },
+  experience: {
+    duration: { en: 'More than one year', id: 'Lebih dari satu tahun' },
+    title: { en: 'Independent projects', id: 'Proyek pribadi' },
+    body: { en: 'Alongside my role as an R&D Developer, I develop Ocaty, ORCA and Oxelot independently. Each project has its own overview and a description of my contribution.', id: 'Di luar pekerjaan sebagai R&D Developer, saya mengembangkan Ocaty, ORCA, dan Oxelot secara mandiri. Penjelasan produk dan peran saya bisa dilihat pada masing-masing proyek.' },
+  },
+  approach: {
+    lead: { en: 'I handle both product and technical decisions in my personal projects, keeping planning, development and marketing connected.', id: 'Saya mengurus produk dan sisi teknisnya sekaligus, agar rencana, pengembangan, dan pemasarannya berjalan searah.' },
+    steps: [
+      { title: { en: 'Plan the product', id: 'Merancang produk' }, body: { en: 'Define what the product needs, plan its features and develop its brand identity.', id: 'Menentukan kebutuhan produk, merencanakan fitur, dan menyiapkan identitas merek.' } },
+      { title: { en: 'Build and release', id: 'Membangun dan merilis' }, body: { en: 'Write the code and prepare a release process that fits the project.', id: 'Mengerjakan kode dan menyiapkan proses rilis sesuai kebutuhan tiap proyek.' } },
+      { title: { en: 'Introduce the product', id: 'Memperkenalkan produk' }, body: { en: 'Explain what the product does and handle its marketing.', id: 'Menyiapkan cara menjelaskan produk dan menangani pemasarannya.' } },
+    ],
+  },
+  contact: {
+    title: { en: "Let's talk.", id: 'Mari ngobrol.' },
+    lead: { en: 'Have a project in mind, a role to discuss, or a question about my work? Send me an email.', id: 'Ada proyek, peluang kerja, atau hal lain yang ingin dibahas? Kirim email dan ceritakan kebutuhanmu.' },
+    email: { en: 'Send me an email', id: 'Kirim email' },
+    aside: { en: 'A short note is enough.', id: 'Ceritakan idemu dulu.' },
+  },
 };
 export const projects = [
   {
     id: 'project-orca', name: 'ORCA', image: '/assets/orca-workspace.png',
-    kind: { en: 'A workspace for projects', id: 'Ruang kerja untuk proyek' },
-    summary: { en: 'Documents, boards, tasks and a calendar, grouped in one workspace.', id: 'Dokumen, papan, tugas, dan kalender yang dikelompokkan dalam satu ruang kerja.' },
-    context: { en: 'ORCA brings different ways of working on a project into spaces: writing documents, organizing tasks and following a schedule.', id: 'ORCA menyatukan beberapa cara mengerjakan proyek di dalam space: menulis dokumen, mengatur tugas, dan mengikuti jadwal.' },
-    focus: { en: 'The workspace and its document, board and calendar views. The project can be self-hosted.', id: 'Ruang kerja beserta tampilan dokumen, papan, dan kalender. Proyek ini dapat di-host sendiri.' },
-    evidence: { en: 'Open the public demo to explore the workspace and its sample content without creating an account.', id: 'Buka demo publik untuk mencoba ruang kerja dan konten contohnya tanpa membuat akun.' },
+    kind: { en: 'Project workspace', id: 'Ruang kerja proyek' },
+    summary: { en: 'Keep project documents, tasks and schedules in one workspace.', id: 'Dokumen, tugas, dan jadwal proyek dalam satu ruang kerja.' },
+    context: { en: 'ORCA brings document writing, task management and project scheduling into one place.', id: 'ORCA menyediakan satu tempat untuk menulis dokumen, mengatur tugas, dan menyusun jadwal proyek.' },
+    focus: { en: 'I build the workspace and its document, board and calendar views. ORCA can also run on your own server.', id: 'Saya mengembangkan ruang kerja beserta tampilan dokumen, board tugas, dan kalendernya. ORCA juga bisa dijalankan di server sendiri.' },
+    reviewTitle: { en: 'Try the demo', id: 'Coba langsung' },
+    evidence: { en: 'Explore the workspace with sample content. No account is needed.', id: 'Coba demo berisi data contoh untuk melihat cara kerjanya. Tidak perlu membuat akun.' },
     stack: ['TypeScript', 'Documents', 'Boards', 'Calendar'],
     links: [{ label: { en: 'Open demo', id: 'Buka demo' }, url: 'https://orca.ocaty.com' }],
   },
   {
     id: 'project-ocaty', name: 'Ocaty', image: '/assets/ocaty.png',
-    kind: { en: 'Business software', id: 'Perangkat lunak bisnis' },
-    summary: { en: 'Business software with commerce, CRM and ERP modules.', id: 'Perangkat lunak bisnis dengan modul commerce, CRM, dan ERP.' },
-    context: { en: 'Ocaty explores business workflows through separate application modules and the API services behind them.', id: 'Ocaty mengerjakan alur bisnis melalui modul aplikasi yang terpisah dan layanan API yang mendukungnya.' },
-    focus: { en: 'Frontend modules with shared UI packages, alongside account and notification services.', id: 'Modul frontend dengan paket UI bersama, beserta layanan akun dan notifikasi.' },
-    evidence: { en: 'The existing page preview describes the product. Its frontend uses module federation; the services use FastAPI and PostgreSQL.', id: 'Preview halaman yang tersedia menjelaskan produknya. Frontend memakai module federation; layanannya menggunakan FastAPI dan PostgreSQL.' },
+    kind: { en: 'Business applications', id: 'Aplikasi bisnis' },
+    summary: { en: 'Business applications with commerce, CRM and ERP modules.', id: 'Aplikasi bisnis dengan modul penjualan, CRM, dan ERP.' },
+    context: { en: 'With Ocaty, I develop separate application modules for business workflows, including commerce, CRM and ERP.', id: 'Melalui Ocaty, saya mengembangkan modul untuk kebutuhan bisnis, seperti penjualan, CRM, dan ERP.' },
+    focus: { en: 'I work on frontend modules, shared interface components, and account and notification services.', id: 'Saya mengerjakan modul frontend, komponen antarmuka bersama, serta layanan akun dan notifikasi.' },
+    reviewTitle: { en: 'Technical overview', id: 'Gambaran teknis' },
+    evidence: { en: 'Module federation connects the frontend modules. The backend services use FastAPI and PostgreSQL.', id: 'Modul antarmukanya terhubung melalui module federation, dengan FastAPI dan PostgreSQL pada sisi backend.' },
     stack: ['TypeScript', 'React', 'FastAPI', 'PostgreSQL'],
     links: [] as { label: Copy; url: string }[],
   },
   {
     id: 'project-oxelot', name: 'Oxelot', image: null,
-    kind: { en: 'Tools for web applications', id: 'Perangkat untuk aplikasi web' },
-    summary: { en: 'A TypeScript library for storage, background workers and offline sync in PWAs.', id: 'Library TypeScript untuk penyimpanan, worker latar, dan sinkronisasi offline pada PWA.' },
-    context: { en: 'Oxelot works on the browser side of an application: storing data, moving work into background workers and supporting offline synchronization.', id: 'Oxelot mengerjakan sisi browser sebuah aplikasi: menyimpan data, memindahkan pekerjaan ke worker latar, dan mendukung sinkronisasi offline.' },
-    focus: { en: 'The library combines OPFS and WASM SQLite with a worker pool and offline synchronization.', id: 'Library ini menggabungkan OPFS dan WASM SQLite dengan kumpulan worker serta sinkronisasi offline.' },
-    evidence: { en: 'Read the source and documentation in the repository to inspect the library and its APIs.', id: 'Baca kode dan dokumentasi di repositori untuk meninjau library serta API-nya.' },
+    kind: { en: 'Web development library', id: 'Library pengembangan web' },
+    summary: { en: 'A TypeScript library for local storage, background workers and offline data synchronization.', id: 'Library TypeScript untuk penyimpanan lokal, background worker, dan sinkronisasi data secara offline.' },
+    context: { en: 'Oxelot provides browser-side storage, background workers and data synchronization for web applications with offline support.', id: 'Oxelot menyediakan penyimpanan lokal, background worker, dan sinkronisasi data untuk aplikasi web yang mendukung penggunaan offline.' },
+    focus: { en: 'I develop local storage with OPFS and WASM SQLite, worker pools and offline synchronization.', id: 'Saya mengembangkan penyimpanan berbasis OPFS dan WASM SQLite, pengelolaan worker, serta sinkronisasi offline.' },
+    reviewTitle: { en: 'Source and documentation', id: 'Kode dan dokumentasi' },
+    evidence: { en: 'The source code and API documentation are available on GitHub to read and try.', id: 'Kode sumber dan dokumentasi API tersedia di GitHub untuk dipelajari atau dicoba.' },
     stack: ['TypeScript', 'WASM', 'OPFS', 'Workers'],
-    links: [{ label: { en: 'View repository', id: 'Lihat repositori' }, url: 'https://github.com/NurHabibAssolihudin/Oxelot' }],
+    links: [{ label: { en: 'View repository', id: 'Lihat kode di GitHub' }, url: 'https://github.com/NurHabibAssolihudin/Oxelot' }],
   },
 ];
 

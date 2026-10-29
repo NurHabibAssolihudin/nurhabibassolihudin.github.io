@@ -9,7 +9,10 @@ const title = id ? 'Nur · web dan game' : 'Nur · software and games';
 const description = id ? 'Proyek perangkat lunak, kontribusi dan pengalaman NurHabib Assolihudin.' : 'Software projects, contributions and experience by NurHabib Assolihudin.';
 const canonical = `https://nurhabibassolihudin.github.io/${auto ? '' : language + '/'}`;
 const languages = `<nav class="language-switch" aria-label="${id ? 'Bahasa' : 'Language'}"><a href="/en/" lang="en" hreflang="en" data-language="en"${!id ? ' aria-current="true"' : ''}>EN</a><a href="/id/" lang="id" hreflang="id" data-language="id"${id ? ' aria-current="true"' : ''}>ID</a></nav>`;
-const preferences = `<div class="menu__preferences">${languages}<button type="button" data-theme-toggle>${id ? 'Ganti tema warna' : 'Switch colour theme'}</button></div>`;
+// Reuse the existing authored icon control in the mobile menu.
+const themeControl = markup.header.match(/<button class="icon" data-theme-toggle\b[\s\S]*?<\/button>/)?.[0];
+if (!themeControl) throw new Error('Missing shared theme control');
+const preferences = `<div class="menu__preferences">${languages}${themeControl}</div>`;
 const header = markup.header.replace('<div class="bar__actions">', '<div class="bar__actions">' + languages).replace('<button class="cross cross--block"', preferences + '<button class="cross cross--block"');
 ---
 <!doctype html>

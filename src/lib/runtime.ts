@@ -3,6 +3,14 @@ import { initProfessionalNavigation } from './professional-navigation';
 
 const root = document.documentElement, id = root.lang === 'id';
 const storage = { read(key: string) { try { return localStorage.getItem(key); } catch { return null; } }, save(key: string, value: string) { try { localStorage.setItem(key, value); } catch {} } };
+function syncThemeControls() {
+  const dark = root.dataset.theme === 'dark';
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(button => {
+    button.setAttribute('aria-checked', String(dark));
+    button.title = id ? `Aktifkan mode ${dark ? 'terang' : 'gelap'}` : `Use ${dark ? 'light' : 'dark'} mode`;
+  });
+}
+syncThemeControls();
 const worlds = { builder: document.querySelector<HTMLElement>('.world--builder')!, creator: document.querySelector<HTMLElement>('.world--creator')! };
 let current: 'builder' | 'creator' = 'builder', busy = false;
 let artworkReady: Promise<void> | null = null, creatorReady: Promise<void> | null = null;
@@ -57,7 +65,7 @@ document.addEventListener('click', async event => {
   const target = event.target as Element;
   if (!menu.hidden && !document.querySelector('.bar')!.contains(target)) closeMenu();
   const theme = target.closest('[data-theme-toggle]');
-  if (theme) { const next = root.dataset.theme === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; storage.save('theme', next); }
+  if (theme) { const next = root.dataset.theme === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; storage.save('theme', next); syncThemeControls(); }
   if (target.closest('[data-menu]')) { const open = menu.hidden; menu.hidden = !open; menuButton.setAttribute('aria-expanded', String(open)); menuButton.setAttribute('aria-label', id ? open ? 'Tutup menu' : 'Buka menu' : open ? 'Close menu' : 'Open menu'); }
   if (target.closest('a[href^="#"]')) closeMenu();
   const cross = target.closest<HTMLButtonElement>('[data-cross]');
