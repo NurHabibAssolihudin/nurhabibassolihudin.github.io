@@ -11,7 +11,7 @@ npm test             # language preference and gesture regression tests
 npm run verify:build # validate emitted content, links/assets and preserved creator
 ```
 
-Node 24 is used for local verification and CI. Dependencies are pinned by `package-lock.json`. `.github/workflows/build.yml` builds and checks every push to `main` and pull request targeting `main`. The workflow can also be run manually. Successful runs save `dist/` as the downloadable `portfolio-dist` artifact for 14 days. Generated output is ignored by Git; this workflow does not publish the site.
+Node 24 is used for local verification and CI. Dependencies are pinned by `package-lock.json`. `.github/workflows/build.yml` builds and checks every push to `main` and pull request targeting `main`. Successful pushes to `main` upload `dist/` as a Pages artifact and publish it in a dependent deployment job. Pull requests only validate. The workflow can also be run manually; publishing is restricted to `main`. Generated output is ignored by Git.
 
 ## Editing
 
@@ -46,4 +46,6 @@ The initial view uses static Astro markup and a lightweight navigation controlle
 
 The owner requested commit and push to main and explicitly chose to remove the obsolete site rather than retain a second implementation. Root/en/id HTML snapshots, the old page controller/build scripts and unused discipline scenes are removed. Astro routes in `src/pages/` emit the site exclusively into ignored `dist/`. Active artwork, styles and creator interactions live under `src/`; shared templates contain only retained markup.
 
-Pushes to `main` install locked dependencies with `npm ci`, run the build/typecheck, unit tests and static-output checks, then save `dist/` as `portfolio-dist` in the workflow run's Artifacts area. The runner's `dist/` directory is temporary and Pages cannot automatically read it. Publishing requires a separate Pages deployment step and the **GitHub Actions** publishing source, or compiled files committed to a branch's root or `/docs` publishing folder. A `/dist` folder is not a selectable branch publishing source. The owner will configure publishing separately; this workflow has only read access to repository contents and no Pages deployment job.
+In repository **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. Pushes to `main` install locked dependencies with `npm ci`, run the build/typecheck, unit tests and static-output checks, then upload `dist/` using `actions/upload-pages-artifact`. A dependent job publishes the artifact using `actions/deploy-pages`, the `github-pages` environment and the built-in `GITHUB_TOKEN`. Only that deployment job has Pages write and OIDC permissions; no personal access token is needed.
+
+The runner's `dist/` directory is temporary and Pages cannot automatically read it. The output is intentionally absent from the repository. The **Deploy from a branch** publishing mode only supports `/` or `/docs`, not `/dist`; it also starts the old Jekyll workflow, which does not build this Astro project. Switching the publishing source to **GitHub Actions** replaces that branch-based publishing path. The build-only workflow delivered in `d45d2ed` successfully produced the downloadable `portfolio-dist` artifact but did not publish it.
