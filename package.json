@@ -3,8 +3,29 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-pages.mjs",
-    "dev": "node scripts/preview.mjs",
-    "test": "node --test scripts/language.test.mjs"
+    "prepare:public": "node scripts/prepare-public.mjs",
+    "build": "npm run prepare:public && astro check && astro build",
+    "dev": "npm run prepare:public && astro dev --host 127.0.0.1 --port 4173",
+    "preview": "astro preview --host 127.0.0.1 --port 4173",
+    "check": "astro check",
+    "test": "node --test scripts/*.test.mjs",
+    "verify:build": "node scripts/verify-build.mjs"
+  },
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.1.2",
+    "astro": "^7.4.4",
+    "motion": "^14.7.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^6.0.3"
   }
 }

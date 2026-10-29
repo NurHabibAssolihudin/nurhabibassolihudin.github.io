@@ -7,11 +7,11 @@
   if(!canvas)return;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const fine=matchMedia('(hover: hover) and (pointer: fine)');
-  let gl=canvas.getContext('webgl',{alpha:true,antialias:false,depth:false,stencil:false,premultipliedAlpha:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
+  let gl=canvas.getContext('webgl',{alpha:true,antialias:false,depth:false,stencil:false,premultipliedAlpha:true,preserveDrawingBuffer:false,powerPreference:'low-power'});
   let context,program,buffer,uniforms,points=[],count=0,width=0,height=0,dpr=1;
   let frame=0,last=0,phase=0,held=false,lost=false,dirty=true,charged=false,disorder=0,targetDisorder=0;
-  let geometry={orb:[0,0,200],heroBottom:0,quiet:[0,0],protect:new Float32Array(12)};
-  const touches=[];
+  let geometry={orb:[0,0,200],heroBottom:0,heroVisible:true,quiet:[0,0],protect:new Float32Array(12)};
+  const touches=[],touchData=new Float32Array(24);
   const vertex=`precision highp float;
     attribute vec3 home;
     uniform vec2 viewport;
@@ -92,11 +92,12 @@
     const world=document.querySelector('.world.is-live')||document.querySelector('.world');
     const orb=world.querySelector('.core').getBoundingClientRect();
     const hero=world.querySelector('.hero').getBoundingClientRect();
-    const work=world.querySelector('.work').getBoundingClientRect();
+    const work=world.querySelector('.work,#work').getBoundingClientRect();
     geometry.orb=[orb.left+orb.width/2,orb.top+orb.height/2,Math.max(100,orb.width*.37)];
     geometry.heroBottom=hero.bottom;
+    geometry.heroVisible=hero.bottom>(document.querySelector('.bar')?.getBoundingClientRect().bottom||0)+1&&hero.top<height;
     geometry.quiet=[work.top,work.bottom];
-    ['.hero__h1','.hero__copy','.hero__corecap'].forEach((selector,index)=>{
+    ['.hero__h1','.hero__copy,.pro-hero .hero__lead','.hero__corecap'].forEach((selector,index)=>{
       const box=world.querySelector(selector).getBoundingClientRect();
       geometry.protect.set([box.left-8,box.top-8,box.right+8,box.bottom+8],index*4);
     });
@@ -138,9 +139,10 @@
     const elapsed=last?Math.min(now-last,80):42;last=now;
     if(dirty)measure();
     if(!gl){staticFrame();surface.dataset.state='static';return;}
-    if(!held&&!reduced.matches){phase+=elapsed*.001;disorder+=(targetDisorder-disorder)*(1-Math.exp(-elapsed/260));}
+    const active=root.dataset.world==='creator'||geometry.heroVisible;
+    if(!held&&!reduced.matches&&active){phase+=elapsed*.001;disorder+=(targetDisorder-disorder)*(1-Math.exp(-elapsed/260));}
     else if(force)disorder=targetDisorder;
-    const touchData=new Float32Array(24);
+    touchData.fill(0);
     if(!reduced.matches&&!held)touches.forEach((point,index)=>{
       const age=(now-point.time)/1000;
       touchData.set([point.x,point.y,Math.max(0,1-age/1.1)*.75,24+age*35],index*4);
@@ -152,9 +154,9 @@
     gl.uniform1f(uniforms.creator,root.dataset.world==='creator'?1:0);gl.uniform1f(uniforms.disorder,disorder);
     gl.uniform1f(uniforms.dpr,dpr);gl.uniform1f(uniforms.heroBottom,geometry.heroBottom);
     gl.uniform1f(uniforms.light,root.dataset.theme==='light'?1:0);gl.drawArrays(gl.POINTS,0,count);
-    surface.dataset.state=held?'held':reduced.matches?'static':charged?'charging':disorder>.02?'settling':'flowing';
+    surface.dataset.state=held?'held':reduced.matches||!active?'static':charged?'charging':disorder>.02?'settling':'flowing';
   }
-  function tick(now){frame=0;if(document.hidden||held||lost)return;if(now-last<1000/24){wake();return;}paint(now);if(gl&&!reduced.matches)wake();}
+  function tick(now){frame=0;if(document.hidden||held||lost)return;if(now-last<1000/24){wake();return;}paint(now);if(gl&&!reduced.matches&&(root.dataset.world==='creator'||geometry.heroVisible))wake();}
   function wake(){if(!frame&&!document.hidden&&!held&&!lost)frame=requestAnimationFrame(tick);}
   function snapshot(){dirty=true;paint(performance.now(),true);}
   function invalidate(){dirty=true;if(gl&&!reduced.matches)wake();else snapshot();}
@@ -165,15 +167,17 @@
     sync(){dirty=true;snapshot();wake();}
   };
   window.addEventListener('resize',resize,{passive:true});
-  window.addEventListener('scroll',invalidate,{passive:true});
+  // Capture also receives the professional page's native internal scroll.
+  window.addEventListener('scroll',invalidate,{passive:true,capture:true});
   window.addEventListener('pointermove',event=>{
-    if(!fine.matches||reduced.matches||held)return;
+    if(!fine.matches||reduced.matches||held||(root.dataset.world==='builder'&&!geometry.heroVisible))return;
     const now=performance.now();if(touches.length&&now-touches[0].time<32)return;
     touches.unshift({x:event.clientX,y:event.clientY,time:now});touches.length=Math.min(touches.length,6);wake();
   },{passive:true});
   new MutationObserver(invalidate).observe(root,{attributes:true,attributeFilter:['data-world','data-theme']});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){if(frame)cancelAnimationFrame(frame);frame=0;surface.dataset.state='paused';}else{last=0;invalidate();}});
   reduced.addEventListener('change',()=>{touches.length=0;if(frame)cancelAnimationFrame(frame);frame=0;last=0;snapshot();wake();});
+  document.fonts.ready.then(invalidate);
   if(gl)surface.addEventListener('webglcontextlost',event=>{event.preventDefault();lost=true;if(frame)cancelAnimationFrame(frame);frame=0;surface.hidden=true;root.classList.remove('has-field');});
   root.classList.add('has-field');resize();snapshot();wake();
 })();

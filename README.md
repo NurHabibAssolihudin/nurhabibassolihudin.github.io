@@ -1,21 +1,49 @@
 # NurHabib portfolio
 
-Static portfolio for GitHub Pages. No dependencies or build service required for hosting. Both locale pages are generated HTML. The full-page builder/creator switch remains essential. The current local prototype explores sculptural futurism, a clean blue planet with four satellites and an alimagine mothership with flaming skull orbiters, a responsive point field, a dotted cover and circular world opening and compact project previews.
-
-`field.js` renders one planet-influenced point field: ordered blue builder currents and fluid vermilion creator swirls. It pauses during world crossing, then settles into the new world. Drawing is capped at 24fps/DPR 1.5; reduced motion and missing WebGL use static rendering. Text and project areas stay quiet. No extra library or network service is required.
-
-The Builder discipline section at `#platforms` uses three scroll-stacked explanatory scenes. Original SVG modules, memory pieces and service blocks animate only in the active panel. `scenes.css` and `scenes.js` keep this experiment separate. Cards stay in normal flow when the viewport is too short, motion is reduced or JavaScript is disabled. Their links open the matching project article; full-page world switching is preserved.
-
-Copy in both languages describes project functions without repeated production or shipping claims. `polish.css` supplies shared spacing tokens, consistent heading scale, compact project rows, heading/image entrances and control feedback. `components.js` connects the tool selector to real project anchors and enhances native technical/process details with interruptible height animation. Reduced motion uses instant details; without JavaScript the complete tool table and both worlds remain readable. Portal captions activate the same full-page crossing as their objects.
+Bilingual portfolio built with Astro, React and TypeScript. Motion remains installed for future choreography; the current section navigation needs no animation-library runtime. Astro generates readable static HTML at `/`, `/en/` and `/id/`; GitHub Pages can serve the contents of `dist/` without a running application server.
 
 ```sh
-npm run dev    # http://127.0.0.1:4173
-npm run build  # regenerate /, /en/ and /id/ from scripts/build-pages.mjs
-npm test       # explicit choice, saved preference and browser-language fallback
+npm ci
+npm run dev          # source preview: http://127.0.0.1:4173
+npm run build        # typecheck + static dist/
+npm run preview      # inspect dist/ at the same address; stop dev first
+npm test             # language preference and gesture regression tests
+npm run verify:build # validate emitted content, links/assets and preserved creator
 ```
 
-Edit English markup in `templates/page.html` and Indonesian translations in `locales/id.json`, then run `npm run build`. `scripts/build-pages.mjs` translates text and accessible attributes. The baseline styles are in `styles.css`; the current experiment is isolated in `prototype.css`. `world-objects.js` renders both orbital scenes in Canvas 2D, without WebGL or downloaded textures. It uses a cached blue globe, projected satellite/mothership meshes, skull sprites and deterministic flame/ember animation. `planet-transit.js` owns the bitmap dot front and circular opening, and `script.js` controls world state. `planet.css` contains the object fallback and transition styling. Language navigation is in `locale.js`. Root defaults to readable English without JavaScript. Explicit locale pages never auto-redirect. `?lang=id` and `?lang=en` at root set a preference. Language links retain the current section and world.
+Node 24 is used for local verification and CI. Dependencies are pinned by `package-lock.json`. The validation workflow builds and checks changes; it does not deploy them. Pages must use an Actions deployment that uploads `dist/` when the migration is ready to publish. Generated output is ignored by Git.
 
-Automatic selection at root: explicit query > saved manual choice > first supported browser language > English. The owner chose browser preferences rather than country detection. There are no geolocation service calls, IP lookups or GPS permission requests. The prototype uses existing self-hosted Bricolage and Manrope fonts. Manual language and theme use localStorage; world state uses sessionStorage. Controls remain usable if storage is denied.
+## Editing
 
-The rejected visual iteration remains in `.taste-skill/rejected-redesign/`. Its generated landscape is not referenced by the site. The original baseline is in `.taste-skill/pre-orb-prototype/`; the previous calm material experiment is in `.taste-skill/pre-sculptural/`. Existing Ocaty and ORCA images remain unchanged and can be enlarged from their compact thumbnails. No commit, push or deployment is implied by preview.
+- `src/components/Professional.astro`, `Panel.astro`: static professional sections.
+- `src/components/WorkPicker.tsx`: the only hydrated React island; loads near the selected-work section.
+- `src/lib/professional-navigation.ts`: cached section geometry, anchors, keyboard, history and gesture wiring.
+- `src/lib/wheel-navigation.ts`: tested gesture intent handling, with no queued movements.
+- `src/data/professional.ts`: typed English/Indonesian copy and project facts. `src/data/navigation.ts` keeps lightweight section IDs out of the content bundle.
+- `src/styles/professional.css`: professional layout and responsive behavior.
+- `src/layouts/Portfolio.astro`, `src/pages/`: shared static layout, locale routes and metadata.
+- `src/lib/runtime.ts`: shared language, theme, menu and complete world switching.
+- `templates/{creator,header,footer,planet}.html`, `locales/id.json`: retained world markup and its used translations, assembled by `src/lib/world-markup.ts`.
+- `src/artwork/`: field, orbital objects and world crossing. `src/lib/creator-interactions.js` owns creator interactions. `scripts/prepare-public.mjs` copies these scripts and the shared styles from `src/styles/` into generated `public/` using an explicit allowlist.
+
+The professional world has nine sections: landing, overview, selected work, ORCA, Ocaty, Oxelot, experience, working approach and contact. Selection changes the real background preview and description; the detail action opens the matching section. Returning preserves selection. Passive scrolling through project detail sections never changes the chosen preview. A fresh direct project link seeds an empty picker; an existing manual choice survives reload/history. Old `#platforms`, `#stack` and `#about` links resolve to their new destinations.
+
+Touch uses native CSS Scroll Snap. A wheel adapter rejects small movements and decaying momentum while accepting fresh or continuing intentional input. Same-direction input during a movement is discarded, never queued or replayed at arrival. A new gesture after the section settles can advance again in the same direction. A single fast burst and its momentum cannot automatically start another section. Deliberate reversal can interrupt the current section movement immediately, using its requested destination to avoid skipping a section. Keyboard, content links and the main menu provide direct navigation. There is no slide counter or previous/next section bar. On mobile (up to 700px), a single floating dropdown trigger replaces the header strip, with language/theme controls inside the menu; content uses the full viewport height. Short/zoomed viewports use ordinary reading flow with proximity snapping so content is not clipped. Reduced motion uses immediate navigation. Without JavaScript the entire content of both worlds stays in document flow and project detail links remain available.
+
+The complete builder/creator switch remains essential. The creator's content, name **alimagine**, mothership, flaming skull orbiters and dotted-cover/circular-opening transition are preserved. Canvas rendering starts independently of React, initializes only the visited orbital scenes, pauses off screen and freezes during crossings; existing static fallbacks remain available. No new artwork is included in phase 1. Phase 2 adds professional imagery and the lounge/tea-table contact setting; phase 3 develops **Chrimson Violet**.
+
+Automatic language selection at root: explicit query, saved manual choice, first supported browser preference, then English. Explicit locale routes never auto-redirect. Language links preserve section and world. No IP lookup, GPS or geolocation provider is used. Fonts are self-hosted. Storage preferences are optional; controls continue when storage access is denied.
+
+See `MIGRATION-BRIEF.md`, `MIGRATION-PHASES.md` and `QA-PHASE-1.md` for scope, facts and validation. The npm commands above use Astro. Preview/build success does not imply commit, push or deployment.
+
+## Asset and startup optimization
+
+The existing self-hosted fonts are served as WOFF2: 40,024 bytes combined versus 177,304 bytes of original TTF. Original sources and OFL licenses remain in `assets/fonts/`. `scripts/optimize-fonts.py` regenerates the assets with optional fonttools/Brotli tooling; npm builds need only the generated WOFF2 files. Retained character widths and the current EN/ID glyph coverage were verified.
+
+The initial view uses static Astro markup and a lightweight navigation controller. React loads only as work approaches the viewport (400px observer margin). A pre-hydration project-link fallback remains usable. The first layout is established before visibility observation so the island does not accidentally load from temporary fallback geometry. Planet/background/transition scripts load in parallel, and creator interactions load on demand or warm on portal hover/focus. No legacy `scenes.css` or TTF files are copied into `dist/`. See `OPTIMIZATION-REPORT.md` for before/after measurements and verification limits.
+
+## Main delivery and Pages cutover
+
+The owner requested commit and push to main and explicitly chose to remove the obsolete site rather than retain a second implementation. Root/en/id HTML snapshots, the old page controller/build scripts and unused discipline scenes are removed. Astro routes in `src/pages/` emit the site exclusively into ignored `dist/`. Active artwork, styles and creator interactions live under `src/`; shared templates contain only retained markup.
+
+The validation workflow uploads the generated `dist/` as `portfolio-dist` for review. It does not change Pages settings or deploy. The owner will reconfigure Pages to deploy the built site. Serving the repository root directly is no longer supported.

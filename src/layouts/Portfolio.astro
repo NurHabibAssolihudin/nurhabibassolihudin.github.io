@@ -1,0 +1,48 @@
+---
+import Professional from '../components/Professional.astro';
+import { worldMarkup, type Language } from '../lib/world-markup';
+import '../styles/professional.css';
+interface Props { language: Language; auto?: boolean }
+const { language, auto = false } = Astro.props;
+const id = language === 'id', markup = worldMarkup(language);
+const title = id ? 'Nur · web dan game' : 'Nur · software and games';
+const description = id ? 'Proyek perangkat lunak, kontribusi dan pengalaman NurHabib Assolihudin.' : 'Software projects, contributions and experience by NurHabib Assolihudin.';
+const canonical = `https://nurhabibassolihudin.github.io/${auto ? '' : language + '/'}`;
+const languages = `<nav class="language-switch" aria-label="${id ? 'Bahasa' : 'Language'}"><a href="/en/" lang="en" hreflang="en" data-language="en"${!id ? ' aria-current="true"' : ''}>EN</a><a href="/id/" lang="id" hreflang="id" data-language="id"${id ? ' aria-current="true"' : ''}>ID</a></nav>`;
+const preferences = `<div class="menu__preferences">${languages}<button type="button" data-theme-toggle>${id ? 'Ganti tema warna' : 'Switch colour theme'}</button></div>`;
+const header = markup.header.replace('<div class="bar__actions">', '<div class="bar__actions">' + languages).replace('<button class="cross cross--block"', preferences + '<button class="cross cross--block"');
+---
+<!doctype html>
+<html lang={language} data-theme="light" data-world="builder" data-auto-language={auto || undefined}>
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add('js','pro-ready');try{var theme=localStorage.getItem('theme');document.documentElement.dataset.theme=theme==='light'||theme==='dark'?theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}</script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" /><meta name="theme-color" content="#0b0c0f" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href="https://nurhabibassolihudin.github.io/en/" /><link rel="alternate" hreflang="id" href="https://nurhabibassolihudin.github.io/id/" /><link rel="alternate" hreflang="x-default" href="https://nurhabibassolihudin.github.io/" />
+    <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:type" content="website" /><meta property="og:image" content="https://nurhabibassolihudin.github.io/assets/ocaty.png" /><meta property="og:locale" content={id ? 'id_ID' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content="https://nurhabibassolihudin.github.io/assets/ocaty.png" />
+    <link rel="icon" href="/assets/door.svg" />
+    <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css" /><link rel="stylesheet" href="/prototype.css" /><link rel="stylesheet" href="/planet.css" /><link rel="stylesheet" href="/polish.css" />
+    <!-- Professional rules load after the preserved creator's styling. -->
+  </head>
+  <body>
+    <a class="skip" href="#main">{id ? 'Langsung ke konten' : 'Skip to content'}</a>
+    <div class="rift" id="rift" aria-hidden="true" inert></div>
+    <div id="experience">
+      <canvas class="world-field" aria-hidden="true"></canvas>
+      <Fragment set:html={header} />
+      <main id="main">
+        <noscript><p class="wrap no-script">{id ? 'Kedua dunia ditampilkan di bawah. Tautan bagian dan EN/ID tetap dapat digunakan.' : 'Both worlds are shown below. Section and EN/ID links remain available.'}</p></noscript>
+        <div class="world world--builder is-live" data-world="builder"><Professional language={language} planet={markup.planet} /></div>
+        <Fragment set:html={markup.creator} />
+      </main>
+      <Fragment set:html={markup.footer} />
+    </div>
+    <script>import '../lib/runtime';</script>
+  </body>
+</html>

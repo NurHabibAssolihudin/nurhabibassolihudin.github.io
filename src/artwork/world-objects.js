@@ -2,7 +2,7 @@
 (function(){
   'use strict';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
-  const controllers=[],TAU=Math.PI*2;
+  const controllers=[],mounted=new WeakSet(),TAU=Math.PI*2;
   let held=false;
   const globe=document.createElement('canvas');globe.width=globe.height=400;
   const globeInk=globe.getContext('2d');
@@ -107,12 +107,14 @@
     }
     tasks.sort((a,b)=>a.z-b.z).forEach(task=>task.draw());
   }
-  document.querySelectorAll('.core__canvas').forEach(canvas=>{
+  function prepare(world){
+  document.querySelectorAll(`.world--${world==='creator'?'creator':'builder'} .core__canvas`).forEach(canvas=>{
+    if(mounted.has(canvas))return;mounted.add(canvas);
     const context=canvas.getContext('2d');if(!context||!globeInk)return;
     const button=canvas.closest('.core'),creator=canvas.closest('.world').dataset.world==='creator';
     let frame=0,last=0,previous=0,time=0,visible=false,aimX=0,aimY=0,targetX=0,targetY=0,charge=0;
     function draw(stamp,force=false){
-      frame=0;if(!visible||document.hidden)return;
+      frame=0;if(!visible||document.hidden||button.closest('.world').dataset.world!==document.documentElement.dataset.world)return;
       if(!force&&stamp-last<1000/24){wake();return;}
       const elapsed=previous?Math.min(stamp-previous,80):42;last=previous=stamp;
       if(!held&&!reduced.matches){time+=elapsed*.001;aimX+=(targetX-aimX)*.15;aimY+=(targetY-aimY)*.15;}
@@ -120,15 +122,17 @@
       scene(context,{creator,time,aimX,aimY,charge});
       canvas.dataset.state=held?'held':reduced.matches?'static':'orbiting';if(!held&&!reduced.matches)wake();
     }
-    function wake(){if(!frame&&visible&&!document.hidden&&!held)frame=requestAnimationFrame(draw);}
-    function resize(){const size=Math.max(1,Math.round(Math.min(button.getBoundingClientRect().width*(devicePixelRatio||1),innerWidth<700?400:640)));if(canvas.width!==size){canvas.width=canvas.height=size;}wake();}
+    function wake(){if(!frame&&visible&&!document.hidden&&!held&&button.closest('.world').dataset.world===document.documentElement.dataset.world)frame=requestAnimationFrame(draw);}
+    function resize(){const width=button.getBoundingClientRect().width;if(!width)return;const size=Math.max(1,Math.round(Math.min(width*(devicePixelRatio||1),innerWidth<700?400:640)));if(canvas.width!==size){canvas.width=canvas.height=size;}wake();}
     new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){previous=0;resize();wake();}else if(frame){cancelAnimationFrame(frame);frame=0;}},{rootMargin:'0px'}).observe(canvas);
     new ResizeObserver(resize).observe(button);
     button.addEventListener('pointermove',event=>{if(!fine.matches||reduced.matches)return;const r=button.getBoundingClientRect();targetX=(event.clientX-r.left)/r.width-.5;targetY=(event.clientY-r.top)/r.height-.5;wake();});button.addEventListener('pointerleave',()=>{targetX=targetY=0;wake();});
     controllers.push({charge(value){charge=value?1:0;},hold(value){if(frame){cancelAnimationFrame(frame);frame=0;}if(!value)wake();},snapshot(){if(!button.closest('.world').classList.contains('is-live'))return;visible=true;resize();if(frame){cancelAnimationFrame(frame);frame=0;}draw(performance.now(),true);},wake});
     button.classList.add('has-planet');canvas.dataset.renderer='vector-2d';canvas.dataset.object=creator?'mothership':'blue-planet';canvas.dataset.orbiters='4';
   });
+  }
   window.NurPlanet={
+    prepare,
     charge(value){controllers.forEach(c=>c.charge(value));},hold(value){held=value;controllers.forEach(c=>c.hold(value));},snapshot(){controllers.forEach(c=>c.snapshot());},
     emblem(ink,world){
       const image=document.createElement('canvas');image.width=image.height=200;const source=image.getContext('2d');if(!source)return false;
@@ -138,4 +142,5 @@
     }
   };
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)controllers.forEach(c=>c.wake());});reduced.addEventListener('change',()=>{window.NurPlanet.snapshot();controllers.forEach(c=>c.wake());});
+  prepare(document.documentElement.dataset.world);
 })();

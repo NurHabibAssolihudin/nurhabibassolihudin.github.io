@@ -1,6 +1,6 @@
 /* Fractured worlds: a typographic poster and one impossible physical artefact. */
-@font-face{font-family:Manrope;src:url('/assets/fonts/manrope.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:Bricolage;src:url('/assets/fonts/bricolage.ttf') format('truetype');font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:Manrope;src:url('/assets/fonts/manrope.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Bricolage;src:url('/assets/fonts/bricolage.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
 :root{
   --font-display:Bricolage,sans-serif;--font-text:Manrope,sans-serif;
   --step-display:clamp(3rem,7.8vw,7rem);--step-head:clamp(1.8rem,3.4vw,3rem);

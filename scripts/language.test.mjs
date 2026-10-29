@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { chooseLanguage } from '../language.mjs';
+import { chooseLanguage } from '../src/lib/language.mjs';
 
 test('explicit language and remembered choice win over browser preference', () => {
   assert.equal(chooseLanguage({ explicit: 'en', saved: 'id', languages: ['id-ID'] }), 'en');

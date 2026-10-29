@@ -1,0 +1,5 @@
+---
+interface Props { section: string; class?: string }
+const {section, class: className = ''} = Astro.props;
+---
+<section id={section} class={`pro-panel ${className}`} data-chapter aria-labelledby={`${section}-title`}><div class="pro-content"><slot /></div></section>
