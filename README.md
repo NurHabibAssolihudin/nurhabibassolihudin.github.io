@@ -11,7 +11,7 @@ npm test             # language preference and gesture regression tests
 npm run verify:build # validate emitted content, links/assets and preserved creator
 ```
 
-Node 24 is used for local verification and CI. Dependencies are pinned by `package-lock.json`. The validation workflow builds and checks changes; it does not deploy them. Pages must use an Actions deployment that uploads `dist/` when the migration is ready to publish. Generated output is ignored by Git.
+Node 24 is used for local verification and CI. Dependencies are pinned by `package-lock.json`. `.github/workflows/build.yml` builds and checks every push to `main` and pull request targeting `main`. The workflow can also be run manually. Successful runs save `dist/` as the downloadable `portfolio-dist` artifact for 14 days. Generated output is ignored by Git; this workflow does not publish the site.
 
 ## Editing
 
@@ -46,4 +46,4 @@ The initial view uses static Astro markup and a lightweight navigation controlle
 
 The owner requested commit and push to main and explicitly chose to remove the obsolete site rather than retain a second implementation. Root/en/id HTML snapshots, the old page controller/build scripts and unused discipline scenes are removed. Astro routes in `src/pages/` emit the site exclusively into ignored `dist/`. Active artwork, styles and creator interactions live under `src/`; shared templates contain only retained markup.
 
-The validation workflow uploads the generated `dist/` as `portfolio-dist` for review. It does not change Pages settings or deploy. The owner will reconfigure Pages to deploy the built site. Serving the repository root directly is no longer supported.
+Pushes to `main` install locked dependencies with `npm ci`, run the build/typecheck, unit tests and static-output checks, then save `dist/` as `portfolio-dist` in the workflow run's Artifacts area. The runner's `dist/` directory is temporary and Pages cannot automatically read it. Publishing requires a separate Pages deployment step and the **GitHub Actions** publishing source, or compiled files committed to a branch's root or `/docs` publishing folder. A `/dist` folder is not a selectable branch publishing source. The owner will configure publishing separately; this workflow has only read access to repository contents and no Pages deployment job.
