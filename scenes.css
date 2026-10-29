@@ -1,0 +1,73 @@
+/* Three disciplines, three working objects. The deck follows the reader's scroll. */
+.platforms--scenes{padding-block:1rem var(--section)}
+.platforms--scenes .platforms__lead{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;max-width:none;align-items:end;margin-bottom:3rem}
+.platforms--scenes .h2{font-size:clamp(2.7rem,5.8vw,5rem);max-width:13ch;line-height:.98}
+.platforms--scenes .platforms__lead>p{max-width:45ch;padding-bottom:.25rem}
+.discipline-deck{display:block;padding-bottom:1rem}
+.discipline-scene{position:relative;margin-bottom:clamp(3rem,8vw,7rem);scroll-margin-top:2rem}
+.discipline-scene:last-child{margin-bottom:0}
+.discipline-scene__surface{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:1fr auto;align-items:center;gap:1.5rem 1rem;min-height:560px;padding:clamp(2rem,4.2vw,4rem);overflow:hidden;transform-origin:50% 0;border-radius:4px;background:var(--stage);color:var(--stage-ink)}
+.discipline-scene--platform{--stage:#4264ff;--stage-ink:#fff;z-index:1}
+.discipline-scene--ai{--stage:#e5e5df;--stage-ink:#121823;z-index:2}
+.discipline-scene--systems{--stage:#171d28;--stage-ink:#f1efe7;z-index:3}
+.discipline-scene__copy{position:relative;z-index:1;max-width:39ch}
+.discipline-scene h3{font-size:clamp(2.4rem,4.5vw,4rem);line-height:.98;max-width:12ch;margin-bottom:1.5rem}
+.discipline-scene__copy>p{line-height:1.65;max-width:36ch}
+.discipline-scene__link{display:inline-flex;align-items:center;justify-content:space-between;gap:2.5rem;min-height:48px;margin-top:1.5rem;font-weight:600;text-decoration:underline;text-underline-offset:6px}
+.discipline-scene__link>span{font-size:1.5rem;transition:transform 160ms var(--ease)}
+.discipline-scene__link:focus-visible{outline:3px solid currentColor;outline-offset:5px}
+.discipline-scene__tools{grid-column:1;align-self:end;font-size:var(--step-small);line-height:1.65;max-width:37ch}
+.discipline-object{grid-column:2;grid-row:1/3;min-width:0;align-self:center}
+.discipline-object__art{display:block;width:115%;height:clamp(260px,29vw,380px);max-width:none;margin-left:-6%;overflow:visible}
+.discipline-object figcaption{text-align:center;font-size:var(--step-small);margin-top:1rem}
+.scene-part{transform-box:fill-box;transform-origin:center;animation-play-state:paused!important}
+.module{animation:module-assemble 4.8s var(--ease-in-out) infinite}
+.module--back{animation-delay:-.2s}
+.module--left{animation-delay:-.5s}
+.module--right{animation-delay:-.8s}
+.module--front{animation-delay:-1.1s}
+.memory-drum{animation:memory-read 5s var(--ease-in-out) infinite}
+.memory{animation:memory-connect 5s var(--ease-in-out) infinite}
+.memory--back{animation-delay:-1.5s}
+.memory--front{animation-delay:-3s}
+.system-packet{animation:packet-deliver 3.8s var(--ease-in-out) infinite}
+.system-bridge{animation:bridge-receive 3.8s var(--ease-in-out) infinite}
+html.has-scenes .discipline-scene{position:sticky;top:32px}
+html.has-scenes .discipline-scene:nth-child(2){top:54px}
+html.has-scenes .discipline-scene:nth-child(3){top:76px}
+html:not(.is-crossing):not(.scenes-hidden) .world.is-live .discipline-scene.is-active .scene-part{animation-play-state:running!important}
+@keyframes module-assemble{0%,16%,88%,100%{transform:translateY(0)}42%,62%{transform:translateY(-38px)}}
+@keyframes memory-read{0%,20%,85%,100%{transform:translateY(0)}45%,60%{transform:translateY(-13px)}}
+@keyframes memory-connect{0%,18%,85%,100%{transform:translate(0,0);opacity:1}45%,60%{transform:translate(10px,-20px);opacity:.65}}
+@keyframes packet-deliver{0%,10%{transform:translate(0,0);opacity:0}18%{opacity:1}48%{transform:translate(95px,48px);opacity:1}78%{transform:translate(217px,-14px);opacity:1}86%,100%{transform:translate(217px,-14px);opacity:0}}
+@keyframes bridge-receive{0%,38%,100%{transform:translateY(0)}55%,68%{transform:translateY(-16px)}}
+@media(hover:hover) and (pointer:fine){.discipline-scene__link:hover>span{transform:translate(3px,-3px)}}
+@media(max-width:900px){
+  .discipline-scene__surface{min-height:530px;padding:2rem;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .discipline-scene h3{font-size:clamp(2.2rem,5vw,3.5rem)}
+  .discipline-object__art{width:125%;margin-left:-12%}
+  .discipline-scene__copy>p{font-size:1rem}
+}
+@media(max-width:600px){
+  .platforms--scenes .platforms__lead{grid-template-columns:1fr;gap:1.25rem;margin-bottom:2rem}
+  .platforms--scenes .h2{font-size:clamp(2.6rem,10vw,3.5rem);max-width:12ch}
+  .discipline-scene__surface{grid-template-columns:1fr;grid-template-rows:auto auto auto;min-height:0;padding:1.5rem;gap:1rem}
+  .discipline-scene h3{font-size:2.35rem;max-width:12ch;margin-bottom:1rem}
+  .discipline-scene__copy>p{line-height:1.55}
+  .discipline-scene__link{margin-top:.75rem}
+  .discipline-object{grid-column:1;grid-row:2;width:100%;max-width:340px;justify-self:center}
+  .discipline-object__art{width:105%;margin-left:-2.5%;height:210px}
+  .discipline-object figcaption{margin-top:0;font-size:.875rem}
+  .discipline-scene__tools{grid-column:1;grid-row:3;max-width:none;font-size:.875rem}
+  html.has-scenes .discipline-scene{top:14px}
+  html.has-scenes .discipline-scene:nth-child(2){top:28px}
+  html.has-scenes .discipline-scene:nth-child(3){top:42px}
+}
+/* Every card remains readable on short screens and without motion or script. */
+html.has-scenes.scenes-flow .discipline-scene{position:relative!important;top:auto!important}
+@media(prefers-reduced-motion:reduce){
+  html.has-scenes .discipline-scene{position:relative!important;top:auto!important}
+  .discipline-scene__surface{transform:none!important;opacity:1!important}
+  .scene-part{animation:none!important}
+  .discipline-scene__link>span{transition:none}
+}

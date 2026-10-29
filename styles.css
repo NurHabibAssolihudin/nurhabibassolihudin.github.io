@@ -387,3 +387,18 @@ html.js .reveal.in { opacity: 1; transform: none; }
   html.js .reveal { opacity: 1; transform: none; }
   .iris { display: none !important; }
 }
+
+/* Language controls extend the original header without replacing world navigation. */
+.language-switch { display: inline-flex; align-items: center; gap: 2px; margin-right: .25rem; }
+.language-switch a { display: grid; place-items: center; min-width: 34px; min-height: 40px; font-size: var(--step-small); color: var(--muted); }
+.language-switch a[aria-current] { color: var(--ink); background: var(--bg-2); font-weight: 600; }
+.language-switch a:hover { color: var(--accent); }
+.no-script { padding-block: 1rem; }
+html:not(.js) .world { display: block; }
+html:not(.js) [data-cross] { display: none; }
+@media (max-width: 600px) {
+  .bar__actions > .cross { display: none; }
+  .bar__inner { gap: .5rem; }
+  .bar__actions { gap: .15rem; }
+  .card__actions .btn { overflow-wrap: anywhere; max-width: 100%; }
+}

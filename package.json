@@ -1,0 +1,10 @@
+{
+  "name": "nur-two-worlds",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "dev": "node scripts/preview.mjs",
+    "test": "node --test scripts/language.test.mjs"
+  }
+}

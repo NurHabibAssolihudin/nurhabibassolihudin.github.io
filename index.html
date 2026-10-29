@@ -1,39 +1,44 @@
+<!-- Generated from templates/page.html and locales/id.json. -->
 <!doctype html>
-<html lang="en" data-theme="light" data-world="builder">
+<html lang="en" data-auto-language data-theme="light" data-world="builder">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<script>document.documentElement.classList.add("js");document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));</script>
-<title>Nur · one builder, two worlds</title>
-<meta name="description" content="NurHabib Assolihudin builds platform architecture and AI products, and makes game worlds with alimagine. One builder, two worlds." />
+<script>document.documentElement.classList.add("js");try{var theme=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",theme==="light"||theme==="dark"?theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
+<title>Nur · software and games</title>
+<meta name="description" content="Software projects, tools and games by NurHabib Assolihudin." />
 <meta name="color-scheme" content="light dark" />
 <meta name="theme-color" content="#e9e8e4" />
-<link rel="canonical" href="https://nurhabibassolihudin.github.io/" />
+<link rel="canonical" href="https://nurhabibassolihudin.github.io/en/" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Nur · one builder, two worlds" />
-<meta property="og:description" content="Platform architecture and AI products, plus the game worlds made with alimagine." />
-<meta property="og:url" content="https://nurhabibassolihudin.github.io/" />
+<meta property="og:title" content="Nur · software and games" />
+<meta property="og:description" content="Web applications, tools and game projects." />
+<meta property="og:url" content="https://nurhabibassolihudin.github.io/en/" />
 <meta property="og:image" content="https://nurhabibassolihudin.github.io/assets/ocaty.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Nur · one builder, two worlds" />
-<meta name="twitter:description" content="Platform architecture and AI products, plus the game worlds made with alimagine." />
+<meta name="twitter:title" content="Nur · software and games" />
+<meta name="twitter:description" content="Web applications, tools and game projects." />
 <meta name="twitter:image" content="https://nurhabibassolihudin.github.io/assets/ocaty.png" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23a8430d' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='%23a8430d'/%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=1" />
+<link rel="stylesheet" href="/styles.css?v=5" />
+<link rel="stylesheet" href="/prototype.css?v=8" />
+<link rel="stylesheet" href="/scenes.css?v=1" />
+<link rel="stylesheet" href="/planet.css?v=2" />
+<link rel="stylesheet" href="/polish.css?v=1" />
+<link rel="alternate" hreflang="en" href="https://nurhabibassolihudin.github.io/en/" />
+<link rel="alternate" hreflang="id" href="https://nurhabibassolihudin.github.io/id/" />
+<link rel="alternate" hreflang="x-default" href="https://nurhabibassolihudin.github.io/" />
+<meta property="og:locale" content="en_US" />
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
 
-<!-- one core, two worlds: the iris that carries you across -->
-<div class="iris" id="iris" aria-hidden="true">
-  <span class="iris__fill"></span>
-  <span class="iris__ring"></span>
-</div>
+<!-- A blue planet and a mothership open the passage between two complete worlds. -->
+<div class="rift" id="rift" aria-hidden="true" inert></div>
 
+<div id="experience">
+<canvas class="world-field" aria-hidden="true"></canvas>
 <header class="bar" id="bar">
   <div class="wrap bar__inner">
     <a class="brand" href="#top">
@@ -44,24 +49,25 @@
 
     <nav class="nav" aria-label="Primary">
       <div class="nav__set nav__set--builder">
-        <a href="#platforms">Platforms</a>
-        <a href="#work">Work</a>
-        <a href="#stack">Stack</a>
+        <a href="#platforms">Focus</a>
+        <a href="#work">Projects</a>
+        <a href="#stack">Tools</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="nav__set nav__set--creator">
-        <a href="#worlds">Worlds</a>
-        <a href="#craft">Craft</a>
+        <a href="#worlds">Projects</a>
+        <a href="#craft">Process</a>
         <a href="#tools">Tools</a>
-        <a href="#play">Play</a>
+        <a href="#play">Contact</a>
       </div>
     </nav>
 
     <div class="bar__actions">
+      <nav class="language-switch" aria-label="Language"><a href="/en/" lang="en" hreflang="en" data-language="en" aria-current="true">EN</a><a href="/id/" lang="id" hreflang="id" data-language="id">ID</a></nav>
       <button class="cross" data-cross type="button" aria-label="Cross to the other world">
         <span class="cross__dot" aria-hidden="true"></span>
-        <span class="cross__label cross__label--builder">Creator world</span>
-        <span class="cross__label cross__label--creator">Builder world</span>
+        <span class="cross__label cross__label--builder">alimagine</span>
+        <span class="cross__label cross__label--creator">Software</span>
       </button>
       <button class="icon" data-theme-toggle type="button" aria-label="Switch colour theme">
         <svg class="icon__sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></svg>
@@ -76,16 +82,16 @@
   <div class="menu" id="menu" hidden>
     <div class="wrap">
       <div class="nav__set nav__set--builder">
-        <a href="#platforms">Platforms</a>
-        <a href="#work">Work</a>
-        <a href="#stack">Stack</a>
+        <a href="#platforms">Focus</a>
+        <a href="#work">Projects</a>
+        <a href="#stack">Tools</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="nav__set nav__set--creator">
-        <a href="#worlds">Worlds</a>
-        <a href="#craft">Craft</a>
+        <a href="#worlds">Projects</a>
+        <a href="#craft">Process</a>
         <a href="#tools">Tools</a>
-        <a href="#play">Play</a>
+        <a href="#play">Contact</a>
       </div>
       <button class="cross cross--block" data-cross type="button">
         <span class="cross__label cross__label--builder">Cross to the creator world</span>
@@ -96,6 +102,7 @@
 </header>
 
 <main id="main">
+<noscript><p class="wrap no-script">Both worlds are shown below. EN/ID links remain available.</p></noscript>
 
 <!-- ============================================================
      WORLD A / BUILDER
@@ -104,77 +111,168 @@
 
   <section class="hero" id="top">
     <div class="wrap hero__grid">
-      <h1 class="hero__h1">I build platforms and worlds.</h1>
+      <h1 class="hero__h1"><span class="hero__line">Web &amp;</span><span class="hero__line">systems.</span></h1>
       <div class="hero__foot">
         <div class="hero__copy">
-          <p class="hero__lead">I'm Nur. I design platform architecture and AI products that people can run, and I make games and story-worlds with alimagine. Same builder, two directions.</p>
+          <p class="hero__lead">I'm Nur, a software developer. I work on web applications, integrations and infrastructure, and make games with alimagine.</p>
           <div class="hero__actions">
-            <a class="btn" href="#work">See the work</a>
-            <a class="quiet" href="#platforms">How I build</a>
+            <a class="btn" href="#work">View projects</a>
+            <a class="quiet" href="#platforms">Areas of work</a>
           </div>
         </div>
 
         <div class="hero__core">
         <button class="core" data-cross type="button" aria-label="Cross to the creator world">
-          <span class="core__ring" aria-hidden="true"></span>
-          <span class="core__arc core__arc--a" aria-hidden="true"></span>
-          <span class="core__arc core__arc--b" aria-hidden="true"></span>
-          <span class="core__disc" aria-hidden="true"><span class="core__seam"></span></span>
+          <svg class="planet__fallback" viewBox="0 0 640 640" aria-hidden="true" focusable="false">
+<ellipse cx="320" cy="320" rx="240" ry="88" transform="rotate(-20 320 320)" fill="none" stroke="#718bd0" stroke-width="2" opacity=".4"/>
+<g transform="translate(320 320) scale(.75) translate(-320 -320)"><circle cx="320" cy="320" r="166" fill="#4264ff"/><path d="M320 154a166 166 0 0 1 0 332c67-45 81-105 70-178-8-65-30-118-70-154Z" fill="#2645d2"/></g>
+<g transform="translate(505 225) rotate(-18)"><path d="M-42-13h25v26h-25ZM17-13h25v26H17Z" fill="#5478dc"/><path d="M-12-17h24v34h-24Z" fill="#dce3ed"/><path d="M-3-29h6v12h-6Z" fill="#bdcadd"/></g><g transform="translate(153 421) rotate(22)"><path d="M-42-13h25v26h-25ZM17-13h25v26H17Z" fill="#5478dc"/><path d="M-12-17h24v34h-24Z" fill="#dce3ed"/><path d="M-3-29h6v12h-6Z" fill="#bdcadd"/></g><g transform="translate(215 150) rotate(-26)"><path d="M-42-13h25v26h-25ZM17-13h25v26H17Z" fill="#5478dc"/><path d="M-12-17h24v34h-24Z" fill="#dce3ed"/><path d="M-3-29h6v12h-6Z" fill="#bdcadd"/></g><g transform="translate(485 460) rotate(35)"><path d="M-42-13h25v26h-25ZM17-13h25v26H17Z" fill="#5478dc"/><path d="M-12-17h24v34h-24Z" fill="#dce3ed"/><path d="M-3-29h6v12h-6Z" fill="#bdcadd"/></g>
+</svg>
+          <canvas class="core__canvas" width="640" height="640" aria-hidden="true"></canvas>
         </button>
-        <p class="hero__corecap">The core is the doorway: builder on one side, creator on the other. <span class="accent">Press to cross</span>.</p>
+        <p class="hero__corecap">Game projects. <button class="accent core-link" data-cross type="button">Open alimagine ↗</button></p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="band" aria-label="Products in production">
-    <div class="wrap band__grid">
-      <figure class="band__item">
-        <img src="assets/ocaty.png" width="1360" height="860" alt="Ocaty platform landing page, listing commerce, CRM, ERP and API modules" loading="lazy" decoding="async" />
-      </figure>
-      <figure class="band__item">
-        <img src="assets/orca-app.png" width="1360" height="860" alt="ORCA workspace showing spaces, projects and views" loading="lazy" decoding="async" />
-      </figure>
-      <figure class="band__item">
-        <img src="assets/orca-workspace.png" width="1360" height="860" alt="ORCA project hub for the Sunset Coffee Launch sample project" loading="lazy" decoding="async" />
-      </figure>
-    </div>
-    <div class="wrap">
-      <p class="band__cap">Running in production: the Ocaty business platform and ORCA, the workspace for ideas, plans and work.</p>
-    </div>
-  </section>
-
-  <section class="about" id="about">
-    <div class="wrap about__grid">
-      <p class="about__statement">I turn ideas into systems, products and stories, building the things I want to understand first.</p>
-      <div class="about__body">
-        <p>Most of my work starts as a question about how something really behaves underneath. The architecture is the answer I converge on after enough iterations: a platform split so teams can ship independently, an agent that keeps memory instead of forgetting, a bridge that lets the open web do what native apps do.</p>
-        <p class="muted">I care about the internals, not just the surface. Then build the next layer on top of what I learned.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="platforms" id="platforms">
-    <div class="wrap platforms__grid">
+  <section class="platforms platforms--scenes" id="platforms" aria-labelledby="disciplines-title">
+    <div class="wrap discipline-wrap">
       <div class="platforms__lead">
-        <h2 class="h2">Three sides of the same builder.</h2>
-        <p class="muted">Platforms, AI products and the systems underneath them. Each one exists because a real question needed an answer.</p>
+        <h2 class="h2" id="disciplines-title">Areas of work.</h2>
+        <p class="muted">Web applications, AI tooling and the services around them.</p>
       </div>
-      <ol class="builds">
-        <li class="build">
-          <h3 class="build__title">Platform architecture</h3>
-          <p class="build__desc">Modular surfaces that separate teams can ship to independently: module federation for the frontend, a design system published as a package, services behind it.</p>
-          <p class="build__meta">Ocaty · Module Federation · FastAPI · Design systems</p>
+      <ol class="discipline-deck">
+        <li class="discipline-scene discipline-scene--platform">
+          <div class="discipline-scene__surface">
+            <div class="discipline-scene__copy">
+              <h3>Web applications</h3>
+              <p>Frontend modules, shared components and APIs for web applications.</p>
+              <a class="discipline-scene__link" href="#project-ocaty">Explore Ocaty <span aria-hidden="true">↗</span></a>
+            </div>
+            <figure class="discipline-object">
+              <svg class="discipline-object__art" viewBox="0 0 600 420" aria-hidden="true" focusable="false">
+                <g class="architecture-base">
+                  <path fill="#182963" d="M70 238 300 354 535 237 305 122Z"/>
+                  <path fill="#111d49" d="M70 238v24l230 116v-24Z"/>
+                  <path fill="#263a84" d="M300 354v24l235-117v-24Z"/>
+                  <path fill="#90a7ff" d="m102 237 198 99 202-100-197-99Z"/>
+                </g>
+                <g class="scene-part module module--back">
+                  <path fill="#bec9e3" d="m202 147 101 51 103-52-101-51Z"/>
+                  <path fill="#596c9f" d="M202 147v47l101 51v-47Z"/>
+                  <path fill="#8599c6" d="M303 198v47l103-52v-47Z"/>
+                  <path fill="#f2f0e9" d="m218 147 85 42 87-43-85-43Z"/>
+                  <path fill="#4264ff" d="m267 148 36 18 37-19-36-18Z"/>
+                </g>
+                <g class="scene-part module module--left">
+                  <path fill="#f2f0e9" d="m93 204 101 51 103-52-101-51Z"/>
+                  <path fill="#b4bdd3" d="M93 204v47l101 51v-47Z"/>
+                  <path fill="#dae0ec" d="M194 255v47l103-52v-47Z"/>
+                  <path fill="#182963" d="m157 205 38 19 39-20-38-19Z"/>
+                </g>
+                <g class="scene-part module module--right">
+                  <path fill="#f2f0e9" d="m312 203 101 51 103-52-101-51Z"/>
+                  <path fill="#b4bdd3" d="M312 203v47l101 51v-47Z"/>
+                  <path fill="#dae0ec" d="M413 254v47l103-52v-47Z"/>
+                  <path fill="#4264ff" d="m376 204 38 19 39-20-38-19Z"/>
+                </g>
+                <g class="scene-part module module--front">
+                  <path fill="#172452" d="m202 260 101 51 103-52-101-51Z"/>
+                  <path fill="#0b1539" d="M202 260v47l101 51v-47Z"/>
+                  <path fill="#263a84" d="M303 311v47l103-52v-47Z"/>
+                  <path fill="#e9edf7" d="m267 260 36 18 37-19-36-18Z"/>
+                </g>
+              </svg>
+              <figcaption>Separate modules, shared components.</figcaption>
+            </figure>
+            <p class="discipline-scene__tools">Ocaty · Module Federation · FastAPI · Design systems</p>
+          </div>
         </li>
-        <li class="build">
-          <h3 class="build__title">AI products</h3>
-          <p class="build__desc">Turning models into products people can actually run: agents with real memory and real actions, interfaces a language model writes, bridges that give a PWA real power.</p>
-          <p class="build__meta">Tony · GenUI · Oxelot · Letta · Activepieces · React</p>
+        <li class="discipline-scene discipline-scene--ai">
+          <div class="discipline-scene__surface">
+            <div class="discipline-scene__copy">
+              <h3>AI tooling</h3>
+              <p>Agents, memory and tool integrations, explored through Tony and GenUI.</p>
+              <a class="discipline-scene__link" href="#project-tony">Meet Tony <span aria-hidden="true">↗</span></a>
+            </div>
+            <figure class="discipline-object">
+              <svg class="discipline-object__art" viewBox="0 0 600 420" aria-hidden="true" focusable="false">
+                <path fill="#c4c6c7" d="M132 251c0 47 75 85 168 85s168-38 168-85v30c0 47-75 85-168 85s-168-38-168-85Z"/>
+                <ellipse fill="#d9dcdf" cx="300" cy="251" rx="168" ry="85"/>
+                <ellipse fill="#a9b0bd" cx="300" cy="251" rx="122" ry="62"/>
+                <g class="scene-part memory-drum">
+                  <path fill="#151d30" d="M168 202c0 37 59 67 132 67s132-30 132-67v38c0 37-59 67-132 67s-132-30-132-67Z"/>
+                  <ellipse fill="#334158" cx="300" cy="202" rx="132" ry="67"/>
+                  <ellipse fill="#101929" cx="300" cy="202" rx="91" ry="46"/>
+                  <path fill="#4264ff" d="M239 167v45c0 17 27 31 61 31s61-14 61-31v-45Z"/>
+                  <ellipse fill="#7691ff" cx="300" cy="167" rx="61" ry="31"/>
+                  <ellipse fill="#d8e1ff" cx="300" cy="167" rx="26" ry="13"/>
+                </g>
+                <g class="scene-part memory memory--left">
+                  <path fill="#172452" d="m72 171 69 35 75-38-69-35Z"/>
+                  <path fill="#354c9b" d="M72 171v20l69 35v-20Z"/>
+                  <path fill="#6885e2" d="M141 206v20l75-38v-20Z"/>
+                  <path fill="#b9caff" d="m105 171 36 18 40-20-36-18Z"/>
+                </g>
+                <g class="scene-part memory memory--back">
+                  <path fill="#172452" d="m319 82 69 35 75-38-69-35Z"/>
+                  <path fill="#354c9b" d="M319 82v20l69 35v-20Z"/>
+                  <path fill="#6885e2" d="M388 117v20l75-38V79Z"/>
+                  <path fill="#b9caff" d="m352 82 36 18 40-20-36-18Z"/>
+                </g>
+                <g class="scene-part memory memory--front">
+                  <path fill="#4264ff" d="m398 290 69 35 75-38-69-35Z"/>
+                  <path fill="#233b9e" d="M398 290v20l69 35v-20Z"/>
+                  <path fill="#6e88ed" d="M467 325v20l75-38v-20Z"/>
+                  <path fill="#e4eaff" d="m431 290 36 18 40-20-36-18Z"/>
+                </g>
+              </svg>
+              <figcaption>Memory and tool connections.</figcaption>
+            </figure>
+            <p class="discipline-scene__tools">Tony · GenUI · Oxelot · Letta · Activepieces · React</p>
+          </div>
         </li>
-        <li class="build">
-          <h3 class="build__title">Systems</h3>
-          <p class="build__desc">The infrastructure end: message brokers coordinating realtime services, storage engines, backtesting rigs. The parts that stay reliable when you stop watching them.</p>
-          <p class="build__meta">RabbitMQ · WebSocket · backtesting · OPFS · Redis</p>
+        <li class="discipline-scene discipline-scene--systems">
+          <div class="discipline-scene__surface">
+            <div class="discipline-scene__copy">
+              <h3>Systems</h3>
+              <p>Message queues, realtime connections and browser storage.</p>
+              <a class="discipline-scene__link" href="#project-oxelot">Inside Oxelot <span aria-hidden="true">↗</span></a>
+            </div>
+            <figure class="discipline-object">
+              <svg class="discipline-object__art" viewBox="0 0 600 420" aria-hidden="true" focusable="false">
+                <path fill="none" stroke="#384354" stroke-width="24" stroke-linejoin="round" d="m105 219 190 96 202-103"/>
+                <path fill="none" stroke="#8091ad" stroke-width="7" stroke-linejoin="round" d="m105 210 190 96 202-103"/>
+                <g class="scene-part system-block system-block--left">
+                  <path fill="#d9deea" d="m52 183 75 38 77-39-75-38Z"/>
+                  <path fill="#718098" d="M52 183v74l75 38v-74Z"/>
+                  <path fill="#a5b2c9" d="M127 221v74l77-39v-74Z"/>
+                  <path fill="#4264ff" d="m79 183 48 24 50-25-48-24Z"/>
+                </g>
+                <g class="scene-part system-block system-block--right">
+                  <path fill="#d9deea" d="m406 184 75 38 77-39-75-38Z"/>
+                  <path fill="#718098" d="M406 184v74l75 38v-74Z"/>
+                  <path fill="#a5b2c9" d="M481 222v74l77-39v-74Z"/>
+                  <path fill="#4264ff" d="m433 184 48 24 50-25-48-24Z"/>
+                </g>
+                <g class="scene-part system-packet">
+                  <path fill="#9fb2ff" d="m173 241 27 14 28-14-27-14Z"/>
+                  <path fill="#4264ff" d="M173 241v20l27 14v-20Z"/>
+                  <path fill="#6c87ef" d="M200 255v20l28-14v-20Z"/>
+                </g>
+                <g class="scene-part system-bridge">
+                  <path fill="#d9deea" d="m198 111 97 49 104-52-98-49Z"/>
+                  <path fill="#7888a5" d="M198 111v67l97 49v-67Z"/>
+                  <path fill="#a5b2c9" d="M295 160v67l104-52v-67Z"/>
+                  <path fill="#111925" d="m247 111 49 25 53-27-49-25Z"/>
+                  <path fill="#4264ff" d="M278 115v33l17 9 18-9v-33l-17 9Z"/>
+                </g>
+              </svg>
+              <figcaption>Messages between services.</figcaption>
+            </figure>
+            <p class="discipline-scene__tools">RabbitMQ · WebSocket · backtesting · OPFS · Redis</p>
+          </div>
         </li>
       </ol>
     </div>
@@ -182,105 +280,97 @@
 
   <section class="work" id="work">
     <div class="wrap">
-      <h2 class="h2 work__h">Things I have actually built.</h2>
-      <p class="work__lead muted">Platforms and products in the open, plus the ones that live behind a login.</p>
+      <h2 class="h2 work__h">Projects.</h2>
+      <p class="work__lead muted">Applications, libraries and experiments I work on.</p>
     </div>
 
-    <article class="panel">
+    <article class="panel" id="project-ocaty" data-tech="TypeScript React FastAPI PostgreSQL">
       <div class="wrap panel__grid">
         <div class="panel__media">
-          <img src="assets/ocaty.png" width="1360" height="860" alt="Ocaty landing page describing an integrated business platform" loading="lazy" decoding="async" />
+          <img src="/assets/ocaty.png" width="1360" height="860" alt="Ocaty landing page describing an integrated business platform" loading="lazy" decoding="async" />
         </div>
         <div class="panel__text">
-          <h3 class="panel__title">Ocaty</h3>
-          <p class="panel__meta">Platform · e-commerce ecosystem · 2024</p>
-          <p class="panel__body">A product surface that multiple teams can ship to independently. Module federation micro-frontends, a design system shipped as a package, and FastAPI services for account and notification on PostgreSQL.</p>
-          <p class="panel__stack">TypeScript · React · Module Federation · FastAPI · PostgreSQL</p>
+          <div class="panel__heading"><h3 class="panel__title">Ocaty</h3>
+          <p class="panel__meta">Platform · e-commerce ecosystem · 2024</p></div>
+          <p class="panel__body">Business software with commerce, CRM and ERP modules, using a modular frontend and API services.</p>
+          <details class="project-details"><summary>Technical notes</summary><div class="details-body"><p>Frontend modules use module federation and shared UI packages. Account and notification services use FastAPI and PostgreSQL.</p><p class="panel__stack">TypeScript · React · Module Federation · FastAPI · PostgreSQL</p></div></details>
         </div>
       </div>
     </article>
 
-    <article class="panel panel--flip">
+    <article class="panel panel--flip" id="project-orca" data-tech="TypeScript">
       <div class="wrap panel__grid">
         <div class="panel__media">
-          <img src="assets/orca-workspace.png" width="1360" height="860" alt="ORCA project hub with documents, board and tasks for a sample project" loading="lazy" decoding="async" />
+          <img src="/assets/orca-workspace.png" width="1360" height="860" alt="ORCA project hub with documents, board and tasks for a sample project" loading="lazy" decoding="async" />
         </div>
         <div class="panel__text">
-          <h3 class="panel__title">ORCA</h3>
-          <p class="panel__meta">Product · workspace for ideas, plans and work · 2026</p>
-          <p class="panel__body">Documents, boards, tasks and a calendar in one workspace, grouped by space so work and private life stay apart. Self-hostable, MIT licensed, and open to try without an account.</p>
-          <p class="panel__stack">TypeScript · Documents · Boards · Calendar · Self-hosting</p>
+          <div class="panel__heading"><h3 class="panel__title">ORCA</h3>
+          <p class="panel__meta">Product · workspace for ideas, plans and work · 2026</p></div>
+          <p class="panel__body">A workspace for documents, boards, tasks and a calendar, grouped by space.</p>
+          <details class="project-details"><summary>Technical notes</summary><div class="details-body"><p>Self-hostable and MIT licensed. The public demo can be opened without an account.</p><p class="panel__stack">TypeScript · Documents · Boards · Calendar · Self-hosting</p></div></details>
           <p class="panel__linkrow"><a class="quiet" href="https://orca.ocaty.com" target="_blank" rel="noreferrer">orca.ocaty.com</a></p>
         </div>
       </div>
     </article>
 
-    <article class="panel">
+    <article class="panel" id="project-tony" data-tech="Letta React TypeScript Activepieces">
       <div class="wrap panel__grid">
-        <div class="panel__media">
-          <div class="ui" data-ui aria-label="Tony agent console">
-            <div class="ui__bar"><span class="ui__name">Tony</span><span class="ui__note">self-hosted agent</span></div>
-            <div class="ui__stream">
-              <p class="ui__line"><span class="ui__who">You</span> Summarise what is still open and hold me two hours tomorrow.</p>
-              <p class="ui__line ui__line--agent"><span class="ui__who">Tony</span> Three items are open from Tuesday. I read the calendar and kept 09:00–11:30 free tomorrow, after the standup.</p>
-              <p class="ui__line"><span class="ui__who">You</span> Draft the reply to the supplier thread as well.</p>
-              <p class="ui__line ui__line--agent"><span class="ui__who">Tony</span> Drafted from the last four messages in that thread. Held for your review, not sent.</p>
-            </div>
-            <div class="ui__foot"><span>memory · 42 facts</span><span>tools · calendar, mail, files</span></div>
-          </div>
-        </div>
+        <div class="panel__media"><div class="project-mark" aria-hidden="true">Tony</div></div>
         <div class="panel__text">
-          <h3 class="panel__title">Tony</h3>
-          <p class="panel__meta">AI product · stateful assistant · 2026</p>
-          <p class="panel__body">An assistant I can run myself, with memory that persists and the ability to act. A stateful agent built on Letta, a React interface of its own, and an automation layer composed as a single monorepo.</p>
-          <p class="panel__stack">Letta · React · Activepieces · TypeScript</p>
+          <div class="panel__heading"><h3 class="panel__title">Tony</h3>
+          <p class="panel__meta">AI product · stateful assistant · 2026</p></div>
+          <p class="panel__body">An assistant built with Letta, with persistent memory and connections to other tools.</p>
+          <details class="project-details"><summary>Technical notes</summary><div class="details-body"><p>A React interface and an Activepieces automation layer connect the agent to its tools.</p><p class="panel__stack">Letta · React · Activepieces · TypeScript</p></div></details>
         </div>
       </div>
     </article>
 
-    <article class="panel panel--flip">
+    <article class="panel panel--flip" id="project-oxelot" data-tech="TypeScript WASM OPFS">
       <div class="wrap panel__grid">
-        <div class="panel__media">
-          <div class="ui ui--api" data-ui aria-label="Oxelot library surface">
-            <div class="ui__bar"><span class="ui__name">@oxelot/core</span><span class="ui__note">v0.2.0 · MIT</span></div>
-            <ul class="ui__api">
-              <li><code>opfs.write(p, b)</code><span>persistent</span></li>
-              <li><code>sqlite.exec(q)</code><span>wasm</span></li>
-              <li><code>pool.run(t)</code><span>worker</span></li>
-              <li><code>sync.push(op)</code><span>offline</span></li>
-              <li><code>device.open(k)</code><span>bridge</span></li>
-            </ul>
-            <div class="ui__foot"><span>OPFS + WASM SQLite VFS</span><span>e2e + fuzz tested</span></div>
-          </div>
-        </div>
+        <div class="panel__media"><div class="project-mark" aria-hidden="true">Oxelot</div></div>
         <div class="panel__text">
-          <h3 class="panel__title">Oxelot</h3>
-          <p class="panel__meta">Open source · PWA native bridge · 2026</p>
-          <p class="panel__body">A spec-driven library that gives the open web native-level storage, background processing and hardware access. A WASM SQLite VFS, OPFS storage, a worker pool and offline sync behind one small surface.</p>
-          <p class="panel__stack">TypeScript · WASM · Workers · OPFS</p>
+          <div class="panel__heading"><h3 class="panel__title">Oxelot</h3>
+          <p class="panel__meta">Open source · PWA native bridge · 2026</p></div>
+          <p class="panel__body">A TypeScript library for storage, background workers and offline sync in PWAs.</p>
+          <details class="project-details"><summary>Technical notes</summary><div class="details-body"><p>The storage layer combines OPFS and WASM SQLite, alongside a worker pool and offline synchronization.</p><p class="panel__stack">TypeScript · WASM · Workers · OPFS</p></div></details>
           <p class="panel__linkrow"><a class="quiet" href="https://github.com/NurHabibAssolihudin/Oxelot" target="_blank" rel="noreferrer">github.com/NurHabibAssolihudin/Oxelot</a></p>
         </div>
       </div>
     </article>
 
     <div class="wrap more">
-      <h3 class="more__h">Also running</h3>
+      <h3 class="more__h">Other experiments</h3>
       <ul class="more__list">
-        <li><span class="more__name">GenUI</span><span class="more__what">A dashboard whose layout a language model rewrites from plain language. FastAPI, Jinja2, a small component library.</span></li>
-        <li><span class="more__name">Backtrade CLI</span><span class="more__what">Test crypto strategies before risking capital: data collection, a backtest engine and pluggable strategies.</span></li>
-        <li><span class="more__name">RabbitMQ Chat</span><span class="more__what">Realtime chat over quorum queues with a WebSocket broadcast hub, pub/sub and durability in practice.</span></li>
-        <li><span class="more__name">AI Organization</span><span class="more__what">A business run by an agent org: a CEO orchestrator, domain leads and workers on an open multi-agent runtime.</span></li>
+        <li id="project-genui" data-tech="FastAPI Jinja2"><span class="more__name">GenUI</span><span class="more__what">A dashboard experiment with layouts that respond to language prompts.</span></li>
+        <li><span class="more__name">Backtrade CLI</span><span class="more__what">Tools for collecting market data and backtesting strategies.</span></li>
+        <li id="project-chat" data-tech="RabbitMQ WebSocket"><span class="more__name">RabbitMQ Chat</span><span class="more__what">A realtime chat experiment using RabbitMQ and WebSocket.</span></li>
+        <li><span class="more__name">AI Organization</span><span class="more__what">A multi-agent experiment with an orchestrator, domain leads and workers.</span></li>
       </ul>
     </div>
   </section>
 
-  <section class="stack" id="stack">
-    <div class="wrap stack__grid">
-      <div>
-        <h2 class="h2">Tools I reach for.</h2>
-        <p class="muted">The short list I actually use, grouped by the job it does.</p>
-      </div>
-      <table class="table">
+  <section class="stack toolbox-section" id="stack">
+    <div class="wrap">
+      <div class="section-heading"><h2 class="h2">Tools.</h2><p class="muted">Choose a tool to see the related projects.</p></div>
+      <div class="toolbox" data-toolbox>
+        <div class="toolbox__interactive">
+          <div class="toolbox__stage">
+            <svg class="toolbox__paths" viewBox="0 0 600 420" aria-hidden="true"><ellipse cx="300" cy="210" rx="223" ry="92" transform="rotate(-18 300 210)"/><ellipse cx="300" cy="210" rx="151" ry="171" transform="rotate(32 300 210)"/><path class="toolbox__connection" d="M108 168Q190 265 300 210"/></svg>
+            <span class="toolbox__hub" aria-hidden="true">N</span>
+            <fieldset class="toolbox__nodes"><legend class="visually-hidden">Choose a tool</legend>
+              <button type="button" class="toolbox__node" data-tool="React" data-x="18" data-y="40" style="left:18%;top:40%;--i:0" aria-pressed="true">React</button>
+              <button type="button" class="toolbox__node" data-tool="TypeScript" data-x="54" data-y="17" style="left:54%;top:17%;--i:1" aria-pressed="false">TypeScript</button>
+              <button type="button" class="toolbox__node" data-tool="FastAPI" data-x="84" data-y="39" style="left:84%;top:39%;--i:2" aria-pressed="false">FastAPI</button>
+              <button type="button" class="toolbox__node" data-tool="PostgreSQL" data-x="80" data-y="73" style="left:80%;top:73%;--i:3" aria-pressed="false">PostgreSQL</button>
+              <button type="button" class="toolbox__node" data-tool="Letta" data-x="49" data-y="86" style="left:49%;top:86%;--i:4" aria-pressed="false">Letta</button>
+              <button type="button" class="toolbox__node" data-tool="WASM" data-x="19" data-y="75" style="left:19%;top:75%;--i:5" aria-pressed="false">WASM</button>
+              <button type="button" class="toolbox__node" data-tool="OPFS" data-x="14" data-y="18" style="left:14%;top:18%;--i:6" aria-pressed="false">OPFS</button>
+              <button type="button" class="toolbox__node" data-tool="WebSocket" data-x="82" data-y="16" style="left:82%;top:16%;--i:7" aria-pressed="false">WebSocket</button>
+            </fieldset>
+          </div>
+          <div class="toolbox__result" aria-live="polite" aria-atomic="true"><h3 class="toolbox__title">React</h3><p class="muted">Used in these projects</p><ul class="toolbox__links"><li><a href="#project-ocaty">Ocaty <span aria-hidden="true">↗</span></a></li><li><a href="#project-tony">Tony <span aria-hidden="true">↗</span></a></li></ul></div>
+        </div>
+        <details class="toolbox__all" open><summary>Full tool list</summary><div class="details-body"><table class="table">
         <caption class="visually-hidden">Languages, services and tooling by domain</caption>
         <tbody>
           <tr><th scope="row">Languages</th><td>Python · TypeScript · JavaScript · GDScript</td></tr>
@@ -290,15 +380,16 @@
           <tr><th scope="row">Tooling</th><td>Bun · uv · pnpm · Git</td></tr>
           <tr><th scope="row">Games</th><td>Godot · narrative design · interactive fiction</td></tr>
         </tbody>
-      </table>
+      </table></div></details>
+      </div>
     </div>
   </section>
 
   <section class="contact" id="contact">
     <div class="wrap">
       <div class="card">
-        <h2 class="card__h">Have a system you want to ship?</h2>
-        <p class="card__p">Platforms, AI products, or something in between. I would like to hear about it.</p>
+        <h2 class="card__h">Have a project in mind?</h2>
+        <p class="card__p">You can reach me by email or through the links below.</p>
         <div class="card__actions">
           <a class="btn" href="mailto:nurhabibassolihudin12@gmail.com">nurhabibassolihudin12@gmail.com</a>
           <a class="quiet" href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer">GitHub</a>
@@ -317,24 +408,25 @@
 
   <section class="hero" id="ctop">
     <div class="wrap hero__grid">
-      <h1 class="hero__h1">Worlds to get lost in.</h1>
+      <h1 class="hero__h1"><span class="hero__line">Games &amp;</span><span class="hero__line">stories.</span></h1>
       <div class="hero__foot">
         <div class="hero__copy">
-          <p class="hero__lead">I'm Nur, and this is the other direction: a studio that makes games and interactive stories with alimagine, folding visual, audio and story into one moment you can feel.</p>
+          <p class="hero__lead">I make games and interactive stories with alimagine. Here are the projects and ideas I'm working on.</p>
           <div class="hero__actions">
-            <a class="btn" href="#worlds">See the worlds</a>
+            <a class="btn" href="#worlds">View projects</a>
             <a class="quiet" href="https://alimaginegames.com" target="_blank" rel="noreferrer">alimaginegames.com</a>
           </div>
         </div>
 
         <div class="hero__core">
           <button class="core" data-cross type="button" aria-label="Cross to the builder world">
-            <span class="core__ring" aria-hidden="true"></span>
-            <span class="core__arc core__arc--a" aria-hidden="true"></span>
-            <span class="core__arc core__arc--b" aria-hidden="true"></span>
-            <span class="core__disc" aria-hidden="true"><span class="core__seam"></span></span>
-          </button>
-          <p class="hero__corecap">The same core, walked the other way. <span class="accent">Press to cross</span>.</p>
+            <svg class="planet__fallback" viewBox="0 0 640 640" aria-hidden="true" focusable="false">
+<path d="m112 324 181-150 236 101-164 215Z" fill="#293b56"/><path d="m112 324 177-115-22 94-82 94Z" fill="#62748e"/><path d="m529 275-180-48 35 100 25 114Z" fill="#9aa8bb"/><path d="m290 175 58 27 60 153-44 135-96-188Z" fill="#8495af"/><path d="m290 203 31-30 44 133-1 107-40-98Z" fill="#d1d8df"/><path d="m325 315 39 98 11-57-25-51Z" fill="#16253c"/><path d="m334 322 21 51 5-21-14-34Z" fill="#ff5032"/>
+<g transform="translate(124 232) scale(0.9)"><path d="M-17 0Q-30-20-17-47l9 10L1-65l9 23 10-9Q31-22 17 0Z" fill="#f34a25"/><path d="M-12 0Q-18-21-7-35L2-46l9 21 5-7Q21-10 11 0Z" fill="#ffaf44"/><path d="M-14-7C-20-24-7-32 5-29c18 1 19 16 12 24l-6 6-1 10H-7l-2-10Z" fill="#eeece2"/><path d="m-12-17 9 2-1 7-7-1ZM5-15l10-3-1 8-8 2ZM1-8l-3 6h6Z" fill="#131823"/><path d="M-5 3H7v3H-5Z" fill="#131823"/></g><g transform="translate(485 179) scale(0.8)"><path d="M-17 0Q-30-20-17-47l9 10L1-65l9 23 10-9Q31-22 17 0Z" fill="#f34a25"/><path d="M-12 0Q-18-21-7-35L2-46l9 21 5-7Q21-10 11 0Z" fill="#ffaf44"/><path d="M-14-7C-20-24-7-32 5-29c18 1 19 16 12 24l-6 6-1 10H-7l-2-10Z" fill="#eeece2"/><path d="m-12-17 9 2-1 7-7-1ZM5-15l10-3-1 8-8 2ZM1-8l-3 6h6Z" fill="#131823"/><path d="M-5 3H7v3H-5Z" fill="#131823"/></g><g transform="translate(524 429) scale(0.9)"><path d="M-17 0Q-30-20-17-47l9 10L1-65l9 23 10-9Q31-22 17 0Z" fill="#f34a25"/><path d="M-12 0Q-18-21-7-35L2-46l9 21 5-7Q21-10 11 0Z" fill="#ffaf44"/><path d="M-14-7C-20-24-7-32 5-29c18 1 19 16 12 24l-6 6-1 10H-7l-2-10Z" fill="#eeece2"/><path d="m-12-17 9 2-1 7-7-1ZM5-15l10-3-1 8-8 2ZM1-8l-3 6h6Z" fill="#131823"/><path d="M-5 3H7v3H-5Z" fill="#131823"/></g><g transform="translate(225 518) scale(0.8)"><path d="M-17 0Q-30-20-17-47l9 10L1-65l9 23 10-9Q31-22 17 0Z" fill="#f34a25"/><path d="M-12 0Q-18-21-7-35L2-46l9 21 5-7Q21-10 11 0Z" fill="#ffaf44"/><path d="M-14-7C-20-24-7-32 5-29c18 1 19 16 12 24l-6 6-1 10H-7l-2-10Z" fill="#eeece2"/><path d="m-12-17 9 2-1 7-7-1ZM5-15l10-3-1 8-8 2ZM1-8l-3 6h6Z" fill="#131823"/><path d="M-5 3H7v3H-5Z" fill="#131823"/></g>
+</svg>
+          <canvas class="core__canvas" width="640" height="640" aria-hidden="true"></canvas>
+        </button>
+        <p class="hero__corecap">Web projects. <button class="accent core-link" data-cross type="button">Open software work ↗</button></p>
         </div>
       </div>
     </div>
@@ -342,24 +434,11 @@
 
   <section class="work" id="worlds">
     <div class="wrap">
-      <h2 class="h2 work__h">Small universes, shipped one by one.</h2>
-      <p class="work__lead muted">Each world starts as a feeling and grows into its own rules.</p>
+      <h2 class="h2 work__h">Game projects.</h2>
+      <p class="work__lead muted">Games and interactive stories, built with Godot and the web.</p>
     </div>
 
-    <article class="panel">
-      <div class="wrap panel__grid">
-        <div class="panel__media panel__media--field">
-          <p class="crest">alimagine</p>
-        </div>
-        <div class="panel__text">
-          <h3 class="panel__title">alimagine</h3>
-          <p class="panel__meta">Studio · game &amp; interactive story · 2024</p>
-          <p class="panel__body">The studio I build with. Games and interactive stories shaped by combining visual, audio and story into a moment you feel rather than a feature you use.</p>
-          <p class="panel__stack">Godot · GDScript · narrative design</p>
-          <p class="panel__linkrow"><a class="quiet" href="https://alimaginegames.com" target="_blank" rel="noreferrer">alimaginegames.com</a></p>
-        </div>
-      </div>
-    </article>
+
 
     <article class="panel panel--flip">
       <div class="wrap panel__grid">
@@ -367,9 +446,9 @@
           <p class="crest">Going Home</p>
         </div>
         <div class="panel__text">
-          <h3 class="panel__title">Going Home</h3>
-          <p class="panel__meta">Game · quiet narrative · Godot</p>
-          <p class="panel__body">A quiet, bittersweet walk back. Built scene by scene in GDScript, tethered to one feeling the whole way through.</p>
+          <div class="panel__heading"><h3 class="panel__title">Going Home</h3>
+          <p class="panel__meta">Game · quiet narrative · Godot</p></div>
+          <p class="panel__body">A narrative game about a journey home, made with Godot and GDScript.</p>
           <p class="panel__stack">Godot · GDScript</p>
         </div>
       </div>
@@ -381,9 +460,9 @@
           <p class="crest">0-Day</p>
         </div>
         <div class="panel__text">
-          <h3 class="panel__title">Project Erebus</h3>
-          <p class="panel__meta">Project · experiment · 2024</p>
-          <p class="panel__body">A world with a name and a mystery. A game project codenamed Erebus, and the site that documents its 0-day.</p>
+          <div class="panel__heading"><h3 class="panel__title">Project Erebus</h3>
+          <p class="panel__meta">Project · experiment · 2024</p></div>
+          <p class="panel__body">A game experiment under the name Erebus, with a site for its notes.</p>
           <p class="panel__stack">Story · Web</p>
         </div>
       </div>
@@ -395,47 +474,22 @@
           <p class="crest">Trilogy</p>
         </div>
         <div class="panel__text">
-          <h3 class="panel__title">Interactive stories</h3>
-          <p class="panel__meta">Narrative · trilogy · in progress</p>
-          <p class="panel__body">Stories where the world answers back, from a platformer to a world-building political thriller that grows as its questions do.</p>
+          <div class="panel__heading"><h3 class="panel__title">Interactive stories</h3>
+          <p class="panel__meta">Narrative · trilogy · in progress</p></div>
+          <p class="panel__body">Interactive stories in development, including a platformer and a political thriller.</p>
           <p class="panel__stack">Godot · narrative · world-building</p>
         </div>
       </div>
     </article>
   </section>
 
-  <section class="platforms" id="craft">
-    <div class="wrap platforms__grid">
-      <div class="platforms__lead">
-        <h2 class="h2">Notes on making worlds.</h2>
-        <p class="muted">The rules I keep coming back to when a world has to hold together.</p>
-      </div>
-      <ol class="builds">
-        <li class="build">
-          <h3 class="build__title">Moment before mechanics</h3>
-          <p class="build__desc">Build the feeling first, then the systems that hold it up. A mechanic without a feeling behind it is just a rule.</p>
-        </li>
-        <li class="build">
-          <h3 class="build__title">Worlds are systems too</h3>
-          <p class="build__desc">Characters, rules and consequences: narrative runs on cause and effect. The best worlds are the ones that answer back.</p>
-        </li>
-        <li class="build">
-          <h3 class="build__title">Story under the surface</h3>
-          <p class="build__desc">What you see is the tip of a world built underneath. The rest lives in notes, failures and quiet details nobody is meant to notice.</p>
-        </li>
-        <li class="build">
-          <h3 class="build__title">Ship small worlds often</h3>
-          <p class="build__desc">Every project is a moon. The studio is the orbit they share, and it only grows by finishing things.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
+  <section class="platforms craft-section" id="craft"><div class="wrap platforms__grid"><div class="platforms__lead"><h2 class="h2">How I work.</h2><p class="muted">From a playable idea to the scenes around it.</p></div><div class="process-list"><details class="process-step" open><summary><h3>Prototype</h3></summary><div class="details-body"><p>Start with one interaction and check how it feels before building more scenes.</p></div></details><details class="process-step"><summary><h3>Build the scene</h3></summary><div class="details-body"><p>Work on the writing, visuals and sound around that interaction.</p></div></details><details class="process-step"><summary><h3>Play and revise</h3></summary><div class="details-body"><p>Review the pacing, controls and transitions, then adjust the scene.</p></div></details></div></div></section>
 
   <section class="stack" id="tools">
     <div class="wrap stack__grid">
       <div>
-        <h2 class="h2">What the worlds are made of.</h2>
-        <p class="muted">The engine, the craft, and the experiments around them.</p>
+        <h2 class="h2">Tools for games.</h2>
+        <p class="muted">The engine, scripting language and tools used in these projects.</p>
       </div>
       <table class="table">
         <caption class="visually-hidden">Game tools by domain</caption>
@@ -452,8 +506,8 @@
   <section class="contact" id="play">
     <div class="wrap">
       <div class="card">
-        <h2 class="card__h">Ready to step inside?</h2>
-        <p class="card__p">Games, interactive stories and worlds still being shaped. Come see what is running.</p>
+        <h2 class="card__h">About alimagine.</h2>
+        <p class="card__p">Game projects and notes are collected on the studio site.</p>
         <div class="card__actions">
           <a class="btn" href="https://alimaginegames.com" target="_blank" rel="noreferrer">alimaginegames.com</a>
           <a class="quiet" href="https://github.com/alimagine" target="_blank" rel="noreferrer">github.com/alimagine</a>
@@ -471,7 +525,7 @@
   <div class="wrap foot__inner">
     <div class="foot__brand">
       <p class="foot__name">Nur</p>
-      <p class="foot__sub">one builder, two worlds</p>
+      <p class="foot__sub">software and games</p>
     </div>
     <nav class="foot__links" aria-label="Elsewhere">
       <a href="https://github.com/NurHabibAssolihudin" target="_blank" rel="noreferrer">GitHub</a>
@@ -479,10 +533,17 @@
       <a href="https://alimaginegames.com" target="_blank" rel="noreferrer">alimagine</a>
       <a href="mailto:nurhabibassolihudin12@gmail.com">Email</a>
     </nav>
-    <p class="foot__note">© <span class="year"></span> NurHabib Assolihudin. Platforms, AI products and worlds.</p>
+    <p class="foot__note">© <span class="year"></span> NurHabib Assolihudin. Software and games.</p>
   </div>
 </footer>
+</div>
 
-<script src="script.js?v=1"></script>
+<script src="/field.js?v=1"></script>
+<script src="/world-objects.js?v=2"></script>
+<script src="/planet-transit.js?v=2"></script>
+<script src="/script.js?v=8"></script>
+<script src="/scenes.js?v=1"></script>
+<script src="/components.js?v=1"></script>
+<script type="module" src="/locale.js?v=3"></script>
 </body>
 </html>
