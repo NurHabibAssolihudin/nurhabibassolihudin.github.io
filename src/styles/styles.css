@@ -369,6 +369,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; letter-spacing:
    ============================================================ */
 .world { display: none; }
 .world.is-live { display: block; }
+html[data-world="builder"] .creator-only,
+html[data-world="creator"] .professional-only { display: none; }
 
 /* ============================================================
    MOTION / entrance, controls, and one drifting picture
@@ -394,7 +396,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
 .language-switch a[aria-current] { color: var(--ink); background: var(--bg-2); font-weight: 600; }
 .language-switch a:hover { color: var(--accent); }
 .no-script { padding-block: 1rem; }
-html:not(.js) .world { display: block; }
+html:not(.js) .world--builder { display: block; }
 html:not(.js) [data-cross] { display: none; }
 @media (max-width: 600px) {
   .bar__actions > .cross { display: none; }

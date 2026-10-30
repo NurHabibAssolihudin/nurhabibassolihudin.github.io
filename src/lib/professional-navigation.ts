@@ -74,7 +74,10 @@ export function initProfessionalNavigation() {
       history.replaceState(null, '', '#' + chapterIds[nearest]);
     }
     window.dispatchEvent(new Event('nur:chapter'));
-    if (Math.abs(offset(nearest) - top) <= 1) wheelNavigation.arrive(nearest);
+    // A settled target section is reached even when native snapping or display
+    // scaling adjusts its exact pixel position. arrive() only clears a matching
+    // target; it never queues or starts another movement.
+    wheelNavigation.arrive(nearest);
   }
   function scroll() { clearTimeout(timer); timer = setTimeout(settle, 160); }
   function links(event: MouseEvent) {

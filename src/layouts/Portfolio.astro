@@ -5,7 +5,7 @@ import '../styles/professional.css';
 interface Props { language: Language; auto?: boolean }
 const { language, auto = false } = Astro.props;
 const id = language === 'id', markup = worldMarkup(language);
-const title = id ? 'Nur · web dan game' : 'Nur · software and games';
+const title = id ? 'Nur · pengembangan aplikasi web' : 'Nur · web development';
 const description = id ? 'Proyek perangkat lunak, kontribusi dan pengalaman NurHabib Assolihudin.' : 'Software projects, contributions and experience by NurHabib Assolihudin.';
 const canonical = `https://nurhabibassolihudin.github.io/${auto ? '' : language + '/'}`;
 const languages = `<nav class="language-switch" aria-label="${id ? 'Bahasa' : 'Language'}"><a href="/en/" lang="en" hreflang="en" data-language="en"${!id ? ' aria-current="true"' : ''}>EN</a><a href="/id/" lang="id" hreflang="id" data-language="id"${id ? ' aria-current="true"' : ''}>ID</a></nav>`;
@@ -13,7 +13,7 @@ const languages = `<nav class="language-switch" aria-label="${id ? 'Bahasa' : 'L
 const themeControl = markup.header.match(/<button class="icon" data-theme-toggle\b[\s\S]*?<\/button>/)?.[0];
 if (!themeControl) throw new Error('Missing shared theme control');
 const preferences = `<div class="menu__preferences">${languages}${themeControl}</div>`;
-const header = markup.header.replace('<div class="bar__actions">', '<div class="bar__actions">' + languages).replace('<button class="cross cross--block"', preferences + '<button class="cross cross--block"');
+const header = markup.header.replace('<div class="bar__actions">', '<div class="bar__actions">' + languages).replace('<!-- mobile-preferences -->', preferences);
 ---
 <!doctype html>
 <html lang={language} data-theme="light" data-world="builder" data-auto-language={auto || undefined}>
@@ -40,7 +40,7 @@ const header = markup.header.replace('<div class="bar__actions">', '<div class="
       <canvas class="world-field" aria-hidden="true"></canvas>
       <Fragment set:html={header} />
       <main id="main">
-        <noscript><p class="wrap no-script">{id ? 'Kedua dunia ditampilkan di bawah. Tautan bagian dan EN/ID tetap dapat digunakan.' : 'Both worlds are shown below. Section and EN/ID links remain available.'}</p></noscript>
+        <noscript><p class="wrap no-script">{id ? 'JavaScript tidak aktif. Informasi dan tautan proyek tetap dapat dibaca.' : 'JavaScript is off. Project information and links remain available.'}</p></noscript>
         <div class="world world--builder is-live" data-world="builder"><Professional language={language} planet={markup.planet} /></div>
         <Fragment set:html={markup.creator} />
       </main>

@@ -2,6 +2,7 @@ import { chooseLanguage, supported } from './language.mjs';
 import { initProfessionalNavigation } from './professional-navigation';
 
 const root = document.documentElement, id = root.lang === 'id';
+const professionalTitle = document.title;
 const storage = { read(key: string) { try { return localStorage.getItem(key); } catch { return null; } }, save(key: string, value: string) { try { localStorage.setItem(key, value); } catch {} } };
 function syncThemeControls() {
   const dark = root.dataset.theme === 'dark';
@@ -25,6 +26,7 @@ const menu = document.querySelector<HTMLElement>('#menu')!, menuButton = documen
 function closeMenu() { menu.hidden = true; menuButton.setAttribute('aria-expanded', 'false'); menuButton.setAttribute('aria-label', id ? 'Buka menu' : 'Open menu'); }
 function setWorld(name: 'builder' | 'creator') {
   current = name; root.dataset.world = name;
+  document.title = name === 'builder' ? professionalTitle : id ? 'alimagine · game dan cerita' : 'alimagine · games and stories';
   Object.entries(worlds).forEach(([world, element]) => { element.classList.toggle('is-live', world === name); element.inert = world !== name; });
   document.querySelector('.brand')?.setAttribute('href', name === 'builder' ? '#top' : '#ctop');
 }

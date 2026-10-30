@@ -97,8 +97,11 @@
     geometry.heroBottom=hero.bottom;
     geometry.heroVisible=hero.bottom>(document.querySelector('.bar')?.getBoundingClientRect().bottom||0)+1&&hero.top<height;
     geometry.quiet=[work.top,work.bottom];
+    geometry.protect.fill(0);
     ['.hero__h1','.hero__copy,.pro-hero .hero__lead','.hero__corecap'].forEach((selector,index)=>{
-      const box=world.querySelector(selector).getBoundingClientRect();
+      const element=world.querySelector(selector);
+      if(!element)return;
+      const box=element.getBoundingClientRect();
       geometry.protect.set([box.left-8,box.top-8,box.right+8,box.bottom+8],index*4);
     });
     surface.dataset.world=root.dataset.world;
