@@ -1,0 +1,14 @@
+---
+import fallback from '../artwork/mothership-fallback.svg?raw';
+import {creatorCopy as copy} from '../data/creator';
+import {t,type Locale} from '../data/professional';
+interface Props {language:Locale}
+const {language}=Astro.props;
+---
+<div class="hero__core">
+  <button class="core" data-cross type="button" aria-label={t(copy.hero.return,language)}>
+    <Fragment set:html={fallback}/>
+    <canvas class="core__canvas" width="640" height="640" aria-hidden="true"></canvas>
+  </button>
+  <p class="hero__corecap">{t(copy.hero.caption,language)} <button class="accent core-link" data-cross type="button">{t(copy.hero.open,language)}</button></p>
+</div>

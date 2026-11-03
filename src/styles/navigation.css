@@ -1,0 +1,12 @@
+/* Native cross-document transitions preserve normal navigation and static hosting. */
+html.js[data-world="builder"] .world--builder,
+html.js[data-world="creator"] .world--creator { display:block; }
+html.js[data-world="builder"] .world--creator,
+html.js[data-world="creator"] .world--builder { display:none; }
+::view-transition-old(root) { animation:locale-out 180ms ease both; }
+::view-transition-new(root) { animation:locale-in 280ms var(--ease-preview) both; }
+@keyframes locale-out { to { opacity:0; } }
+@keyframes locale-in { from { opacity:0; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) {
+  ::view-transition-old(root),::view-transition-new(root) { animation:none; }
+}

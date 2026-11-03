@@ -1,6 +1,9 @@
 import { chooseLanguage, supported } from './language.mjs';
 import { initProfessionalNavigation } from './professional-navigation';
 import { createMenuMotion } from './menu-motion';
+import {initChapterMotion} from './chapter-motion';
+import {decodeFragment} from './url-fragment';
+import {chapterAliases as aliases} from '../data/navigation';
 
 const root = document.documentElement, id = root.lang === 'id';
 const professionalTitle = document.title;
@@ -14,7 +17,7 @@ function syncThemeControls() {
 }
 syncThemeControls();
 const worlds = { builder: document.querySelector<HTMLElement>('.world--builder')!, creator: document.querySelector<HTMLElement>('.world--creator')! };
-let current: 'builder' | 'creator' = 'builder', busy = false;
+let current: 'builder' | 'creator' = root.dataset.world === 'creator' ? 'creator' : 'builder', busy = false;
 let artworkReady: Promise<void> | null = null, creatorReady: Promise<void> | null = null;
 let transitReady: Promise<NonNullable<Window['NurTransit']> | null> | null = null;
 function prepareTransit() {
@@ -56,12 +59,11 @@ if (root.hasAttribute('data-auto-language')) {
   if (supported(explicit)) storage.save('nur-language', explicit!);
   if (language !== root.lang) { params.delete('lang'); location.replace(`/${language}/${params.size ? '?' + params : ''}${location.hash}`); }
 }
-document.querySelectorAll<HTMLAnchorElement>('[data-language]').forEach(link => link.addEventListener('click', () => { storage.save('nur-language', link.dataset.language!); link.hash = location.hash; saveWorld(); }));
+document.querySelectorAll<HTMLAnchorElement>('[data-language]').forEach(link => link.addEventListener('click', () => { storage.save('nur-language', link.dataset.language!); link.hash = location.hash; saveWorld(); menuMotion.setOpen(false,true); window.NurTransit?.finish(); window.dispatchEvent(new Event('nur:transition-start')); }));
 try { const saved = JSON.parse(sessionStorage.getItem('nur-world-state') || '{}'); if (saved.world === 'creator') current = 'creator'; } catch {}
 function routeWorld() {
-  const aliases: Record<string, string> = { platforms: 'summary', stack: 'approach', about: 'summary' };
   const requestedHash = location.hash;
-  const hash = decodeURIComponent(requestedHash.slice(1));
+  const hash = decodeFragment(requestedHash);
   window.NurTransit?.finish();
   if (location.hash !== requestedHash) history.replaceState(null, '', location.pathname + location.search + requestedHash);
   const owner = document.getElementById(aliases[hash] || hash)?.closest<HTMLElement>('.world')?.dataset.world;
@@ -86,6 +88,7 @@ document.addEventListener('click', async event => {
   const cross = target.closest<HTMLButtonElement>('[data-cross]');
   if (!cross || busy) return;
   busy = true;
+  window.dispatchEvent(new Event('nur:transition-start'));
   cross.setAttribute('aria-busy', 'true');
   try {
     const name = current === 'builder' ? 'creator' : 'builder';
@@ -111,6 +114,8 @@ async function startArtwork() {
   if (current === 'creator') await prepareCreator();
 }
 initProfessionalNavigation();
+initChapterMotion();
+root.dataset.navigationReady='true';
 artworkReady = startArtwork();
 for (const event of ['pointerover', 'focusin']) document.addEventListener(event, event => {
   if ((event.target as Element).closest('[data-cross]')) {

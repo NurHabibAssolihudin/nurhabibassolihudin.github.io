@@ -6,5 +6,6 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   integrations: [react()],
+  prefetch: {prefetchAll:false,defaultStrategy:'hover'},
   devToolbar: { enabled: false },
 });

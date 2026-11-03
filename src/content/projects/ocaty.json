@@ -1,0 +1,38 @@
+{
+  "id": "project-ocaty",
+  "name": "Ocaty",
+  "image": "../../../assets/ocaty.png",
+  "original": "/assets/ocaty.png",
+  "kind": {
+    "en": "Business applications",
+    "id": "Aplikasi bisnis"
+  },
+  "summary": {
+    "en": "Business applications with commerce, CRM and ERP modules.",
+    "id": "Aplikasi bisnis dengan modul penjualan, CRM, dan ERP."
+  },
+  "context": {
+    "en": "With Ocaty, I develop separate application modules for business workflows, including commerce, CRM and ERP.",
+    "id": "Melalui Ocaty, saya mengembangkan modul untuk kebutuhan bisnis, seperti penjualan, CRM, dan ERP."
+  },
+  "focus": {
+    "en": "I work on frontend modules, shared interface components, and account and notification services.",
+    "id": "Saya mengerjakan modul frontend, komponen antarmuka bersama, serta layanan akun dan notifikasi."
+  },
+  "reviewTitle": {
+    "en": "Technical overview",
+    "id": "Gambaran teknis"
+  },
+  "evidence": {
+    "en": "Module federation connects the frontend modules. The backend services use FastAPI and PostgreSQL.",
+    "id": "Modul antarmukanya terhubung melalui module federation, dengan FastAPI dan PostgreSQL pada sisi backend."
+  },
+  "technologies": [
+    "TypeScript",
+    "React",
+    "FastAPI",
+    "PostgreSQL"
+  ],
+  "links": [],
+  "order": 1
+}

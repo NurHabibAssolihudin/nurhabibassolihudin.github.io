@@ -1,0 +1,24 @@
+{
+  "order": 2,
+  "flip": true,
+  "crest": {
+    "en": "Trilogy",
+    "id": "Trilogi"
+  },
+  "name": {
+    "en": "Interactive stories",
+    "id": "Cerita interaktif"
+  },
+  "meta": {
+    "en": "Narrative · trilogy · in progress",
+    "id": "Naratif · trilogi · dalam pengerjaan"
+  },
+  "body": {
+    "en": "Interactive stories in development, including a platformer and a political thriller.",
+    "id": "Beberapa cerita interaktif yang sedang saya kembangkan, termasuk game platformer dan thriller politik."
+  },
+  "stack": {
+    "en": "Godot · narrative · world-building",
+    "id": "Godot · cerita · penciptaan dunia"
+  }
+}

@@ -52,40 +52,4 @@ export const sections = {
     profiles: { en: 'Professional profiles', id: 'Profil profesional' },
   },
 };
-export const projects = [
-  {
-    id: 'project-orca', name: 'ORCA', image: '/assets/orca-workspace.png',
-    kind: { en: 'Project workspace', id: 'Ruang kerja proyek' },
-    summary: { en: 'Keep project documents, tasks and schedules in one workspace.', id: 'Dokumen, tugas, dan jadwal proyek dalam satu ruang kerja.' },
-    context: { en: 'ORCA brings document writing, task management and project scheduling into one place.', id: 'ORCA menyediakan satu tempat untuk menulis dokumen, mengatur tugas, dan menyusun jadwal proyek.' },
-    focus: { en: 'I build the workspace and its document, board and calendar views. ORCA can also run on your own server.', id: 'Saya mengembangkan ruang kerja beserta tampilan dokumen, board tugas, dan kalendernya. ORCA juga bisa dijalankan di server sendiri.' },
-    reviewTitle: { en: 'Try the demo', id: 'Coba langsung' },
-    evidence: { en: 'Explore the workspace with sample content. No account is needed.', id: 'Coba demo berisi data contoh untuk melihat cara kerjanya. Tidak perlu membuat akun.' },
-    technologies: ['TypeScript'],
-    links: [{ label: { en: 'Open demo', id: 'Buka demo' }, url: 'https://orca.ocaty.com' }],
-  },
-  {
-    id: 'project-ocaty', name: 'Ocaty', image: '/assets/ocaty.png',
-    kind: { en: 'Business applications', id: 'Aplikasi bisnis' },
-    summary: { en: 'Business applications with commerce, CRM and ERP modules.', id: 'Aplikasi bisnis dengan modul penjualan, CRM, dan ERP.' },
-    context: { en: 'With Ocaty, I develop separate application modules for business workflows, including commerce, CRM and ERP.', id: 'Melalui Ocaty, saya mengembangkan modul untuk kebutuhan bisnis, seperti penjualan, CRM, dan ERP.' },
-    focus: { en: 'I work on frontend modules, shared interface components, and account and notification services.', id: 'Saya mengerjakan modul frontend, komponen antarmuka bersama, serta layanan akun dan notifikasi.' },
-    reviewTitle: { en: 'Technical overview', id: 'Gambaran teknis' },
-    evidence: { en: 'Module federation connects the frontend modules. The backend services use FastAPI and PostgreSQL.', id: 'Modul antarmukanya terhubung melalui module federation, dengan FastAPI dan PostgreSQL pada sisi backend.' },
-    technologies: ['TypeScript', 'React', 'FastAPI', 'PostgreSQL'],
-    links: [] as { label: Copy; url: string }[],
-  },
-  {
-    id: 'project-oxelot', name: 'Oxelot', image: null,
-    kind: { en: 'Web development library', id: 'Library pengembangan web' },
-    summary: { en: 'A TypeScript library for local storage, background workers and offline data synchronization.', id: 'Library TypeScript untuk penyimpanan lokal, background worker, dan sinkronisasi data secara offline.' },
-    context: { en: 'Oxelot provides browser-side storage, background workers and data synchronization for web applications with offline support.', id: 'Oxelot menyediakan penyimpanan lokal, background worker, dan sinkronisasi data untuk aplikasi web yang mendukung penggunaan offline.' },
-    focus: { en: 'I develop local storage with OPFS and WASM SQLite, worker pools and offline synchronization.', id: 'Saya mengembangkan penyimpanan berbasis OPFS dan WASM SQLite, pengelolaan worker, serta sinkronisasi offline.' },
-    reviewTitle: { en: 'Source and documentation', id: 'Kode dan dokumentasi' },
-    evidence: { en: 'The source code and API documentation are available on GitHub to read and try.', id: 'Kode sumber dan dokumentasi API tersedia di GitHub untuk dipelajari atau dicoba.' },
-    technologies: ['TypeScript', 'WASM', 'OPFS', 'Workers'],
-    links: [{ label: { en: 'View repository', id: 'Lihat kode di GitHub' }, url: 'https://github.com/NurHabibAssolihudin/Oxelot' }],
-  },
-];
-
 export { chapterIds } from './navigation';

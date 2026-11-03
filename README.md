@@ -7,7 +7,7 @@ npm ci
 npm run dev          # source preview: http://127.0.0.1:4173
 npm run build        # typecheck + static dist/
 npm run preview      # inspect dist/ at the same address; stop dev first
-npm test             # language preference and gesture regression tests
+npm test             # language, gesture, fragment, image-cache and content-order regressions
 npm run verify:build # validate emitted content, links/assets and preserved creator
 ```
 
@@ -19,13 +19,17 @@ Node 24 is used for local verification and CI. Dependencies are pinned by `packa
 - `src/components/WorkPicker.tsx`: the only hydrated React island; loads near the selected-work section.
 - `src/lib/professional-navigation.ts`: cached section geometry, anchors, keyboard, history and gesture wiring.
 - `src/lib/wheel-navigation.ts`: tested gesture intent handling, with no queued movements.
-- `src/data/professional.ts`: typed English/Indonesian copy and project facts. `src/data/navigation.ts` keeps lightweight section IDs out of the content bundle.
+- `src/data/professional.ts`: typed English/Indonesian section copy. `src/content/projects/*.json` contains validated project facts; `src/data/navigation.ts` keeps section IDs out of the content bundle.
+- `src/content.config.ts`, `src/lib/project-content.ts`: Astro collection schemas and build-time responsive WebP generation. Project IDs/order must match `src/data/navigation.ts`; mismatches fail the build before routing and picker indices can diverge. Preview props contain only the fields needed by the picker.
 - `src/styles/professional.css`: professional layout and responsive behavior.
 - `src/layouts/Portfolio.astro`, `src/pages/`: shared static layout, locale routes and metadata.
 - `src/lib/runtime.ts`: shared language, theme, menu and complete world switching.
 - `src/artwork/planet-transit.ts`: lazy-loaded Motion crossing, retaining the original destination emblems.
 - `src/lib/menu-motion.ts`, `motion-settings.ts`: interruptible dropdown motion and the shared CSS easing tokens.
-- `templates/{creator,header,footer,planet}.html`, `locales/id.json`: retained world markup and its used translations, assembled by `src/lib/world-markup.ts`.
+- `src/lib/use-reduced-motion.ts`, `url-fragment.ts`, `project-images.ts`: live OS motion preference, safe fragment decoding and bounded image preparation with retry.
+- `src/lib/chapter-motion.ts`, `project-transfer.ts`: finite section arrivals and the project-name handoff tied to native scroll.
+- `src/components/Creator.astro`, `CreatorPortal.astro`, `src/data/creator.ts`, `src/content/games/*.json`: typed bilingual creator components and validated game content. The earlier creator HTML template has been replaced; build snapshots guard the same content, structure and links.
+- `templates/{header,footer,planet}.html`, `locales/id.json`: small shared markup templates and only their used translations, assembled by `src/lib/world-markup.ts`.
 - `src/artwork/`: field, orbital objects and world crossing. `src/lib/creator-interactions.js` owns creator interactions. `scripts/prepare-public.mjs` copies the continuous renderers, creator interactions and shared styles into generated `public/` using an explicit allowlist. Vite bundles the TypeScript Motion transition separately.
 
 The professional world has nine sections: landing, overview, selected work, ORCA, Ocaty, Oxelot, experience, working approach and contact. Selection changes the real background preview and description; the detail action opens the matching section. Returning preserves selection. Passive scrolling through project detail sections never changes the chosen preview. A fresh direct project link seeds an empty picker; an existing manual choice survives reload/history. Old `#platforms`, `#stack` and `#about` links resolve to their new destinations.
@@ -43,6 +47,10 @@ See `MIGRATION-BRIEF.md`, `MIGRATION-PHASES.md` and `QA-PHASE-1.md` for scope, f
 The existing self-hosted fonts are served as WOFF2: 40,024 bytes combined versus 177,304 bytes of original TTF. Original sources and OFL licenses remain in `assets/fonts/`. `scripts/optimize-fonts.py` regenerates the assets with optional fonttools/Brotli tooling; npm builds need only the generated WOFF2 files. Retained character widths and the current EN/ID glyph coverage were verified.
 
 The initial view uses static Astro markup and a lightweight navigation controller with Motion's mini DOM engine for the menu. React loads only as work approaches the viewport (400px observer margin). A pre-hydration project-link fallback remains usable. The first layout is established before visibility observation so the island does not accidentally load from temporary fallback geometry. Planet/background scripts load in parallel. The world transition and creator interactions load on demand or warm on portal hover/focus. No legacy `scenes.css` or TTF files are copied into `dist/`. See `OPTIMIZATION-REPORT.md` for measurements and verification limits.
+
+The picker uses `m` and asynchronous `LazyMotion` with `domMax` for its shared selection surface. Features load near work, not on the landing screen. Existing screenshots are generated as responsive WebP variants during build and decoded before a new background is painted. Failed preparation falls back to the project name. Detail links can carry that name into the matching heading, following native scroll without taking control of it. Section arrivals reveal actual supporting components after settlement, with preparation before they enter the screen; the titles stay stationary. Each section gets this welcome only on its first visit in the tab session. Returning never masks content; remembered visits survive reload and ID/EN navigation through optional session storage, with an in-memory fallback. Contact actions/profiles use a calm fade. Decorative arrival circles/planes are removed. Keyboard/reduced-motion navigation stays quiet.
+
+Locale links use Astro hover prefetch and progressive native cross-document View Transitions, without a client router. Theme, world, hash and project choice persist. If a project island or creator scene is not initialized when a snapshot would be captured, the transition is skipped instead of freezing an incorrect initial view. Browsers without this API use normal links. See `LIBRARY-UPGRADE.md` for the six changes and their validation.
 
 ## Main delivery and Pages cutover
 

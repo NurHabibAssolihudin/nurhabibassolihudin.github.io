@@ -1,5 +1,6 @@
-import { chapterIds, projectSectionIds } from '../data/navigation';
+import { chapterIds, projectSectionIds, chapterAliases as aliases } from '../data/navigation';
 import { createWheelNavigation } from './wheel-navigation';
+import {decodeFragment} from './url-fragment';
 
 export function initProfessionalNavigation() {
   const parent = document.querySelector<HTMLElement>('.pro-experience');
@@ -9,9 +10,14 @@ export function initProfessionalNavigation() {
   const panels = [...scrollArea.querySelectorAll<HTMLElement>('[data-chapter]')];
   const contents = panels.map(panel => panel.querySelector<HTMLElement>('.pro-content')!);
   const wheelNavigation = createWheelNavigation(chapterIds.length);
-  const aliases: Record<string, string> = { platforms: 'summary', stack: 'approach', about: 'summary' };
   let current = 0, offsets: number[] = [], readingEnds: number[] = [], width = 0, height = 0, frame = 0, disposed = false;
   let timer: ReturnType<typeof setTimeout>;
+  let quietArrival=true;
+  let transfer:ReturnType<typeof import('./project-transfer').createProjectTransfer>|undefined;
+  let transferLoading:Promise<void>|undefined;
+  function prepareTransfer(){
+    if(!transferLoading)transferLoading=import('./project-transfer').then(module=>{if(!disposed)transfer=module.createProjectTransfer(scrollArea);}).catch(()=>{transferLoading=undefined;});
+  }
   const offset = (index: number) => offsets[index] ?? panels[index].offsetTop - scrollArea.offsetTop;
   const activate = (index: number) => { current = index; shell.dataset.active = chapterIds[index]; };
 
@@ -23,12 +29,14 @@ export function initProfessionalNavigation() {
   }
   function jump(index: number, addHistory = true, focus = false) {
     if (!panels[index]) return;
+    quietArrival=focus;
+    window.dispatchEvent(new CustomEvent('nur:chapter-start',{detail:{id:chapterIds[index],quiet:focus}}));
     scrollArea.scrollTo({ top: offset(index), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches || focus ? 'instant' : 'smooth' });
     if (addHistory) history.pushState(null, '', '#' + chapterIds[index]);
     if (focus) panels[index].querySelector<HTMLElement>('h1,h2')?.focus({ preventScroll: true });
   }
   function readHash() {
-    const hash = location.hash.slice(1), index = chapterIds.indexOf(aliases[hash] || hash);
+    const hash = decodeFragment(location.hash), index = chapterIds.indexOf(aliases[hash] || hash);
     if (index < 0) return;
     const project = projectSectionIds.indexOf(chapterIds[index]);
     // A direct project link can seed an empty picker. Existing choices belong
@@ -63,7 +71,8 @@ export function initProfessionalNavigation() {
       if (aligned) scrollArea.scrollTo({ top: offset(current), behavior: 'instant' });
     }
   }
-  function settle() {
+  function settle(event?: Event) {
+    if(event && event.target !== scrollArea)return;
     if (document.documentElement.dataset.world !== 'builder' || !offsets.length) return;
     const top = scrollArea.scrollTop;
     const distance = (index: number) => Math.max(offsets[index] - top, top - readingEnds[index], 0);
@@ -73,7 +82,7 @@ export function initProfessionalNavigation() {
       // Reading a section is independent from choosing a work preview.
       history.replaceState(null, '', '#' + chapterIds[nearest]);
     }
-    window.dispatchEvent(new Event('nur:chapter'));
+    window.dispatchEvent(new CustomEvent('nur:chapter',{detail:{quiet:quietArrival}}));
     // A settled target section is reached even when native snapping or display
     // scaling adjusts its exact pixel position. arrive() only clears a matching
     // target; it never queues or starts another movement.
@@ -83,19 +92,28 @@ export function initProfessionalNavigation() {
   function links(event: MouseEvent) {
     const anchor = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
     if (!anchor || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const index = chapterIds.indexOf(aliases[anchor.hash.slice(1)] || anchor.hash.slice(1));
+    const hash=decodeFragment(anchor.hash);
+    const index = chapterIds.indexOf(aliases[hash] || hash);
     if (index < 0 || document.documentElement.dataset.world !== 'builder') return;
-    event.preventDefault(); wheelNavigation.reset(); jump(index, true, event.detail === 0);
+    event.preventDefault(); wheelNavigation.reset();
     const project = projectSectionIds.indexOf(chapterIds[index]);
     if (project >= 0) selectProject(project);
+    const source=anchor.closest('#work')?.querySelector<HTMLElement>('.pro-project-option[aria-pressed="true"] .pro-option__name');
+    const target=panels[index].querySelector<HTMLElement>('h2');
+    if(project>=0&&source&&target&&transfer&&event.detail!==0){
+      transfer.run({source,target,from:scrollArea.scrollTop,to:offset(index),navigate:()=>jump(index)});
+    }else jump(index,true,event.detail===0);
   }
   function worldChange() {
     wheelNavigation.reset();
+    quietArrival=true;
     if (document.documentElement.dataset.world === 'builder') {
       activate(0); measure(); scrollArea.scrollTo({ top: 0, behavior: 'instant' });
     }
   }
-  function historyChange() { wheelNavigation.reset(); measure(); readHash(); }
+  function historyChange() { quietArrival=true;wheelNavigation.reset(); measure(); readHash();window.dispatchEvent(new CustomEvent('nur:chapter',{detail:{quiet:true}})); }
+  function pointer(){quietArrival=false;}
+  function intent(event:Event){if((event.target as Element).closest('#work a[href^="#project-"]'))prepareTransfer();}
   function readWithinSection(delta: number) {
     if (!panels[current].classList.contains('pro-panel--flow')) return false;
     const top = scrollArea.scrollTop, start = offset(current), end = readingEnds[current];
@@ -124,6 +142,7 @@ export function initProfessionalNavigation() {
       node = node.parentElement;
     }
     event.preventDefault();
+    quietArrival=false;
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? height : 1);
     if (delta && readWithinSection(delta)) return;
     const destination = wheelNavigation.input(delta, event.timeStamp, current);
@@ -139,13 +158,20 @@ export function initProfessionalNavigation() {
   scrollArea.addEventListener('scroll', scroll, { passive: true });
   scrollArea.addEventListener('scrollend', settle);
   scrollArea.addEventListener('wheel', wheel, { passive: false });
+  scrollArea.addEventListener('pointerdown',pointer,{passive:true});
+  document.addEventListener('pointerover',intent,{passive:true});document.addEventListener('focusin',intent);
   document.addEventListener('click', links); document.addEventListener('keydown', keys);
   window.addEventListener('popstate', historyChange); window.addEventListener('hashchange', historyChange); window.addEventListener('nur:world', worldChange);
   const resize = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); });
   resize.observe(scrollArea); contents.forEach(content => resize.observe(content));
   document.fonts.ready.then(measure);
+  const work=scrollArea.querySelector('#work');
+  const nearby=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){prepareTransfer();nearby.disconnect();}},{root:scrollArea,rootMargin:'400px 0px'});
+  if(work)nearby.observe(work);
   return () => {
     disposed = true; clearTimeout(timer); cancelAnimationFrame(frame); resize.disconnect();
+    nearby.disconnect();transfer?.dispose();
+    scrollArea.removeEventListener('pointerdown',pointer);document.removeEventListener('pointerover',intent);document.removeEventListener('focusin',intent);
     scrollArea.removeEventListener('scroll', scroll); scrollArea.removeEventListener('scrollend', settle); scrollArea.removeEventListener('wheel', wheel);
     document.removeEventListener('click', links); document.removeEventListener('keydown', keys);
     window.removeEventListener('popstate', historyChange); window.removeEventListener('hashchange', historyChange); window.removeEventListener('nur:world', worldChange);

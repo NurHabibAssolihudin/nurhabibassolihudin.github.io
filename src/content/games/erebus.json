@@ -1,0 +1,24 @@
+{
+  "order": 1,
+  "flip": false,
+  "crest": {
+    "en": "0-Day",
+    "id": "0-Day"
+  },
+  "name": {
+    "en": "Project Erebus",
+    "id": "Project Erebus"
+  },
+  "meta": {
+    "en": "Project · experiment · 2024",
+    "id": "Proyek · eksperimen · 2024"
+  },
+  "body": {
+    "en": "A game experiment under the name Erebus, with a site for its notes.",
+    "id": "Eksperimen game bernama Erebus. Catatan pengembangannya saya kumpulkan di situs proyek."
+  },
+  "stack": {
+    "en": "Story · Web",
+    "id": "Cerita · Web"
+  }
+}

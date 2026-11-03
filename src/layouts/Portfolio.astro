@@ -1,14 +1,18 @@
 ---
 import Professional from '../components/Professional.astro';
+import Creator from '../components/Creator.astro';
 import { worldMarkup, type Language } from '../lib/world-markup';
+import {chapterIds,creatorIds,chapterAliases} from '../data/navigation';
 import '../styles/professional.css';
+import '../styles/chapter-motion.css';
+import '../styles/navigation.css';
 interface Props { language: Language; auto?: boolean }
 const { language, auto = false } = Astro.props;
 const id = language === 'id', markup = worldMarkup(language);
 const title = id ? 'NurHabib · pengembangan aplikasi web' : 'NurHabib · web development';
 const description = id ? 'Proyek perangkat lunak, kontribusi dan pengalaman NurHabib Assolihudin.' : 'Software projects, contributions and experience by NurHabib Assolihudin.';
 const canonical = `https://nurhabibassolihudin.github.io/${auto ? '' : language + '/'}`;
-const languages = `<nav class="language-switch" aria-label="${id ? 'Bahasa' : 'Language'}"><a href="/en/" lang="en" hreflang="en" data-language="en"${!id ? ' aria-current="true"' : ''}>EN</a><a href="/id/" lang="id" hreflang="id" data-language="id"${id ? ' aria-current="true"' : ''}>ID</a></nav>`;
+const languages = `<nav class="language-switch" aria-label="${id ? 'Bahasa' : 'Language'}"><a href="/en/" lang="en" hreflang="en" data-astro-prefetch="hover" data-language="en"${!id ? ' aria-current="true"' : ''}>EN</a><a href="/id/" lang="id" hreflang="id" data-astro-prefetch="hover" data-language="id"${id ? ' aria-current="true"' : ''}>ID</a></nav>`;
 // Reuse the existing authored icon control in the mobile menu.
 const themeControl = markup.header.match(/<button class="icon" data-theme-toggle\b[\s\S]*?<\/button>/)?.[0];
 if (!themeControl) throw new Error('Missing shared theme control');
@@ -19,7 +23,32 @@ const header = markup.header.replace('<div class="bar__actions">', '<div class="
 <html lang={language} data-theme="light" data-world="builder" data-auto-language={auto || undefined}>
   <head>
     <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline>document.documentElement.classList.add('js','pro-ready');try{var theme=localStorage.getItem('theme');document.documentElement.dataset.theme=theme==='light'||theme==='dark'?theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}</script>
+    <style is:inline>@view-transition { navigation:auto; }</style>
+    <script is:inline define:vars={{professionalIds:chapterIds,creatorIds,chapterAliases}}>
+      const root=document.documentElement;
+      root.classList.add('js','pro-ready');
+      try{const theme=localStorage.getItem('theme');root.dataset.theme=theme==='light'||theme==='dark'?theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}
+      // Establish the requested world before the first paint, including locale navigation.
+      try{root.dataset.world=JSON.parse(sessionStorage.getItem('nur-world-state')||'{}').world==='creator'?'creator':'builder'}catch(e){}
+      function fragment(){try{return decodeURIComponent(location.hash.slice(1))}catch(e){return location.hash.slice(1)}}
+      const hash=fragment();
+      if(creatorIds.includes(hash))root.dataset.world='creator';
+      else if(professionalIds.includes(chapterAliases[hash]||hash))root.dataset.world='builder';
+      // Never freeze an uninitialized section or an unrestored project into a snapshot.
+      // A slow device keeps normal navigation rather than waiting for React to hydrate.
+      window.addEventListener('pagereveal',event=>{
+        if(!event.viewTransition)return;
+        event.viewTransition.ready.catch(()=>{});
+        const picker=document.querySelector('.pro-work__island');
+        const hash=fragment();
+        const target=document.getElementById(chapterAliases[hash]||hash);
+        const scroller=document.getElementById('professional-scroll');
+        // Static chapters can be positioned synchronously, without waiting for React.
+        if(root.dataset.navigationReady!=='true'&&root.dataset.world==='builder'&&target?.hasAttribute('data-chapter')&&scroller)scroller.scrollTo({top:target.offsetTop-scroller.offsetTop,behavior:'instant'});
+        if((root.dataset.world==='creator'&&root.dataset.navigationReady!=='true')||(hash==='work'&&picker?.dataset.pickerReady!=='true')||matchMedia('(prefers-reduced-motion: reduce)').matches)event.viewTransition.skipTransition();
+      });
+      window.addEventListener('pageswap',event=>event.viewTransition?.ready.catch(()=>{}));
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" /><meta name="theme-color" content="#0b0c0f" />
@@ -42,7 +71,7 @@ const header = markup.header.replace('<div class="bar__actions">', '<div class="
       <main id="main">
         <noscript><p class="wrap no-script">{id ? 'JavaScript tidak aktif. Informasi dan tautan proyek tetap dapat dibaca.' : 'JavaScript is off. Project information and links remain available.'}</p></noscript>
         <div class="world world--builder is-live" data-world="builder"><Professional language={language} planet={markup.planet} /></div>
-        <Fragment set:html={markup.creator} />
+        <Creator language={language}/>
       </main>
       <Fragment set:html={markup.footer} />
     </div>

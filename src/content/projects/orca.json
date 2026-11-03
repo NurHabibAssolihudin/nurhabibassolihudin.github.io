@@ -1,0 +1,43 @@
+{
+  "id": "project-orca",
+  "name": "ORCA",
+  "image": "../../../assets/orca-workspace.png",
+  "original": "/assets/orca-workspace.png",
+  "kind": {
+    "en": "Project workspace",
+    "id": "Ruang kerja proyek"
+  },
+  "summary": {
+    "en": "Keep project documents, tasks and schedules in one workspace.",
+    "id": "Dokumen, tugas, dan jadwal proyek dalam satu ruang kerja."
+  },
+  "context": {
+    "en": "ORCA brings document writing, task management and project scheduling into one place.",
+    "id": "ORCA menyediakan satu tempat untuk menulis dokumen, mengatur tugas, dan menyusun jadwal proyek."
+  },
+  "focus": {
+    "en": "I build the workspace and its document, board and calendar views. ORCA can also run on your own server.",
+    "id": "Saya mengembangkan ruang kerja beserta tampilan dokumen, board tugas, dan kalendernya. ORCA juga bisa dijalankan di server sendiri."
+  },
+  "reviewTitle": {
+    "en": "Try the demo",
+    "id": "Coba langsung"
+  },
+  "evidence": {
+    "en": "Explore the workspace with sample content. No account is needed.",
+    "id": "Coba demo berisi data contoh untuk melihat cara kerjanya. Tidak perlu membuat akun."
+  },
+  "technologies": [
+    "TypeScript"
+  ],
+  "links": [
+    {
+      "label": {
+        "en": "Open demo",
+        "id": "Buka demo"
+      },
+      "url": "https://orca.ocaty.com"
+    }
+  ],
+  "order": 0
+}

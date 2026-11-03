@@ -1,0 +1,24 @@
+{
+  "order": 0,
+  "flip": true,
+  "crest": {
+    "en": "Going Home",
+    "id": "Going Home"
+  },
+  "name": {
+    "en": "Going Home",
+    "id": "Going Home"
+  },
+  "meta": {
+    "en": "Game · quiet narrative · Godot",
+    "id": "Game · cerita bertempo tenang · Godot"
+  },
+  "body": {
+    "en": "A narrative game about a journey home, made with Godot and GDScript.",
+    "id": "Game berbasis cerita tentang perjalanan pulang. Dibuat dengan Godot dan GDScript."
+  },
+  "stack": {
+    "en": "Godot · GDScript",
+    "id": "Godot · GDScript"
+  }
+}

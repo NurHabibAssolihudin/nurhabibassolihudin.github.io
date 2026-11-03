@@ -2,10 +2,13 @@
 import Panel from './Panel.astro';
 import ExternalLink from './ExternalLink.astro';
 import WorkPicker from './WorkPicker';
-import { projects, sections, t, words, type Locale } from '../data/professional';
+import { sections, t, words, type Locale } from '../data/professional';
+import {projectContent} from '../lib/project-content';
 interface Props { language: Locale; planet: string }
 const {language, planet} = Astro.props;
 const id = language === 'id';
+const projects=await projectContent();
+const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWidth,imageHeight})=>({id,name,kind,summary,image,imageSet,imageWidth,imageHeight}));
 ---
 <div class="pro-experience" data-enhanced="false" data-active="top">
     <div class="pro-scroll" id="professional-scroll" tabindex={-1} aria-label={id ? 'Bagian halaman profesional' : 'Professional page sections'}>
@@ -21,9 +24,9 @@ const id = language === 'id';
         <div class="pro-split"><div><h2 id="summary-title" class="pro-title" tabindex={-1}>{t(words.summary, language)}</h2><p class="pro-lead">{t(sections.summary.lead, language)}</p><p class="pro-body pro-summary__examples">{t(sections.summary.body, language)}</p><a class="pro-link" href="#experience-work">{t(sections.summary.background, language)}</a></div>
         <div class="pro-summary__scope"><h3 id="scope-title">{t(sections.summary.scopeTitle, language)}</h3><dl class="pro-scope-list" aria-labelledby="scope-title">{sections.summary.scope.map(item => <div><dt>{t(item.name, language)}</dt><dd>{t(item.description, language)}</dd></div>)}</dl></div></div>
       </Panel>
-      <section id="work" class="pro-panel pro-work" data-chapter aria-labelledby="work-title"><WorkPicker language={language} client:visible={{rootMargin:'400px'}} /></section>
+      <section id="work" class="pro-panel pro-work" data-chapter aria-labelledby="work-title"><WorkPicker language={language} projects={pickerProjects} client:visible={{rootMargin:'400px'}} /></section>
       {projects.map(project => <Panel section={project.id} class="pro-case">
-        <div class="pro-case__layout"><div class="pro-case__intro"><h2 class="pro-title" id={`${project.id}-title`} tabindex={-1}>{project.name}</h2><p class="pro-lead">{t(project.kind, language)}</p><p class="pro-body">{t(project.context, language)}</p>{project.image && <a class="pro-thumb" href={project.image} target="_blank" rel="noreferrer" aria-label={(id ? 'Perbesar tampilan ' : 'Enlarge preview of ') + project.name}><img src={project.image} width={1360} height={860} alt={id ? `Tampilan ${project.name}` : `${project.name} interface preview`} loading="lazy" /><span>{id ? 'Perbesar gambar' : 'Enlarge image'}</span></a>}</div>
+        <div class="pro-case__layout"><div class="pro-case__intro"><h2 class="pro-title" id={`${project.id}-title`} tabindex={-1}>{project.name}</h2><p class="pro-lead">{t(project.kind, language)}</p><p class="pro-body">{t(project.context, language)}</p>{project.image && <a class="pro-thumb" href={project.original} target="_blank" rel="noreferrer" aria-label={(id ? 'Perbesar tampilan ' : 'Enlarge preview of ') + project.name}><img src={project.thumbnail} width={440} height={Math.round(440*(project.imageHeight||860)/(project.imageWidth||1360))} alt={id ? `Tampilan ${project.name}` : `${project.name} interface preview`} loading="lazy" /><span>{id ? 'Perbesar gambar' : 'Enlarge image'}</span></a>}</div>
         <div class="pro-case__details">
           <div class="pro-case__group"><h3>{t(words.contribution, language)}</h3><p>{t(words.responsibility, language)}</p><p>{t(project.focus, language)}</p></div>
           <div class="pro-case__group"><h3>{t(project.reviewTitle, language)}</h3><p>{t(project.evidence, language)}</p>{project.links.length > 0 && <ul class="pro-link-list" role="list">{project.links.map(link => <li><ExternalLink url={link.url} label={t(link.label, language)} /></li>)}</ul>}</div>

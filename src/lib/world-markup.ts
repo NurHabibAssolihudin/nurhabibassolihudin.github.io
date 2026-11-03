@@ -1,4 +1,3 @@
-import creatorSource from '../../templates/creator.html?raw';
 import headerSource from '../../templates/header.html?raw';
 import footerSource from '../../templates/footer.html?raw';
 import planetSource from '../../templates/planet.html?raw';
@@ -21,6 +20,6 @@ export function worldMarkup(language: Language) {
   ].map(([hash, en, id]) => `<a href="#${hash}">${language === 'id' ? id : en}</a>`).join('\n');
   return {
     header: translate(headerSource).replaceAll('<!-- professional-nav -->', nav),
-    creator: translate(creatorSource), footer: translate(footerSource), planet: translate(planetSource),
+    footer: translate(footerSource), planet: translate(planetSource),
   };
 }

@@ -2,14 +2,14 @@ import { strict as assert } from 'node:assert';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
+import {markupSnapshot} from './markup-snapshot.mjs';
 const root = resolve(import.meta.dirname, '..');
 const read = file => readFileSync(resolve(root, file), 'utf8');
 const creator = html => html.slice(html.indexOf('<div class="world world--creator"'), html.indexOf('</main>')).trim();
-const baselineCreator = read('templates/creator.html').trim().replaceAll('src="assets/', 'src="/assets/');
 const chapters = ['top', 'summary', 'work', 'project-orca', 'project-ocaty', 'project-oxelot', 'experience-work', 'approach', 'contact'];
-// Creator snapshots include the authorized display rename and shared professional
-// contact channels (3 November), plus the Indonesian copy adaptation.
-const creatorHashes = {"en":"42046bb44dbca9f6774431cdc2f607b5037b93acd5e8e9bf3cbf7ad968ba232a","id":"049e43a9e1b3040bb6f55ad5058fa93be12c26ac980a58778cea3004b3faa2a4"};
+// Pinned before componentization: compare content, structure and links, allowing
+// only compiler whitespace and attribute-order differences.
+const creatorHashes = JSON.parse(read('scripts/creator-snapshots.json'));
 let checks = 0;
 for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
   const html = read(`dist/${route}index.html`);
@@ -23,10 +23,11 @@ for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
   }
   assert.ok(html.includes('hreflang="x-default"') && html.includes('property="og:url"')); checks++;
   assert.equal((html.match(/<astro-island\b/g) || []).length, 1, 'Only the work picker needs hydration'); checks++;
+  assert.ok(/srcset="[^"]+\.webp 480w[^\"]+\.webp 960w/i.test(html),'Project preview needs generated responsive WebP assets'); checks++;
+  assert.match(html,/data-astro-prefetch="hover"/, 'Locale links should prefetch on intent'); checks++;
   assert.ok(/<astro-island\b[^>]*client="visible"/.test(html), 'Work picker must defer hydration until needed'); checks++;
   assert.ok(!html.includes('/scenes.css') && !html.includes('.ttf'), 'Legacy scene CSS and TTF requests must not return'); checks++;
-  if (language === 'en') { assert.equal(creator(html), baselineCreator, 'Creator content changed during professional migration'); checks++; }
-  assert.equal(createHash('sha256').update(creator(html).replaceAll('\r', '')).digest('hex'), creatorHashes[language], `${language}: creator differs from expected content snapshot`); checks++;
+  assert.equal(createHash('sha256').update(markupSnapshot(creator(html))).digest('hex'), creatorHashes[language], `${language}: creator differs from expected content snapshot`); checks++;
   assert.ok(!html.includes('ipapi.co') && !html.includes('navigator.geolocation')); checks++;
 }
 for (const font of ['bricolage', 'manrope']) {
