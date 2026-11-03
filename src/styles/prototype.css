@@ -7,6 +7,7 @@
   --step-body:clamp(1rem,.96rem + .18vw,1.125rem);--step-lead:clamp(1.35rem,2.3vw,2rem);
   --wrap:1320px;--gutter:clamp(1.25rem,3.4vw,3.5rem);--section:clamp(4rem,8vw,7rem);
   --ease:cubic-bezier(.23,1,.32,1);--ease-in-out:cubic-bezier(.77,0,.175,1);
+  --ease-preview:cubic-bezier(.37,0,.63,1); /* easeInOutSine: distribute the preview sweep over its full duration. */
   --scene:#0b0c0f;--scene-ink:#f1efe7;
 }
 [data-theme="light"]{--bg-builder:#f1efe7;--bg-creator:#f1efe7}

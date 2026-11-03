@@ -42,3 +42,9 @@ Physical Android/iPhone frame time, real network performance, production caching
 ## Main delivery and source cleanup
 
 The owner requested commit and push to main, then explicitly chose to remove the obsolete implementation and reconfigure Pages themselves. Root/en/id HTML snapshots, the old page controller/build scripts and unused discipline scenes are removed. Active artwork/styles now live under src/; four focused shared templates replace the monolithic page template, and unused translations are pruned. Build output remains dist/; CI uploads it as portfolio-dist without changing Pages settings or deploying.
+
+## Motion integration — 3 November 2026
+
+The earlier figures above describe the October optimization snapshot. A fresh local production-preview landing now requests 47,693 decoded bytes of external JavaScript: navigation/menu, the mini Motion engine and shared settings, planet renderer and field renderer. This excludes HTML/inline bootstrap and is not a production transfer or FPS measurement. React, WorkPicker and the complete transition module are still absent before intent. The transition and its delay helper are separate deferred chunks; creator interactions remain deferred. Evidence: ignored `.taste-skill/motion-final-loading.json` and `motion-loading.json`.
+
+The continuously rendered canvases are held during crossing, and the destination emblem is painted once. Motion owns finite DOM effects; no React state or custom animation clock is updated per frame. The React picker and its layout/presence features load only near selected work. Temporary compositor hints exist only on nodes removed at transition end. There is no claim of improved real-device frame rate; physical-phone and production-network measurements remain separate.

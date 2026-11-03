@@ -123,7 +123,9 @@
       canvas.dataset.state=held?'held':reduced.matches?'static':'orbiting';if(!held&&!reduced.matches)wake();
     }
     function wake(){if(!frame&&visible&&!document.hidden&&!held&&button.closest('.world').dataset.world===document.documentElement.dataset.world)frame=requestAnimationFrame(draw);}
-    function resize(){const width=button.getBoundingClientRect().width;if(!width)return;const size=Math.max(1,Math.round(Math.min(width*(devicePixelRatio||1),innerWidth<700?400:640)));if(canvas.width!==size){canvas.width=canvas.height=size;}wake();}
+    // Camera transforms change the painted size, not the layout resolution.
+    // Measuring the transformed rectangle could clear a held destination canvas.
+    function resize(){const width=button.clientWidth;if(!width)return;const size=Math.max(1,Math.round(Math.min(width*(devicePixelRatio||1),innerWidth<700?400:640)));if(canvas.width!==size){canvas.width=canvas.height=size;}wake();}
     new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){previous=0;resize();wake();}else if(frame){cancelAnimationFrame(frame);frame=0;}},{rootMargin:'0px'}).observe(canvas);
     new ResizeObserver(resize).observe(button);
     button.addEventListener('pointermove',event=>{if(!fine.matches||reduced.matches)return;const r=button.getBoundingClientRect();targetX=(event.clientX-r.left)/r.width-.5;targetY=(event.clientY-r.top)/r.height-.5;wake();});button.addEventListener('pointerleave',()=>{targetX=targetY=0;wake();});

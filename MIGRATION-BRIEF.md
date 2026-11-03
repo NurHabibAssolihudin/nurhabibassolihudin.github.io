@@ -1,6 +1,6 @@
 # Brief perubahan portfolio
 
-Diperbarui 29 Oktober 2026. Status: fase 1 telah diimplementasikan pada preview lokal; visual fase 2 dan Chrimson Violet fase 3 belum dikerjakan. Snapshot pembanding adalah `main` pada commit `7577aa0`.
+Diperbarui 3 November 2026. Status: fase 1 telah diimplementasikan pada preview lokal. Nama tampilan NurHabib dan Crimson Violet telah diterapkan atas permintaan terbaru pemilik; visual fase 2 dan perubahan total dunia kreatif fase 3 belum dikerjakan. Snapshot pembanding adalah `main` pada commit `7577aa0`.
 
 Brief ini menjadi acuan terbaru bila bertentangan dengan rencana awal scene bertumpuk dan animasi berdasarkan progres scroll. Dokumen `DESIGN.md` menjelaskan implementasi fase 1 dan baseline artwork yang dipertahankan.
 
@@ -8,9 +8,9 @@ Brief ini menjadi acuan terbaru bila bertentangan dengan rencana awal scene bert
 
 **Fokus aktif adalah halaman profesional.** Struktur, konten, navigasi dan animasinya harus membantu calon klien atau penilai memahami kecocokan, memeriksa bukti pekerjaan dan memulai percakapan. Gunakan hasil riset portfolio untuk fungsi tersebut. Tampilan profesional tetap memiliki identitas visual yang khas dan ambisius.
 
-**Dunia game ditunda dan arah namanya adalah Chrimson Violet**, dengan ejaan tersebut sesuai pilihan pemilik. Arah kreatif yang sudah dibahas tetap disimpan: pengalaman sangat ekspresif, penuh imajinasi, ambisi visual dan interaksi yang membuat pengunjung merasakan sesuatu. Standar penyajian untuk hiring atau calon klien pada halaman profesional tidak diterapkan sebagai batas kreativitas Chrimson Violet.
+**Pengembangan ulang dunia game ditunda; nama tampilannya kini Crimson Violet**, sesuai ejaan terbaru pemilik. Arah kreatif yang sudah dibahas tetap disimpan: pengalaman sangat ekspresif, penuh imajinasi, ambisi visual dan interaksi yang membuat pengunjung merasakan sesuatu. Standar penyajian untuk hiring atau calon klien pada halaman profesional tidak diterapkan sebagai batas kreativitas Crimson Violet.
 
-Bagian brief tentang karakter game, mothership dan kontak teatrikal merupakan catatan untuk fase berikutnya, bukan pekerjaan aktif sekarang. Belum melakukan pengembangan ulang, penataan konten atau penggantian nama di tampilan dunia game. Nama alimagine, tautan dan identitas yang ada pada versi berjalan tetap dicatat sebagai kondisi saat ini; rencana nama dunia tidak otomatis mengganti identitas studio atau tujuan kontaknya. Perpindahan dua dunia yang sudah berfungsi tetap dipertahankan ketika fondasi bersama kelak disentuh.
+Bagian brief tentang karakter game, mothership dan kontak teatrikal merupakan catatan untuk fase berikutnya. Penggantian nama tampilan menjadi Crimson Violet telah diminta dan diterapkan pada 3 November, tanpa memulai redesign penuh fase 3. Atas klarifikasi pemilik, kedua dunia memakai kontak profesional yang sama: email, GitHub dan LinkedIn. Tautan akun/situs Alimagine lama di tampilan kreatif telah diganti atau dihapus. Perpindahan dua dunia tetap dipertahankan.
 
 ## Pembagian tiga fase
 
@@ -20,7 +20,7 @@ Urutan terbaru dari pemilik adalah:
 | --- | --- | --- |
 | 1 | Memperbaiki dan membagi bagian profesional, fungsi konten, card/list proyek, detail/kontribusi dan mekanisme scroll berpindah bagian | Gunakan aset yang sudah ada atau background netral. Tidak menunggu/menambah gambar baru dan tidak mengembangkan ulang dunia game. Fondasi framework yang diperlukan dikerjakan di sini. |
 | 2 | Menambahkan gambar dan suasana visual profesional | Foto tokoh inspirasi, preview baru bila tersedia dan visual kontak dua kursi/meja teh; uji kembali keterbacaan dan performa. |
-| 3 | Perubahan total Chrimson Violet | Identitas, struktur, artwork, karakter, interaksi, kontak teatrikal dan integrasi penuh dunia kreatif. |
+| 3 | Perubahan total Crimson Violet | Identitas, struktur, artwork, karakter, interaksi, kontak teatrikal dan integrasi penuh dunia kreatif. |
 
 Lihat [MIGRATION-PHASES.md](MIGRATION-PHASES.md) untuk pekerjaan dan syarat selesai tiap fase. Arah visual di bagian berikut menjadi target fase yang sesuai; keberadaan sebuah konsep di brief tidak berarti harus dikerjakan pada fase 1. Gambar yang sudah tersedia boleh dipakai kembali pada fase 1. Fase 1 menggunakan Astro + React + TypeScript + Motion, sembilan bagian profesional, scroll snap native untuk sentuhan dan pengelolaan gesture roda mouse; lihat `QA-PHASE-1.md` untuk hasil verifikasi. Fase 2 dan 3 tetap dalam rencana.
 
@@ -30,10 +30,10 @@ Urutan berikut menggantikan usulan struktur lima bagian dalam laporan riset seba
 
 | Urutan | Bagian | Fungsi | Isi dan aksi utama |
 | --- | --- | --- | --- |
-| 1 | Head / Landing | Sapaan, first impression, momen wow dan sekilas siapa Nur | Identitas singkat yang mudah dipahami, komposisi/objek khas, akses melanjutkan atau langsung ke pekerjaan/kontak |
+| 1 | Head / Landing | Sapaan, first impression, momen wow dan sekilas siapa NurHabib | Identitas singkat yang mudah dipahami, komposisi/objek khas, akses melanjutkan atau langsung ke pekerjaan/kontak |
 | 2 | Ringkasan | Memberikan gambaran profesional yang lebih jelas setelah kesan pertama | Fokus pekerjaan, bentuk kontribusi dan konteks singkat yang terverifikasi; menjadi jembatan ke bukti pekerjaan |
 | 3 | Pekerjaan Terpilih — ringkasan | Membantu pengunjung memilih pekerjaan yang ingin diperiksa | Card/list proyek, preview background saat dipilih, deskripsi singkat dan tautan ke detail proyek terkait |
-| 4 | Detail per pekerjaan terpilih + kontribusi | Menjelaskan pekerjaan dan peran Nur secara konkret | Konteks masalah, kontribusi sendiri/tim, keputusan penting, bukti, hasil/status dan batas; satu atau lebih bagian untuk tiap proyek |
+| 4 | Detail per pekerjaan terpilih + kontribusi | Menjelaskan pekerjaan dan peran NurHabib secara konkret | Konteks masalah, kontribusi sendiri/tim, keputusan penting, bukti, hasil/status dan batas; satu atau lebih bagian untuk tiap proyek |
 | 5 | Pengalaman dan cara bekerja | Membantu pengunjung menilai latar belakang dan pola kerja | Pengalaman yang relevan dan contoh cara mengambil keputusan/berkolaborasi dari pekerjaan nyata; CV dapat diakses bila tersedia |
 | 6 | Kontak | Menutup pengalaman dengan undangan berbincang di ruang yang sejuk dan santai | Dua tempat duduk santai atau komposisi meja teh, dengan jalur komunikasi langsung yang jelas |
 
@@ -68,7 +68,7 @@ Pengalaman dan cara bekerja juga dapat dipecah menjadi bagian berurutan bila per
 
 Situs harus terasa khas karena gagasan, kreativitas, ambisi dan kecerdasan penyajiannya. Perbedaan visual perlu memiliki alasan dan kualitas eksekusi. Pengunjung mendapat pengalaman yang mengejutkan sekaligus mudah memahami pekerjaan dan identitas pemiliknya.
 
-Bangun satu bahasa visual dan gerak yang menghubungkan objek, tipografi, background, konten dan navigasi. Dua dunia memiliki perilaku yang berbeda: keteraturan dan hubungan sistem pada profesional; imajinasi dan pembengkokan aturan ruang pada Chrimson Violet. Ini arah eksplorasi, bukan alasan menambahkan gerakan acak. Pengembangan tahap sekarang mengerjakan sisi profesional; eksplorasi Chrimson Violet dilanjutkan terpisah.
+Bangun satu bahasa visual dan gerak yang menghubungkan objek, tipografi, background, konten dan navigasi. Dua dunia memiliki perilaku yang berbeda: keteraturan dan hubungan sistem pada profesional; imajinasi dan pembengkokan aturan ruang pada Crimson Violet. Ini arah eksplorasi, bukan alasan menambahkan gerakan acak. Pengembangan tahap sekarang mengerjakan sisi profesional; eksplorasi Crimson Violet dilanjutkan terpisah.
 
 Motion/GSAP digunakan sebagai alat untuk mengerjakan koreografi khusus. React Bits dapat menjadi referensi teknik atau bahan komponen yang diolah. Pemilihan efek mengikuti konsep situs; katalog komponen tidak menentukan identitasnya. Planet, kapal dan perpindahan dunia tetap menjadi karya yang dikembangkan khusus untuk situs ini.
 
@@ -76,7 +76,7 @@ Ukuran penilaian: pengalaman masih dapat dikenali ketika nama/logo ditutup; inte
 
 ## 1. Navigasi per layar
 
-Rancangan navigasi berikut menjadi acuan prototipe halaman profesional. Penerapan rinci pada Chrimson Violet diputuskan ketika fase kreatifnya dimulai; dunia game yang berjalan tidak diubah pada tahap ini.
+Rancangan navigasi berikut menjadi acuan prototipe halaman profesional. Penerapan rinci pada Crimson Violet diputuskan ketika fase kreatifnya dimulai; dunia game yang berjalan tidak diubah pada tahap ini.
 
 Setiap bagian utama dirancang muat dalam satu layar. Satu layar mempunyai fokus informasi, judul dan titik perhatian yang jelas. Navigasi memakai perilaku gesture yang familiar dan teruji sesuai perangkat. Tombol berikutnya/bawah dapat menuju bagian secara langsung. Setelah gesture selesai, pengalaman menetap tuntas pada bagian yang dipilih dan berhenti dengan pandangan terfokus pada informasi tersebut. Arah sebaliknya tersedia untuk kembali.
 
@@ -123,7 +123,7 @@ Tambahkan foto/gambar tokoh dan karakter yang memang dipilih pemilik situs sebag
 | Dunia | Isi | Arah komposisi |
 | --- | --- | --- |
 | Profesional | Beberapa tokoh yang dikenal baik oleh pemilik situs dan menjadi inspirasinya | Selektif, terkurasi, ruang antarfigur cukup; hubungan dengan pekerjaan dan karakter profesional terasa jelas |
-| Chrimson Violet — fase berikutnya | Lebih banyak karakter unik, termasuk dari game yang disukai dan referensi game lainnya | Lebih beragam, ekspresif dan berlapis; karakter dapat tersebar di beberapa layar agar tidak semuanya memenuhi satu viewport |
+| Crimson Violet — fase berikutnya | Lebih banyak karakter unik, termasuk dari game yang disukai dan referensi game lainnya | Lebih beragam, ekspresif dan berlapis; karakter dapat tersebar di beberapa layar agar tidak semuanya memenuhi satu viewport |
 
 Tokoh/karakter tetap dapat dikenali. Arah pengolahan gambar dapat berupa cutout, cropping, lapisan kedalaman atau kolase yang menyatu dengan warna dan material dunia. Besaran, penempatan dan ritmenya dikomposisikan khusus; tidak semua gambar diberi perlakuan identik.
 
@@ -143,7 +143,7 @@ Saat mencapai kontak profesional, pengunjung tiba di **tempat yang sejuk dengan 
 
 Tempo visual mereda, komposisi memberi ruang bernapas dan gerak lingkungan terasa tenang. Tulisan wajar, ramah dan mudah dipahami. Pilihan email/kanal kontak langsung terbaca dan dapat digunakan, terintegrasi dengan undangan berbincang di ruang tersebut. Pengunjung tidak perlu menebak benda mana yang dapat diklik untuk menemukan kontak. Layar ini menjadi tempat berhenti yang nyaman setelah melihat pekerjaan.
 
-### Chrimson Violet: adegan yang menimbulkan sensasi — ditunda
+### Crimson Violet: adegan yang menimbulkan sensasi — ditunda
 
 Kontak dunia game sangat kreatif dan terasa sebagai sebuah kejadian dalam dunianya. Ia memberi sensasi seperti tegang, penasaran, terkejut atau geli, lalu mengubah sensasi itu menjadi ajakan berinteraksi. Pengunjung mempunyai peran dan mendapat respons visual saat memilih atau bertindak; pengalaman tidak berhenti pada sebuah tombol kirim pesan.
 
@@ -153,7 +153,7 @@ Pilihan dialog/aksi mengantar ke saluran kontak yang nyata dan mudah dimengerti.
 
 ## Yang tetap dipertahankan
 
-- Dua pengalaman penuh dengan identitas masing-masing. Profesional menjadi fokus aktif; dunia game yang berjalan dipertahankan, dengan Chrimson Violet sebagai arah nama dan pengembangan kreatif berikutnya.
+- Dua pengalaman penuh dengan identitas masing-masing. Profesional menjadi fokus aktif; dunia game yang berjalan dipertahankan, dengan Crimson Violet sebagai arah nama dan pengembangan kreatif berikutnya.
 - EN/ID, pilihan bahasa yang diingat dan deteksi bahasa browser tanpa layanan lokasi/IP.
 - Copy yang faktual dan tidak mengulang klaim pencapaian; gambar proyek berukuran ringkas.
 - Planet biru dengan empat satelit dan mothership dengan empat tengkorak api menjadi pembanding identitas objek. Koreografi dan transisinya boleh dikembangkan sesuai brief baru.
@@ -163,7 +163,7 @@ Pilihan dialog/aksi mengantar ke saluran kontak yang nyata dan mudah dimengerti.
 
 Arah stack yang disarankan setelah diskusi terbaru adalah Astro + React + TypeScript, dengan Motion sebagai alat animasi utama. GSAP digunakan hanya bila koreografi khusus membutuhkan kendali tambahan; dua mesin animasi tidak menulis properti yang sama pada elemen yang sama. ScrollTrigger tidak lagi menjadi kebutuhan default karena navigasi utama kini diskret per layar. React Bits dipilih dan diolah berdasarkan konsep khusus situs.
 
-Urutan kerja mengikuti tiga fase: (1) fondasi yang diperlukan, peta enam fungsi bagian, perbaikan konten/layout serta navigasi dan jalur proyek dengan aset lama; (2) penambahan gambar profesional dan suasana kontak, diikuti pemeriksaan visual/performa; (3) perubahan total Chrimson Violet. Verifikasi fungsi dilakukan sejak fase 1. Aset gambar baru tidak menjadi prasyarat fase 1; scene kontak kursi/meja teh diwujudkan secara visual pada fase 2.
+Urutan kerja mengikuti tiga fase: (1) fondasi yang diperlukan, peta enam fungsi bagian, perbaikan konten/layout serta navigasi dan jalur proyek dengan aset lama; (2) penambahan gambar profesional dan suasana kontak, diikuti pemeriksaan visual/performa; (3) perubahan total Crimson Violet. Verifikasi fungsi dilakukan sejak fase 1. Aset gambar baru tidak menjadi prasyarat fase 1; scene kontak kursi/meja teh diwujudkan secara visual pada fase 2.
 
 Pada fase 1 nilai prototipe perpindahan layar, hierarki informasi, bukti pekerjaan dan jalur kontak menggunakan aset yang sudah ada. Perlakuan foto dan scene kontak dinilai pada fase 2. Kriteria penerimaan di bawah berlaku sesuai lingkup fase; kriteria karakter, penamaan dan kontak game diselesaikan pada fase 3, bukan syarat penyelesaian fase profesional.
 
@@ -184,7 +184,7 @@ Pada fase 1 nilai prototipe perpindahan layar, hierarki informasi, bukti pekerja
 
 ## Fakta yang dikonfirmasi pemilik pada implementasi fase 1
 
-Ocaty, ORCA dan Oxelot merupakan proyek pribadi. Nur menangani branding, planning, coding, deployment dan marketing. Pengalaman yang boleh ditampilkan: R&D Developer di PT Semesta Teknologi Informatika, lebih dari satu tahun. Tidak ada tanggal mulai/akhir, metrik, hasil komersial atau rincian pekerjaan perusahaan yang diberikan; implementasi tidak mengarangnya.
+Ocaty, ORCA dan Oxelot merupakan proyek pribadi. NurHabib menangani branding, planning, coding, deployment dan marketing. Pengalaman yang boleh ditampilkan: R&D Developer di PT Semesta Teknologi Informatika, lebih dari satu tahun. Tidak ada tanggal mulai/akhir, metrik, hasil komersial atau rincian pekerjaan perusahaan yang diberikan; implementasi tidak mengarangnya.
 
 ## Koreksi navigasi dari pemilik, 29 Oktober 2026
 

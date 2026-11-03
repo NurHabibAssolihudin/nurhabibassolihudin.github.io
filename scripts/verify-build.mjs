@@ -7,9 +7,9 @@ const read = file => readFileSync(resolve(root, file), 'utf8');
 const creator = html => html.slice(html.indexOf('<div class="world world--creator"'), html.indexOf('</main>')).trim();
 const baselineCreator = read('templates/creator.html').trim().replaceAll('src="assets/', 'src="/assets/');
 const chapters = ['top', 'summary', 'work', 'project-orca', 'project-ocaty', 'project-oxelot', 'experience-work', 'approach', 'contact'];
-// English creator markup stays pinned to the migration baseline. The Indonesian
-// copy was intentionally rewritten on 29 October; its layout/links are retained.
-const creatorHashes = { en: 'dc29c00ecb5fda5c796aff20e38ceab0784910fb4819004319c4dda307758916', id: '5c9eb3bc247cfa86f15c3b2d0d89a1bafc4ebd2fc14900aa9054e1179ac2e823' };
+// Creator snapshots include the authorized display rename and shared professional
+// contact channels (3 November), plus the Indonesian copy adaptation.
+const creatorHashes = {"en":"42046bb44dbca9f6774431cdc2f607b5037b93acd5e8e9bf3cbf7ad968ba232a","id":"049e43a9e1b3040bb6f55ad5058fa93be12c26ac980a58778cea3004b3faa2a4"};
 let checks = 0;
 for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
   const html = read(`dist/${route}index.html`);

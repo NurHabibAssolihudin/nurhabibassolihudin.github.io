@@ -1,4 +1,4 @@
-/* One shared point field. The orb bends its structure; each world has its own flow.
+/* One shared point field. A rotating sky surrounds the viewer in the professional hero.
    GPU point sprites keep the moving work proportional to dots, not viewport pixels. */
 (function () {
   'use strict';
@@ -23,15 +23,29 @@
     varying vec4 ink;
     float gaussian(float x){return exp(-x*x);}
     void main(){
+      vec2 homePosition=home.xy;
+      float skyVisible=1.;
+      float depth=home.z;
+      if(creator<.5){
+        // Perspective yaw around the viewer. The back half is outside the frustum,
+        // so points return behind the camera rather than wrapping across the page.
+        float longitude=(home.x/viewport.x-.5)*6.2831853-time*(.032+depth*.024);
+        float forward=cos(longitude);
+        float focal=viewport.x*.78;
+        vec2 sky=vec2(sin(longitude)*focal,home.y-viewport.y*.5)/max(.08,forward);
+        // A slight roll gives the orbit an inclined path without moving the copy.
+        homePosition=viewport*.5+mat2(.9928,.1197,-.1197,.9928)*sky;
+        skyVisible=step(.12,forward);
+      }
       vec2 origin=vec2(orb.x,max(-orb.z*.8,orb.y));
-      vec2 q=(home.xy-origin)/orb.z;
+      vec2 q=(homePosition-origin)/orb.z;
       float r=length(q),angle=atan(q.y,q.x);
       vec2 radial=q/max(r,.02),tangent=vec2(-radial.y,radial.x);
       float envelope=gaussian((r-1.6)*.65);
       vec2 organised=vec2(sin(q.y*1.9+q.x*.3)*7.,sin(q.x*1.6)*13.);
       vec2 fluid=tangent*(sin(r*1.7-time*.16)*29.+sin(angle*3.+r*2.-time*.1)*16.);
       fluid+=vec2(sin(q.y*2.2+time*.12),cos(q.x*1.8-time*.14))*11.;
-      vec2 p=home.xy+mix(organised,fluid,creator)*envelope;
+      vec2 p=homePosition+mix(organised,fluid,creator)*envelope;
       p+=radial*sin(r*3.2-time*.19)*9.*envelope;
       p+=vec2(sin(home.z*91.7),cos(home.z*73.1))*disorder*(16.+envelope*26.);
       float excitation=0.;
@@ -48,7 +62,8 @@
       mass*=.55+.45*gaussian((q.x-.1)*.42);
       float hero=1.-step(heroBottom,p.y);
       float outside=(1.-hero)*.42+hero;
-      float alpha=(.07+mass*1.05+excitation*.65)*outside;
+      float alpha=(.07+mass*1.05+excitation*.65)*outside*skyVisible;
+      alpha*=mix(.72+depth*.48,1.,creator);
       float work=smoothstep(quiet.x-35.,quiet.x+20.,p.y)*(1.-smoothstep(quiet.y-20.,quiet.y+35.,p.y));
       alpha*=1.-work*.82;
       for(int i=0;i<3;i++){
@@ -64,7 +79,7 @@
       vec3 color=mix(base,signal,min(1.,stream*.8+excitation*.75));
       ink=vec4(color,min(.72,alpha));
       gl_Position=vec4(p.x/viewport.x*2.-1.,1.-p.y/viewport.y*2.,0.,1.);
-      gl_PointSize=(1.55+mass*2.6+min(1.,excitation)*.65)*dpr;
+      gl_PointSize=(1.55+mass*2.6+min(1.,excitation)*.65)*mix(.85+depth*.5,1.,creator)*dpr;
     }`;
   const fragment=`precision mediump float;varying vec4 ink;
     void main(){float dotAlpha=1.-smoothstep(.26,.5,length(gl_PointCoord-.5));gl_FragColor=vec4(ink.rgb,ink.a*dotAlpha);}`;
@@ -82,7 +97,7 @@
     // A canvas that already acquired GL cannot acquire 2D, so replace it on failure.
     const replacement=canvas.cloneNode(false);
     canvas.replaceWith(replacement);
-    // Compilation failures are unusual; the static renderer shares the same geometry.
+    // Keep the original static field and content-protection geometry as fallback.
     context=replacement.getContext('2d');
     if(!context)return;
     replacement.dataset.renderer='static';
@@ -159,7 +174,7 @@
     gl.uniform1f(uniforms.light,root.dataset.theme==='light'?1:0);gl.drawArrays(gl.POINTS,0,count);
     surface.dataset.state=held?'held':reduced.matches||!active?'static':charged?'charging':disorder>.02?'settling':'flowing';
   }
-  function tick(now){frame=0;if(document.hidden||held||lost)return;if(now-last<1000/24){wake();return;}paint(now);if(gl&&!reduced.matches&&(root.dataset.world==='creator'||geometry.heroVisible))wake();}
+  function tick(now){frame=0;if(document.hidden||held||lost)return;const fps=root.dataset.world==='builder'?30:24;if(now-last<1000/fps){wake();return;}paint(now);if(gl&&!reduced.matches&&(root.dataset.world==='creator'||geometry.heroVisible))wake();}
   function wake(){if(!frame&&!document.hidden&&!held&&!lost)frame=requestAnimationFrame(tick);}
   function snapshot(){dirty=true;paint(performance.now(),true);}
   function invalidate(){dirty=true;if(gl&&!reduced.matches)wake();else snapshot();}

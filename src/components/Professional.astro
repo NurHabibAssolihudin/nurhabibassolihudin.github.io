@@ -11,7 +11,7 @@ const id = language === 'id';
     <div class="pro-scroll" id="professional-scroll" tabindex={-1} aria-label={id ? 'Bagian halaman profesional' : 'Professional page sections'}>
       <Panel section="top" class="hero pro-hero">
         <div class="hero__grid pro-hero__grid">
-          <div class="pro-hero__copy"><h1 class="hero__h1" id="top-title" tabindex={-1}><span>{id ? 'Halo,' : 'Hello,'}</span><span>{id ? 'saya Nur.' : "I'm Nur."}</span></h1>
+          <div class="pro-hero__copy"><h1 class="hero__h1" id="top-title" tabindex={-1}><span>{id ? 'Halo, saya' : "Hello, I'm"}</span>{' '}<span>NurHabib.</span></h1>
             <p class="hero__lead">{t(words.introduction, language)}</p><div class="pro-actions"><a href="#work" class="pro-button">{t(words.view, language)}</a><a href="#summary" class="pro-link">{t(words.summary, language)}</a></div>
           </div>
           <div class="hero__core pro-portal"><Fragment set:html={planet} /></div>

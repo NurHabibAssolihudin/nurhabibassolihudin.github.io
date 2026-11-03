@@ -1,6 +1,6 @@
 # Tiga fase perubahan portfolio
 
-29 Oktober 2026. Status: fase 1 diimplementasikan dan diverifikasi pada preview lokal; fase 2 dan 3 belum dimulai. Urutan ini ditetapkan pemilik dan menggantikan pembagian tahap implementasi sebelumnya. Detail pengalaman tetap mengacu pada [MIGRATION-BRIEF.md](MIGRATION-BRIEF.md).
+Diperbarui 3 November 2026. Status: fase 1 diimplementasikan dan diverifikasi pada preview lokal; fase 2 dan 3 belum dimulai. Nama tampilan telah diganti menjadi NurHabib dan Crimson Violet atas permintaan pemilik; penggantian nama ini terpisah dari redesign penuh fase 3. Urutan fase tetap mengacu pada keputusan 29 Oktober dan [MIGRATION-BRIEF.md](MIGRATION-BRIEF.md).
 
 ## Fase 1 — Struktur, fungsi dan navigasi profesional
 
@@ -15,7 +15,7 @@ Pekerjaan:
 5. Buat indeks pekerjaan berupa card/list, dengan susunan horizontal jika membantu. Pemilihan memperbarui deskripsi dan background preview menggunakan aset yang sudah tersedia atau background netral. Aksi terpisah menuju detail proyek, dan kembali ke indeks mempertahankan pilihan.
 6. Sediakan navigasi langsung, anchor/deep link, Back/Forward dan konteks bahasa. Pengunjung bisa langsung ke proyek atau kontak tanpa wajib mengikuti seluruh urutan layar.
 7. Kerjakan fungsi dan layout kontak profesional yang santai, dengan kanal komunikasi jelas. Arah ruang sejuk/kursi/meja teh disiapkan dalam komposisi; pembuatan gambar atau scene baru untuk ruang tersebut masuk fase 2.
-8. Pertahankan EN/ID, tema, artwork yang sudah ada dan akses ke dunia game lama. Jika runtime bersama perlu dirapikan, pastikan dunia lama tetap berfungsi; jangan mengubah desain, isi atau nama tampilannya menjadi Chrimson Violet pada fase ini.
+8. Pertahankan EN/ID, tema, artwork yang sudah ada dan akses ke dunia kreatif. Nama tampilan telah diperbarui menjadi Crimson Violet pada 3 November; perubahan total desain, struktur dan interaksi dunia tersebut tetap masuk fase 3.
 
 Batas fase: tidak mencari, membuat atau menambahkan foto tokoh, ilustrasi baru, render baru, karakter game atau aset baru lainnya. Screenshot, font, planet, field dan aset yang sudah ada boleh digunakan kembali. Background netral tetap merupakan tampilan yang dirancang, bukan gambar fiktif atau klaim produk yang belum tersedia.
 
@@ -33,21 +33,21 @@ Pekerjaan:
 4. Buat visual kontak berupa tempat sejuk dengan dua tempat duduk santai atau meja teh. Hubungkan suasana itu dengan ajakan berbincang dan kanal komunikasi yang sudah berfungsi.
 5. Kerjakan koreografi gambar yang menyatu dengan perpindahan bagian. Optimalkan dimensi, format, pemuatan aset, biaya rendering dan fallback. Periksa kembali keterbacaan serta performa setelah aset ditambahkan.
 
-Batas fase: masih halaman profesional. Tidak mengembangkan karakter, background atau adegan kontak baru untuk Chrimson Violet. Bentuk aset profesional ditentukan melalui prototipe; memakai Three.js atau format 3D bukan kewajiban untuk menyelesaikan gambar/suasana.
+Batas fase: masih halaman profesional. Tidak mengembangkan karakter, background atau adegan kontak baru untuk Crimson Violet. Bentuk aset profesional ditentukan melalui prototipe; memakai Three.js atau format 3D bukan kewajiban untuk menyelesaikan gambar/suasana.
 
 Selesai jika gambar pilihan pemilik terintegrasi, teks/proyek tetap menjadi fokus, kontak menghadirkan suasana yang diminta, serta hasil visual dan performa dapat dibandingkan dengan fase 1.
 
-## Fase 3 — Perubahan total Chrimson Violet
+## Fase 3 — Perubahan total Crimson Violet
 
-Tujuan: mengembangkan ulang dunia kreatif sebagai Chrimson Violet dengan karakter yang ambisius, ekspresif dan memberi sensasi, sesuai arah yang telah dibahas.
+Tujuan: mengembangkan ulang dunia kreatif sebagai Crimson Violet dengan karakter yang ambisius, ekspresif dan memberi sensasi, sesuai arah yang telah dibahas.
 
 Pekerjaan:
 
-1. Tetapkan identitas dan penerapan nama Chrimson Violet pada dunia kreatif. Pemetaan hubungan dengan nama studio/tautan alimagine yang sudah ada diputuskan secara eksplisit, bukan diasumsikan otomatis berubah.
+1. Tetapkan identitas dan penerapan nama Crimson Violet pada dunia kreatif. Pemetaan hubungan dengan nama studio/tautan Crimson Violet yang sudah ada diputuskan secara eksplisit, bukan diasumsikan otomatis berubah.
 2. Rancang struktur pengalaman, narasi, komposisi, karakter dan interaksi khusus dunia ini. Struktur profesional tidak otomatis menjadi template dunia kreatif.
 3. Kembangkan ulang artwork/objek, background karakter inspirasi dan koreografi perpindahan. Tentukan penggunaan renderer atau library tambahan berdasarkan gagasan dan pengukuran.
 4. Buat kontak sebagai adegan yang melibatkan pengunjung dan memberi sensasi. Contoh ditodong pistol tetap menjadi salah satu arah eksplorasi; konsep final belum dikunci.
-5. Integrasikan perpindahan penuh antara dunia profesional dan Chrimson Violet. Jaga akses komunikasi, keyboard, bahasa, reduced motion dan fallback tanpa mengurangi ambisi konsepnya.
+5. Integrasikan perpindahan penuh antara dunia profesional dan Crimson Violet. Jaga akses komunikasi, keyboard, bahasa, reduced motion dan fallback tanpa mengurangi ambisi konsepnya.
 
 Selesai jika identitas baru, konten, artwork, interaksi dan transisi dunia kreatif terasa sebagai satu pengalaman yang utuh, serta halaman profesional tetap berfungsi setelah integrasi.
 
@@ -55,6 +55,6 @@ Selesai jika identitas baru, konten, artwork, interaksi dan transisi dunia kreat
 
 Fase 1 -> verifikasi fungsi dan navigasi -> fase 2 -> verifikasi visual/performa profesional -> fase 3.
 
-Pemeriksaan kualitas dilakukan dalam setiap fase, tidak menunggu akhir perubahan Chrimson Violet. Build statis dan publikasi `dist/` merupakan kemampuan fondasi; rencana fase ini tidak dengan sendirinya menjalankan commit, push, merge atau deployment baru.
+Pemeriksaan kualitas dilakukan dalam setiap fase, tidak menunggu akhir perubahan Crimson Violet. Build statis dan publikasi `dist/` merupakan kemampuan fondasi; rencana fase ini tidak dengan sendirinya menjalankan commit, push, merge atau deployment baru.
 
 Fase 1 berjalan di branch `migration/professional-phase-1`, dengan sembilan bagian profesional dan output `dist/`. Hasil pemeriksaan dicatat di `QA-PHASE-1.md`. Pemilik telah meminta commit dan push ke main. Deployment migrasi tetap terpisah. Uji sentuhan pada perangkat fisik tetap diperlukan. Fase 2 dan 3 belum dimulai. Rencana teknis rinci di `artifacts/migration-plan.md` mengikuti pembagian tiga fase ini.
