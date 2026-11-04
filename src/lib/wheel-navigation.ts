@@ -21,10 +21,12 @@ export function createWheelNavigation(sectionCount: number) {
       const step = Math.sign(delta), magnitude = Math.abs(delta);
       if (!step) return null;
       const gap = lastAt === null ? Infinity : now - lastAt;
-      const discreteStep = magnitude >= 60 && gap >= 70 && magnitude >= lastMagnitude * .8;
       const renewedPush = consumed && step === direction && floor <= peak * .4
         && magnitude >= Math.max(12, floor * 1.8) && magnitude > lastMagnitude * 1.4;
-      const fresh = gap > 140 || discreteStep || renewedPush;
+      // Large wheel ticks can remain 80–130ms apart within one fast gesture.
+      // Their size alone does not signal a new command after arrival. Re-arm
+      // only after a pause or a new push following a decayed trackpad tail.
+      const fresh = gap > 140 || renewedPush;
       lastAt = now; lastMagnitude = magnitude;
 
       if (target !== null && step === direction) {

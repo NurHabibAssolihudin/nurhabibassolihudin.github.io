@@ -9,19 +9,32 @@ test('one burst of fast equal wheel events advances only one section',()=>{
  assert.equal(wheel.arrive(3),undefined);
  assert.equal(wheel.arrive(3),undefined);
 });
+test('a sustained coarse wheel gesture cannot rearm at 80–130ms intervals',()=>{
+ for(const spacing of [80,100,120,130])for(const step of [1,-1]){
+  const wheel=createWheelNavigation(9),start=4;
+  assert.equal(wheel.input(step*120,0,start),start+step);
+  for(let time=spacing;time<=600;time+=spacing)wheel.input(step*120,time,start);
+  wheel.arrive(start+step);
+  for(let time=spacing*Math.floor(600/spacing)+spacing;time<=1600;time+=spacing){
+   assert.equal(wheel.input(step*120,time,start+step),null,`${spacing}ms tail at ${time}ms`);
+  }
+  assert.equal(wheel.input(step*120,1900,start+step),start+step*2);
+ }
+});
 test('arrival cannot execute a wheel command received during movement',()=>{
  const wheel=createWheelNavigation(9);
  wheel.input(120,0,2);
  wheel.input(120,200,2);wheel.input(120,400,2);
  assert.equal(wheel.arrive(3),undefined);
 });
-test('a new same-direction command after arrival advances normally',()=>{
+test('a new same-direction command after a pause advances normally',()=>{
  const wheel=createWheelNavigation(9);
  wheel.input(120,0,2);wheel.input(120,120,2);wheel.input(120,240,2);
  wheel.arrive(3);
  assert.equal(wheel.input(120,400,3),4);
  wheel.input(120,520,3);wheel.arrive(4);
- assert.equal(wheel.input(120,640,4),5);
+ // Arrival itself is not a gesture boundary: pause beyond the previous tail.
+ assert.equal(wheel.input(120,680,4),5);
 });
 test('the same fast burst cannot restart just because the section arrived',()=>{
  const wheel=createWheelNavigation(9);
