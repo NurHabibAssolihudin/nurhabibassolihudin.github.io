@@ -2,10 +2,17 @@ export type Locale = 'en' | 'id';
 export type Copy = { en: string; id: string };
 export const t = (value: Copy, language: Locale) => value[language];
 export const words = {
-  introduction: { en: 'I develop web applications, system integrations and tools for developers.', id: 'Saya mengembangkan aplikasi web, integrasi sistem, dan library untuk pengembang.' },
+  introduction: { en: "I'm NurHabib. I build modular web applications, backend services, and tools for developers.", id: 'Saya NurHabib. Saya membangun aplikasi web modular, layanan backend, dan alat bantu untuk pengembang.' },
+  expertise: { en: 'Areas of work', id: 'Bidang yang saya kerjakan' },
+  areas: [
+    { en: 'Modular applications', id: 'Aplikasi modular' },
+    { en: 'Backend & integration', id: 'Backend & integrasi sistem' },
+    { en: 'Developer infrastructure', id: 'Infrastruktur pengembangan' },
+  ],
+  contact: { en: 'Contact me', id: 'Hubungi saya' },
   summary: { en: 'About my work', id: 'Sekilas' }, work: { en: 'Selected projects', id: 'Proyek pilihan' },
   experience: { en: 'Work experience', id: 'Pengalaman kerja' }, approach: { en: 'How I work', id: 'Cara saya bekerja' },
-  view: { en: 'View my projects', id: 'Lihat proyek saya' }, detail: { en: 'About this project', id: 'Tentang proyek ini' },
+  view: { en: 'View selected projects', id: 'Lihat proyek pilihan' }, detail: { en: 'About this project', id: 'Tentang proyek ini' },
   back: { en: 'Back to projects', id: 'Kembali ke daftar proyek' },
   personal: { en: 'Personal project', id: 'Proyek pribadi' },
   contribution: { en: 'My role', id: 'Peran saya' },
@@ -25,9 +32,9 @@ export const sections = {
     projects: { en: 'View selected projects', id: 'Lihat proyek pilihan' },
     scopeTitle: { en: 'Technical scope', id: 'Lingkup teknis' },
     scope: [
-      { name: { en: 'Software development', id: 'Pengembangan perangkat lunak' }, description: { en: 'Applications, backend services and developer tooling', id: 'Aplikasi, layanan backend, dan alat bantu pengembangan' } },
-      { name: { en: 'Integration and automation', id: 'Integrasi dan otomatisasi' }, description: { en: 'APIs, service communication and automated workflows', id: 'API, komunikasi antarlayanan, dan alur kerja otomatis' } },
-      { name: { en: 'Research and prototyping', id: 'Riset dan prototipe' }, description: { en: 'Experiments and evaluation of technical approaches', id: 'Eksperimen dan evaluasi pendekatan teknis' } },
+      { name: { en: 'Product applications', id: 'Aplikasi produk' }, description: { en: 'Web applications, modular business software and shared components', id: 'Aplikasi web, perangkat lunak bisnis modular, dan komponen bersama' } },
+      { name: { en: 'Backend services and integration', id: 'Layanan backend dan integrasi' }, description: { en: 'APIs, data flows, service communication and automation', id: 'API, alur data, komunikasi antarlayanan, dan otomatisasi' } },
+      { name: { en: 'Developer infrastructure', id: 'Infrastruktur pengembangan' }, description: { en: 'Libraries, browser storage, workers and offline data synchronization', id: 'Library, penyimpanan data di browser, worker, dan sinkronisasi data offline' } },
     ],
   },
   experience: {

@@ -14,8 +14,10 @@ const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWid
     <div class="pro-scroll" id="professional-scroll" tabindex={-1} aria-label={id ? 'Bagian halaman profesional' : 'Professional page sections'}>
       <Panel section="top" class="hero pro-hero">
         <div class="hero__grid pro-hero__grid">
-          <div class="pro-hero__copy"><h1 class="hero__h1" id="top-title" tabindex={-1}><span>{id ? 'Halo, saya' : "Hello, I'm"}</span>{' '}<span>NurHabib.</span></h1>
-            <p class="hero__lead">{t(words.introduction, language)}</p><div class="pro-actions"><a href="#work" class="pro-button">{t(words.view, language)}</a><a href="#summary" class="pro-link">{t(words.summary, language)}</a></div>
+          <div class="pro-hero__copy"><h1 class="hero__h1" id="top-title" tabindex={-1}><span>Systems &amp;</span>{' '}<span>Product Engineer</span></h1>
+            <p class="hero__lead">{t(words.introduction, language)}</p>
+            <ul class="pro-hero__areas" aria-label={t(words.expertise, language)}>{words.areas.map(area => <li>{t(area, language)}</li>)}</ul>
+            <div class="pro-actions"><a href="#work" class="pro-button">{t(words.view, language)}</a><a href="#contact" class="pro-link">{t(words.contact, language)}</a></div>
           </div>
           <div class="hero__core pro-portal"><Fragment set:html={planet} /></div>
         </div>
