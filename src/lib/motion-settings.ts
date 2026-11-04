@@ -1,7 +1,7 @@
 /** Seconds, grouped by purpose: travel, readable pause, then usable destination. */
 export const motionTiming = {
   world: {gather: .46, signatureHold: .44, reveal: .54, quietEnter: .12, quietHold: .22, quietExit: .16},
-  gallery: {hover: .34, open: .64, close: .46, content: .24, speed: 32},
+  gallery: {hover: .34, open: .64, close: .46, content: .24, speed: 32, cue: .74, cueStagger: .18},
   // Portfolio content reveals need a readable sweep; they are not button feedback.
   chapter: {reveal: .64, sequence: .70, contact: .55, workStagger: .08},
 } as const;

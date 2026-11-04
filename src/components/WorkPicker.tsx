@@ -16,10 +16,11 @@ import {
 import * as m from 'motion/react-m';
 import type {PickerProject} from '../data/project-types';
 import {prepareProjectImage} from '../lib/project-images';
-import {workCopy, t, words, type Locale} from '../data/professional';
+import {t, words, type Locale} from '../data/professional';
 import {motionTiming} from '../lib/motion-settings';
 import {useReducedMotionPreference} from '../lib/use-reduced-motion';
 import ProjectArtwork from './ProjectArtwork';
+import ProjectPointerCue from './ProjectPointerCue';
 
 const loadFeatures = () => import('../lib/motion-features').then((module) => module.default);
 interface Drag {
@@ -42,8 +43,7 @@ export default function WorkPicker({
   const [ready, setReady] = useState(false),
     [selected, setSelected] = useState(0),
     [hovered, setHovered] = useState<number | null>(null),
-    [primary, setPrimary] = useState(1),
-    [paused, setPaused] = useState(false);
+    [primary, setPrimary] = useState(1);
   const stage = useRef<HTMLDivElement>(null),
     track = useRef<HTMLDivElement>(null);
   const phase = useMotionValue(0),
@@ -55,7 +55,6 @@ export default function WorkPicker({
     focus: false,
     reader: false,
     hidden: false,
-    paused: false,
     reduced: false
   });
   const drag = useRef<Drag | null>(null),
@@ -66,10 +65,9 @@ export default function WorkPicker({
     return cycle ? -cycle + (((value % cycle) + cycle) % cycle) : value;
   };
   useEffect(() => {
-    activity.current.paused = paused;
     activity.current.reduced = reduce;
-    if (reduce || paused) velocity.current = 0;
-  }, [paused, reduce]);
+    if (reduce) velocity.current = 0;
+  }, [reduce]);
   useEffect(() => {
     function restore() {
       let value = document.querySelector<HTMLElement>('.pro-experience')?.dataset.selectedProject;
@@ -175,18 +173,18 @@ export default function WorkPicker({
       state.hidden ||
       state.reader ||
       state.reduced ||
-      drag.current?.moved
+      drag.current
     )
       return;
     const dt = Math.min(delta, 40) / 1000;
     if (Math.abs(velocity.current) > 8) {
       phase.set(normalize(phase.get() + velocity.current * dt));
       velocity.current *= Math.exp(-dt / 0.28);
-    } else if (!state.hover && !state.focus && !state.paused)
+    } else if (!state.hover && !state.focus)
       phase.set(normalize(phase.get() - motionTiming.gallery.speed * dt));
   });
   function pointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || !event.isPrimary) return;
     suppressClick.current = false;
     velocity.current = 0;
     drag.current = {
@@ -231,6 +229,9 @@ export default function WorkPicker({
     gesture.at = event.timeStamp;
   }
   function pointerEnd(event: PointerEvent<HTMLDivElement>) {
+    // Touch implicitly captures on the pressed card. Transferring capture to
+    // the stage emits a bubbling loss from that card, not the end of our drag.
+    if (event.type === 'lostpointercapture' && event.target !== event.currentTarget) return;
     if (drag.current?.id !== event.pointerId) return;
     if (event.type !== 'pointerup') velocity.current = 0;
     drag.current = null;
@@ -286,7 +287,6 @@ export default function WorkPicker({
             <h2 id="work-title" className="pro-title" tabIndex={-1}>
               {t(words.work, language)}
             </h2>
-            <p>{t(workCopy.instruction, language)}</p>
           </div>
           <div
             className="project-gallery__stage"
@@ -296,6 +296,9 @@ export default function WorkPicker({
             onPointerUp={pointerEnd}
             onPointerCancel={pointerEnd}
             onLostPointerCapture={pointerEnd}
+            onPointerLeave={(event) => {
+              if (!drag.current?.moved) pointerEnd(event);
+            }}
             onClickCapture={(event) => {
               if (suppressClick.current) {
                 event.preventDefault();
@@ -391,21 +394,7 @@ export default function WorkPicker({
               ))}
             </m.div>
           </div>
-          <div className="project-gallery__footer">
-            <p>{t(workCopy.gesture, language)}</p>
-            <button
-              type="button"
-              onClick={() => setPaused((value) => !value)}
-              aria-pressed={paused || reduce}
-              disabled={!ready || reduce}
-            >
-              {reduce
-                ? language === 'id'
-                  ? 'Gerakan otomatis nonaktif'
-                  : 'Automatic movement off'
-                : t(paused ? workCopy.resume : workCopy.pause, language)}
-            </button>
-          </div>
+          <ProjectPointerCue stage={stage} enabled={ready && !reduce} />
         </div>
       </LazyMotion>
     </MotionConfig>

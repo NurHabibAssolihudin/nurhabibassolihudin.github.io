@@ -30,14 +30,6 @@ export const caseCopy = {
   tradeoffs: { en: 'Trade-offs', id: 'Kompromi teknis' },
   learning: { en: 'What I learned', id: 'Pelajaran dari proyek ini' },
 };
-// Keep picker-only copy separate so the island does not ship all static sections.
-export const workCopy = {
-  instruction: { en: 'Pick a project. Open the story behind it.', id: 'Pilih proyek untuk membaca cerita pengembangannya.' },
-  select: { en: 'Select a project', id: 'Pilih proyek' },
-  pause: { en: 'Pause movement', id: 'Jeda gerakan' },
-  resume: { en: 'Resume movement', id: 'Lanjutkan gerakan' },
-  gesture: { en: 'Drag to browse. Select a card to read.', id: 'Geser untuk memilih. Buka kartu untuk membaca.' },
-};
 // Each language is written for its readers rather than matched word for word.
 export const sections = {
   summary: {
