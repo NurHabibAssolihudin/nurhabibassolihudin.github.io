@@ -10,24 +10,24 @@ export const words = {
   personal: { en: 'Personal project', id: 'Proyek pribadi' },
   contribution: { en: 'My role', id: 'Peran saya' },
   technology: { en: 'Technology', id: 'Teknologi' },
-  responsibility: { en: 'I develop this project independently, handling its planning, branding, development, release and marketing.', id: 'Ini proyek yang saya kerjakan sendiri, mulai dari perencanaan dan identitas merek hingga pengembangan, rilis, dan pemasaran.' },
+  responsibility: { en: 'Personal project, developed independently.', id: 'Proyek pribadi yang saya kerjakan sendiri.' },
 };
 // Keep picker-only copy separate so the island does not ship all static sections.
 export const workCopy = {
-  instruction: { en: 'Select a project to see what it does and my role in building it.', id: 'Pilih proyek untuk melihat kegunaan dan peran saya di dalamnya.' },
+  instruction: { en: 'Select a project for its description and development details.', id: 'Pilih proyek untuk melihat deskripsi dan rincian pengembangannya.' },
   select: { en: 'Select a project', id: 'Pilih proyek' },
 };
 // Each language is written for its readers rather than matched word for word.
 export const sections = {
   summary: {
-    lead: { en: 'I take my personal projects from product planning and brand identity through development, release and marketing.', id: 'Untuk proyek pribadi, saya menangani perencanaan produk, pengembangan, rilis, dan pemasarannya.' },
-    body: { en: 'ORCA is a project workspace, Ocaty brings together business applications, and Oxelot provides tools for building web apps.', id: 'ORCA membantu mengatur proyek, Ocaty menyediakan modul aplikasi bisnis, dan Oxelot menyediakan alat bantu untuk membuat aplikasi web.' },
+    lead: { en: 'R&D Developer at PT Semesta Teknologi Informatika.', id: 'R&D Developer di PT Semesta Teknologi Informatika.' },
+    body: { en: 'Outside work, I develop ORCA, Ocaty and Oxelot as personal projects.', id: 'Di luar pekerjaan, saya mengembangkan ORCA, Ocaty, dan Oxelot sebagai proyek pribadi.' },
     background: { en: 'View my experience', id: 'Lihat pengalaman saya' },
-    scopeTitle: { en: 'Areas of work', id: 'Lingkup pekerjaan' },
+    scopeTitle: { en: 'Technical focus', id: 'Fokus teknis' },
     scope: [
-      { name: { en: 'Product', id: 'Produk' }, description: { en: 'Planning and brand identity', id: 'Perencanaan dan identitas merek' } },
-      { name: { en: 'Development', id: 'Teknis' }, description: { en: 'Code and release', id: 'Pengembangan dan rilis' } },
-      { name: { en: 'Marketing', id: 'Pemasaran' }, description: { en: 'Introducing the product', id: 'Memperkenalkan produk' } },
+      { name: { en: 'Web applications', id: 'Aplikasi web' }, description: { en: 'Interfaces and backend services', id: 'Antarmuka dan layanan backend' } },
+      { name: { en: 'System integration', id: 'Integrasi sistem' }, description: { en: 'Data exchange between applications', id: 'Pertukaran data antaraplikasi' } },
+      { name: { en: 'Developer libraries', id: 'Library untuk pengembang' }, description: { en: 'Local storage and data synchronization', id: 'Penyimpanan lokal dan sinkronisasi data' } },
     ],
   },
   experience: {

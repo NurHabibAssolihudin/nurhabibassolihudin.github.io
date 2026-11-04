@@ -3,20 +3,20 @@
   "name": "Oxelot",
   "image": null,
   "kind": {
-    "en": "Web development library",
-    "id": "Library pengembangan web"
+    "en": "TypeScript library",
+    "id": "Library TypeScript"
   },
   "summary": {
-    "en": "A TypeScript library for local storage, background workers and offline data synchronization.",
-    "id": "Library TypeScript untuk penyimpanan lokal, background worker, dan sinkronisasi data secara offline."
+    "en": "A TypeScript library for browser storage, background processing and data synchronization.",
+    "id": "Library TypeScript untuk penyimpanan data di browser, pemrosesan di latar belakang, dan sinkronisasi data."
   },
   "context": {
-    "en": "Oxelot provides browser-side storage, background workers and data synchronization for web applications with offline support.",
-    "id": "Oxelot menyediakan penyimpanan lokal, background worker, dan sinkronisasi data untuk aplikasi web yang mendukung penggunaan offline."
+    "en": "The library covers local storage, background processing and data synchronization for web applications, including offline use.",
+    "id": "Library ini menangani penyimpanan data di browser, pemrosesan di latar belakang, dan sinkronisasi data, termasuk penggunaan offline."
   },
   "focus": {
-    "en": "I develop local storage with OPFS and WASM SQLite, worker pools and offline synchronization.",
-    "id": "Saya mengembangkan penyimpanan berbasis OPFS dan WASM SQLite, pengelolaan worker, serta sinkronisasi offline."
+    "en": "I develop storage using OPFS and SQLite through WebAssembly, worker pools and offline data synchronization.",
+    "id": "Saya mengembangkan penyimpanan berbasis OPFS dan SQLite melalui WebAssembly, pengelolaan worker, serta sinkronisasi data offline."
   },
   "reviewTitle": {
     "en": "Source and documentation",

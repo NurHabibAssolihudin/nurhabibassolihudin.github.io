@@ -4,28 +4,28 @@
   "image": "../../../assets/orca-workspace.png",
   "original": "/assets/orca-workspace.png",
   "kind": {
-    "en": "Project workspace",
-    "id": "Ruang kerja proyek"
+    "en": "Project management application",
+    "id": "Aplikasi manajemen proyek"
   },
   "summary": {
-    "en": "Keep project documents, tasks and schedules in one workspace.",
-    "id": "Dokumen, tugas, dan jadwal proyek dalam satu ruang kerja."
+    "en": "A web application with a document editor, task boards and project calendars.",
+    "id": "Aplikasi web dengan editor dokumen, papan tugas, dan kalender proyek."
   },
   "context": {
-    "en": "ORCA brings document writing, task management and project scheduling into one place.",
-    "id": "ORCA menyediakan satu tempat untuk menulis dokumen, mengatur tugas, dan menyusun jadwal proyek."
+    "en": "The application includes a document editor, task boards and project calendars. It can be self-hosted.",
+    "id": "Fitur yang dikembangkan meliputi editor dokumen, papan tugas, dan kalender proyek. Aplikasi dapat dijalankan di server sendiri."
   },
   "focus": {
-    "en": "I build the workspace and its document, board and calendar views. ORCA can also run on your own server.",
-    "id": "Saya mengembangkan ruang kerja beserta tampilan dokumen, board tugas, dan kalendernya. ORCA juga bisa dijalankan di server sendiri."
+    "en": "I develop the workspace, document editor, task boards and project calendar.",
+    "id": "Saya mengembangkan ruang kerja, editor dokumen, papan tugas, dan kalender proyek."
   },
   "reviewTitle": {
-    "en": "Try the demo",
-    "id": "Coba langsung"
+    "en": "Demo",
+    "id": "Demo"
   },
   "evidence": {
-    "en": "Explore the workspace with sample content. No account is needed.",
-    "id": "Coba demo berisi data contoh untuk melihat cara kerjanya. Tidak perlu membuat akun."
+    "en": "The demo contains sample data and does not require an account.",
+    "id": "Demo berisi data contoh dan dapat dibuka tanpa membuat akun."
   },
   "technologies": [
     "TypeScript"

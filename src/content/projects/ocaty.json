@@ -12,12 +12,12 @@
     "id": "Aplikasi bisnis dengan modul penjualan, CRM, dan ERP."
   },
   "context": {
-    "en": "With Ocaty, I develop separate application modules for business workflows, including commerce, CRM and ERP.",
-    "id": "Melalui Ocaty, saya mengembangkan modul untuk kebutuhan bisnis, seperti penjualan, CRM, dan ERP."
+    "en": "The project covers commerce, CRM and ERP modules. Frontend modules and backend services are developed separately.",
+    "id": "Modul yang dikembangkan mencakup penjualan, CRM, dan ERP. Modul frontend dan layanan backend dikembangkan secara terpisah."
   },
   "focus": {
-    "en": "I work on frontend modules, shared interface components, and account and notification services.",
-    "id": "Saya mengerjakan modul frontend, komponen antarmuka bersama, serta layanan akun dan notifikasi."
+    "en": "I develop the frontend modules, shared interface components, and account and notification services.",
+    "id": "Saya mengembangkan modul frontend, komponen antarmuka bersama, serta layanan akun dan notifikasi."
   },
   "reviewTitle": {
     "en": "Technical overview",
