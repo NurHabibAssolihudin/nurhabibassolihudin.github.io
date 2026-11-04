@@ -85,10 +85,8 @@ export function initChapterMotion() {
       id === 'summary'
         ? ['.pro-summary__scope']
         : id === 'work'
-          ? ['.pro-project-picker', '.pro-nojs', '.pro-project-selection']
-          : id.startsWith('project-')
-            ? ['.pro-case__intro>.pro-body', '.pro-thumb', '.pro-case__details']
-            : id === 'experience-work'
+          ? ['.project-gallery__stage']
+          : id === 'experience-work'
               ? ['.pro-employment']
               : id === 'approach'
                 ? ['.pro-approach-list']

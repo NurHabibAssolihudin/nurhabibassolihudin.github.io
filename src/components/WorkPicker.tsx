@@ -1,14 +1,35 @@
-import {useEffect, useLayoutEffect, useRef, useState, type MouseEvent} from 'react';
-import {animate} from 'motion/mini';
-import {AnimatePresence, LayoutGroup, LazyMotion, MotionConfig} from 'motion/react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type PointerEvent,
+  type KeyboardEvent
+} from 'react';
+import {
+  LazyMotion,
+  MotionConfig,
+  useMotionValue,
+  useTransform,
+  useAnimationFrame
+} from 'motion/react';
 import * as m from 'motion/react-m';
 import type {PickerProject} from '../data/project-types';
 import {prepareProjectImage} from '../lib/project-images';
 import {workCopy, t, words, type Locale} from '../data/professional';
-import {motionEase, motionTiming} from '../lib/motion-settings';
+import {motionTiming} from '../lib/motion-settings';
 import {useReducedMotionPreference} from '../lib/use-reduced-motion';
+import ProjectArtwork from './ProjectArtwork';
 
 const loadFeatures = () => import('../lib/motion-features').then((module) => module.default);
+interface Drag {
+  id: number;
+  startX: number;
+  startY: number;
+  lastX: number;
+  at: number;
+  moved: boolean;
+}
 
 export default function WorkPicker({
   language,
@@ -17,38 +38,47 @@ export default function WorkPicker({
   language: Locale;
   projects: PickerProject[];
 }) {
-  const [selected, setSelected] = useState(0),
-    [ready, setReady] = useState(false);
-  const [quietSelection, setQuietSelection] = useState(true);
   const reduce = useReducedMotionPreference();
-  const content = useRef<HTMLDivElement>(null),
-    previous = useRef(0),
-    intent = useRef(false);
-  const previewAnimation = useRef<ReturnType<typeof animate> | null>(null);
-  const chosen = projects[selected];
-  const [background, setBackground] = useState({project: projects[0], painted: true});
+  const [ready, setReady] = useState(false),
+    [selected, setSelected] = useState(0),
+    [hovered, setHovered] = useState<number | null>(null),
+    [primary, setPrimary] = useState(1),
+    [paused, setPaused] = useState(false);
+  const stage = useRef<HTMLDivElement>(null),
+    track = useRef<HTMLDivElement>(null);
+  const phase = useMotionValue(0),
+    transform = useTransform(phase, (value) => `translate3d(${value}px,0,0)`);
+  const geometry = useRef({cycle: 0, pitch: 0, card: 0});
+  const activity = useRef({
+    visible: false,
+    hover: false,
+    focus: false,
+    reader: false,
+    hidden: false,
+    paused: false,
+    reduced: false
+  });
+  const drag = useRef<Drag | null>(null),
+    velocity = useRef(0),
+    suppressClick = useRef(false);
+  const normalize = (value: number) => {
+    const cycle = geometry.current.cycle;
+    return cycle ? -cycle + (((value % cycle) + cycle) % cycle) : value;
+  };
   useEffect(() => {
-    if (!ready) return;
-    let current = true;
-    prepareProjectImage(chosen).then((painted) => {
-      if (current) setBackground({project: chosen, painted});
-    });
-    return () => {
-      current = false;
-    };
-  }, [chosen, ready]);
+    activity.current.paused = paused;
+    activity.current.reduced = reduce;
+    if (reduce || paused) velocity.current = 0;
+  }, [paused, reduce]);
   useEffect(() => {
     function restore() {
-      let saved = document.querySelector<HTMLElement>('.pro-experience')?.dataset.selectedProject;
-      if (saved === undefined) {
+      let value = document.querySelector<HTMLElement>('.pro-experience')?.dataset.selectedProject;
+      if (value === undefined)
         try {
-          saved = sessionStorage.getItem('nur-selected-project') ?? undefined;
+          value = sessionStorage.getItem('nur-selected-project') ?? undefined;
         } catch {}
-      }
-      const index = Number(saved);
-      if (saved !== undefined && projects[index]) {
-        intent.current = false;
-        setQuietSelection(true);
+      const index = Number(value);
+      if (value !== undefined && projects[index]) {
         setSelected(index);
       }
     }
@@ -56,73 +86,194 @@ export default function WorkPicker({
     setReady(true);
     window.addEventListener('nur:project', restore);
     return () => window.removeEventListener('nur:project', restore);
-  }, []);
-  useEffect(() => {
-    if (!ready) return;
-    const picker = document.querySelector<HTMLElement>('.pro-project-picker'),
-      button = picker?.querySelectorAll<HTMLElement>('button')[selected];
-    if (picker && button && picker.scrollWidth > picker.clientWidth)
-      picker.scrollTo({left: button.offsetLeft - picker.offsetLeft, behavior: 'instant'});
-  }, [selected, ready]);
+  }, [projects]);
   useLayoutEffect(() => {
-    const element = content.current,
-      from = previous.current;
-    const deliberate = intent.current && from !== selected;
-    previous.current = selected;
-    intent.current = false;
+    if (!ready || !stage.current || !track.current) return;
+    const element = stage.current;
+    function measure() {
+      const card = track.current?.querySelector<HTMLElement>('.project-card-slot');
+      if (!card) return;
+      const width = card.offsetWidth,
+        gap = parseFloat(getComputedStyle(card.parentElement!).columnGap) || 0,
+        pitch = width + gap;
+      const previousCycle = geometry.current.cycle,
+        previousPhase = phase.get();
+      geometry.current = {card: width, pitch, cycle: pitch * projects.length};
+      // Hydration adds repeated sets without moving the project already painted
+      // in static HTML. Resizing preserves the position within the same cycle.
+      phase.set(
+        previousCycle
+          ? (previousPhase / previousCycle) * geometry.current.cycle
+          : -geometry.current.cycle
+      );
+      velocity.current = 0;
+    }
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(element);
+    return () => resize.disconnect();
+  }, [ready, projects.length, phase]);
+  useEffect(() => {
+    const element = stage.current;
     if (!element) return;
-    const running = previewAnimation.current;
-    if (reduce || quietSelection || !deliberate || typeof element.animate !== 'function') {
-      previewAnimation.current = null;
-      running?.cancel();
-      element.style.removeProperty('clip-path');
-      return;
-    }
-    if (running) {
-      const clip = getComputedStyle(element).clipPath;
-      running.cancel();
-      element.style.clipPath = clip;
-    }
-    // Install the mask before paint so new content cannot flash before the wipe.
-    // Sine easing keeps the sweep visible instead of spending most time on its tail.
-    // Rapid choices continue the current reveal instead of restarting a hidden panel.
-    if (!running)
-      element.style.clipPath = selected > from ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)';
-    const animation = animate(
-      element,
-      {clipPath: 'inset(0% 0% 0% 0%)'},
-      {duration: motionTiming.project.preview, ease: motionEase('--ease-preview')}
-    );
-    previewAnimation.current = animation;
-    void animation.finished.then(
-      () => {
-        if (previewAnimation.current === animation) {
-          element.style.removeProperty('clip-path');
-          previewAnimation.current = null;
-        }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        activity.current.visible = entries[0].isIntersecting;
+        if (!activity.current.visible) velocity.current = 0;
       },
-      () => {
-        if (previewAnimation.current === animation) {
-          element.style.removeProperty('clip-path');
-          previewAnimation.current = null;
-        }
-      }
+      {root: document.getElementById('professional-scroll'), threshold: 0.2}
     );
-  }, [selected, reduce, quietSelection]);
-  useEffect(
-    () => () => {
-      previewAnimation.current?.cancel();
-      previewAnimation.current = null;
-    },
-    []
-  );
-  function selectProject(index: number, event: MouseEvent<HTMLButtonElement>) {
-    if (index === selected) return;
-    intent.current = true;
-    setQuietSelection(event.detail === 0);
+    observer.observe(element);
+    const cancelDrag = () => {
+      const gesture = drag.current;
+      drag.current = null;
+      velocity.current = 0;
+      delete element.dataset.dragging;
+      if (gesture && element.hasPointerCapture(gesture.id))
+        element.releasePointerCapture(gesture.id);
+    };
+    const visibility = () => {
+      activity.current.hidden = document.hidden;
+      if (document.hidden) cancelDrag();
+    };
+    const reader = (event: Event) => {
+      activity.current.reader = (event as CustomEvent).detail.open;
+      cancelDrag();
+      setHovered(null);
+      activity.current.hover = false;
+    };
+    const world = () => {
+      activity.current.visible =
+        document.documentElement.dataset.world === 'builder' &&
+        document.querySelector<HTMLElement>('.pro-experience')?.dataset.active === 'work';
+      cancelDrag();
+    };
+    const wheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) || activity.current.reader) return;
+      event.preventDefault();
+      phase.set(normalize(phase.get() - event.deltaX));
+      velocity.current = 0;
+    };
+    document.addEventListener('visibilitychange', visibility);
+    window.addEventListener('nur:reader', reader);
+    window.addEventListener('nur:world', world);
+    element.addEventListener('wheel', wheel, {passive: false});
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', visibility);
+      window.removeEventListener('nur:reader', reader);
+      window.removeEventListener('nur:world', world);
+      element.removeEventListener('wheel', wheel);
+    };
+  }, [phase]);
+  useAnimationFrame((_time, delta) => {
+    const state = activity.current;
+    if (
+      !ready ||
+      !geometry.current.cycle ||
+      !state.visible ||
+      state.hidden ||
+      state.reader ||
+      state.reduced ||
+      drag.current?.moved
+    )
+      return;
+    const dt = Math.min(delta, 40) / 1000;
+    if (Math.abs(velocity.current) > 8) {
+      phase.set(normalize(phase.get() + velocity.current * dt));
+      velocity.current *= Math.exp(-dt / 0.28);
+    } else if (!state.hover && !state.focus && !state.paused)
+      phase.set(normalize(phase.get() - motionTiming.gallery.speed * dt));
+  });
+  function pointerDown(event: PointerEvent<HTMLDivElement>) {
+    if (event.button !== 0) return;
+    suppressClick.current = false;
+    velocity.current = 0;
+    drag.current = {
+      id: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      lastX: event.clientX,
+      at: event.timeStamp,
+      moved: false
+    };
+    if (event.pointerType === 'mouse') event.preventDefault();
+  }
+  function pointerMove(event: PointerEvent<HTMLDivElement>) {
+    const gesture = drag.current;
+    if (!gesture || gesture.id !== event.pointerId) return;
+    if (!gesture.moved) {
+      const dx = event.clientX - gesture.startX,
+        dy = event.clientY - gesture.startY;
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
+        drag.current = null;
+        return;
+      }
+      if (Math.abs(dx) < 8) return;
+      gesture.moved = true;
+      suppressClick.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      event.currentTarget.dataset.dragging = 'true';
+      if (
+        document.activeElement instanceof HTMLElement &&
+        event.currentTarget.contains(document.activeElement)
+      )
+        document.activeElement.blur();
+      activity.current.focus = false;
+    }
+    const dx = event.clientX - gesture.lastX,
+      elapsed = Math.max(8, event.timeStamp - gesture.at);
+    const momentum = velocity.current * 0.5 + (dx / elapsed) * 500;
+    const limit = geometry.current.pitch * 4;
+    velocity.current = Math.max(-limit, Math.min(limit, momentum));
+    phase.set(normalize(phase.get() + dx));
+    gesture.lastX = event.clientX;
+    gesture.at = event.timeStamp;
+  }
+  function pointerEnd(event: PointerEvent<HTMLDivElement>) {
+    if (drag.current?.id !== event.pointerId) return;
+    if (event.type !== 'pointerup') velocity.current = 0;
+    drag.current = null;
+    delete event.currentTarget.dataset.dragging;
+    if (event.currentTarget.hasPointerCapture(event.pointerId))
+      event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+  function focusCard(element: HTMLAnchorElement) {
+    activity.current.focus = true;
+    velocity.current = 0;
+    const area = stage.current;
+    if (!area) return;
+    const rect = element.getBoundingClientRect(),
+      bounds = area.getBoundingClientRect();
+    if (rect.left < bounds.left + 12 || rect.right > bounds.right - 12)
+      phase.set(phase.get() + bounds.left + bounds.width / 2 - (rect.left + rect.width / 2));
+    area.scrollLeft = 0;
+  }
+  function key(event: KeyboardEvent<HTMLAnchorElement>, group: number, index: number) {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const next =
+      event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? projects.length - 1
+          : (index + (event.key === 'ArrowRight' ? 1 : -1) + projects.length) % projects.length;
+    track.current
+      ?.querySelector<HTMLAnchorElement>(`[data-card-copy="${group}"][data-card-index="${next}"]`)
+      ?.focus({preventScroll: true});
+  }
+  function choose(group: number, index: number) {
+    const focused = document.activeElement;
+    if (
+      focused instanceof HTMLElement &&
+      track.current?.contains(focused) &&
+      focused.dataset.cardCopy !== String(group)
+    )
+      focused.blur();
+    setPrimary(group);
     setSelected(index);
-    const parent = document.querySelector<HTMLElement>('.pro-experience');
-    if (parent) parent.dataset.selectedProject = String(index);
+    const shell = document.querySelector<HTMLElement>('.pro-experience');
+    if (shell) shell.dataset.selectedProject = String(index);
     try {
       sessionStorage.setItem('nur-selected-project', String(index));
     } catch {}
@@ -130,111 +281,130 @@ export default function WorkPicker({
   return (
     <MotionConfig reducedMotion={reduce ? 'always' : 'never'}>
       <LazyMotion features={loadFeatures} strict>
-        <div className="pro-work__island" data-picker-ready={ready}>
-          <div className="pro-work__background" aria-hidden="true">
-            <AnimatePresence initial={false}>
-              <m.div
-                className="pro-work__layer"
-                key={background.project.id}
-                initial={{opacity: 0}}
-                animate={{opacity: 1}}
-                exit={{opacity: 0}}
-                transition={{
-                  duration: quietSelection ? 0 : reduce ? 0.12 : motionTiming.project.background,
-                  ease: motionEase('--ease-preview')
-                }}
-              >
-                {background.project.image && background.painted ? (
-                  <img
-                    src={background.project.image}
-                    srcSet={background.project.imageSet}
-                    sizes="100vw"
-                    alt=""
-                    width={background.project.imageWidth}
-                    height={background.project.imageHeight}
-                    loading={ready ? 'eager' : 'lazy'}
-                    decoding="async"
-                  />
-                ) : (
-                  <span className="pro-work__word">{background.project.name}</span>
-                )}
-              </m.div>
-            </AnimatePresence>
+        <div className="project-gallery" data-picker-ready={ready}>
+          <div className="project-gallery__heading">
+            <h2 id="work-title" className="pro-title" tabIndex={-1}>
+              {t(words.work, language)}
+            </h2>
+            <p>{t(workCopy.instruction, language)}</p>
           </div>
-          <div className="pro-content">
-            {' '}
-            <div className="pro-work__front">
-              <div className="pro-work__heading">
-                <h2 className="pro-title" id="work-title" tabIndex={-1}>
-                  {t(words.work, language)}
-                </h2>
-                <p>{t(workCopy.instruction, language)}</p>
-              </div>
-              <LayoutGroup id="professional-work">
-                <m.div
-                  layoutScroll
-                  className="pro-project-picker"
-                  role="group"
-                  aria-label={t(workCopy.select, language)}
+          <div
+            className="project-gallery__stage"
+            ref={stage}
+            onPointerDown={pointerDown}
+            onPointerMove={pointerMove}
+            onPointerUp={pointerEnd}
+            onPointerCancel={pointerEnd}
+            onLostPointerCapture={pointerEnd}
+            onClickCapture={(event) => {
+              if (suppressClick.current) {
+                event.preventDefault();
+                event.stopPropagation();
+                suppressClick.current = false;
+              }
+            }}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node))
+                activity.current.focus = false;
+            }}
+          >
+            <m.div className="project-gallery__track" ref={track} style={{transform}}>
+              {(ready ? [0, 1, 2] : [1]).map((group) => (
+                <div
+                  className="project-gallery__set"
+                  key={group}
+                  aria-hidden={group !== primary ? true : undefined}
                 >
-                  {projects.map((project, index) => (
-                    <button
-                      type="button"
-                      key={project.id}
-                      aria-controls="work-preview"
-                      aria-pressed={selected === index}
-                      onPointerEnter={() => void prepareProjectImage(project)}
-                      onFocus={() => void prepareProjectImage(project)}
-                      onTouchStart={() => void prepareProjectImage(project)}
-                      onClick={(event) => selectProject(index, event)}
-                      className="pro-project-option"
-                    >
-                      {selected === index && (
-                        <m.span
-                          className="pro-project-option__surface"
-                          layoutId="selected-project"
-                          aria-hidden="true"
+                  {projects.map((project, index) => {
+                    const identity = group * projects.length + index,
+                      distance = hovered === null ? 99 : identity - hovered,
+                      active = distance === 0;
+                    const move = reduce
+                      ? 'translate3d(0,0,0) scale(1)'
+                      : active
+                        ? 'translate3d(0,-16px,0) scale(1.09)'
+                        : Math.abs(distance) === 1
+                          ? `translate3d(${distance * 24}px,6px,0) scale(.97)`
+                          : 'translate3d(0,0,0) scale(1)';
+                    return (
+                      <div
+                        className="project-card-slot"
+                        key={project.id}
+                        style={{zIndex: active ? 3 : 1}}
+                      >
+                        <m.a
+                          href={`/${language}/projects/${project.id.replace('project-', '')}/`}
+                          className="project-card"
+                          data-card-project={project.id}
+                          data-card-copy={group}
+                          data-card-index={index}
+                          data-project={project.id}
+                          data-active={active}
+                          data-selected={selected === index}
+                          tabIndex={group === primary ? 0 : -1}
+                          initial={false}
+                          animate={{transform: move}}
                           transition={
-                            quietSelection || reduce
+                            reduce
                               ? {duration: 0}
                               : {
                                   type: 'spring',
-                                  duration: motionTiming.project.selection,
-                                  bounce: 0
+                                  duration: motionTiming.gallery.hover,
+                                  bounce: 0.12
                                 }
                           }
-                        />
-                      )}
-                      <span className="pro-option__name">{project.name}</span>
-                      <span className="pro-option__kind">{t(project.kind, language)}</span>
-                    </button>
-                  ))}
-                </m.div>
-              </LayoutGroup>
-              <div className="pro-nojs">
-                {projects.map((project) => (
-                  <a className="pro-link" href={'#' + project.id} key={project.id}>
-                    {project.name}
-                  </a>
-                ))}
-              </div>
-              <article
-                id="work-preview"
-                className="pro-project-selection"
-                aria-labelledby="work-preview-title"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <div className="pro-preview__content" ref={content}>
-                  <h3 id="work-preview-title">{chosen.name}</h3>
-                  <p className="pro-project-kind">{t(words.personal, language)}</p>
-                  <p className="pro-body">{t(chosen.summary, language)}</p>
-                  <a href={'#' + chosen.id} className="pro-button">
-                    {t(words.detail, language)}
-                  </a>
+                          onPointerEnter={(event) => {
+                            if (event.pointerType !== 'mouse') return;
+                            setHovered(identity);
+                            activity.current.hover = true;
+                            void prepareProjectImage(project);
+                          }}
+                          onPointerLeave={(event) => {
+                            if (event.pointerType !== 'mouse') return;
+                            setHovered(null);
+                            activity.current.hover = false;
+                          }}
+                          onFocus={(event) => {
+                            setHovered(identity);
+                            focusCard(event.currentTarget);
+                            void prepareProjectImage(project);
+                          }}
+                          onBlur={() => setHovered(null)}
+                          onKeyDown={(event) => key(event, group, index)}
+                          onClick={() => choose(group, index)}
+                          draggable={false}
+                        >
+                          <span className="project-card__light" aria-hidden="true" />
+                          <ProjectArtwork project={project} />
+                          <div className="project-card__copy">
+                            <h3 data-card-title>{project.name}</h3>
+                            <p>{t(project.kind, language)}</p>
+                            <span className="project-card__action">
+                              {t(words.detail, language)}
+                            </span>
+                          </div>
+                        </m.a>
+                      </div>
+                    );
+                  })}
                 </div>
-              </article>
-            </div>
+              ))}
+            </m.div>
+          </div>
+          <div className="project-gallery__footer">
+            <p>{t(workCopy.gesture, language)}</p>
+            <button
+              type="button"
+              onClick={() => setPaused((value) => !value)}
+              aria-pressed={paused || reduce}
+              disabled={!ready || reduce}
+            >
+              {reduce
+                ? language === 'id'
+                  ? 'Gerakan otomatis nonaktif'
+                  : 'Automatic movement off'
+                : t(paused ? workCopy.resume : workCopy.pause, language)}
+            </button>
           </div>
         </div>
       </LazyMotion>

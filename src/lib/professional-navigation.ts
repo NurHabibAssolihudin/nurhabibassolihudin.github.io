@@ -13,11 +13,6 @@ export function initProfessionalNavigation() {
   let current = 0, offsets: number[] = [], readingEnds: number[] = [], width = 0, height = 0, frame = 0, disposed = false;
   let timer: ReturnType<typeof setTimeout>;
   let quietArrival=true;
-  let transfer:ReturnType<typeof import('./project-transfer').createProjectTransfer>|undefined;
-  let transferLoading:Promise<void>|undefined;
-  function prepareTransfer(){
-    if(!transferLoading)transferLoading=import('./project-transfer').then(module=>{if(!disposed)transfer=module.createProjectTransfer(scrollArea);}).catch(()=>{transferLoading=undefined;});
-  }
   const offset = (index: number) => offsets[index] ?? panels[index].offsetTop - scrollArea.offsetTop;
   const activate = (index: number) => { current = index; shell.dataset.active = chapterIds[index]; };
 
@@ -36,12 +31,13 @@ export function initProfessionalNavigation() {
     if (focus) panels[index].querySelector<HTMLElement>('h1,h2')?.focus({ preventScroll: true });
   }
   function readHash() {
-    const hash = decodeFragment(location.hash), index = chapterIds.indexOf(aliases[hash] || hash);
+    const hash = decodeFragment(location.hash);
+    const project = projectSectionIds.indexOf(hash);
+    const index = chapterIds.indexOf(project >= 0 ? 'work' : aliases[hash] || hash);
     if (index < 0) return;
-    const project = projectSectionIds.indexOf(chapterIds[index]);
-    // A direct project link can seed an empty picker. Existing choices belong
-    // to the visitor and must survive reloads/history through other sections.
-    if (project >= 0 && shell.dataset.selectedProject === undefined) selectProject(project);
+    // Legacy project hashes now open the reader above the gallery. Scrolling
+    // between ordinary chapters never changes the visitor's project choice.
+    if (project >= 0) selectProject(project);
     scrollArea.scrollTo({ top: offset(index), behavior: 'instant' });
     activate(index);
   }
@@ -80,7 +76,7 @@ export function initProfessionalNavigation() {
     if (nearest !== current) {
       activate(nearest);
       // Reading a section is independent from choosing a work preview.
-      history.replaceState(null, '', '#' + chapterIds[nearest]);
+      if(!document.querySelector('#project-reader[open]'))history.replaceState(null, '', '#' + chapterIds[nearest]);
     }
     window.dispatchEvent(new CustomEvent('nur:chapter',{detail:{quiet:quietArrival}}));
     // A settled target section is reached even when native snapping or display
@@ -96,13 +92,7 @@ export function initProfessionalNavigation() {
     const index = chapterIds.indexOf(aliases[hash] || hash);
     if (index < 0 || document.documentElement.dataset.world !== 'builder') return;
     event.preventDefault(); wheelNavigation.reset();
-    const project = projectSectionIds.indexOf(chapterIds[index]);
-    if (project >= 0) selectProject(project);
-    const source=anchor.closest('#work')?.querySelector<HTMLElement>('.pro-project-option[aria-pressed="true"] .pro-option__name');
-    const target=panels[index].querySelector<HTMLElement>('h2');
-    if(project>=0&&source&&target&&transfer&&event.detail!==0){
-      transfer.run({source,target,from:scrollArea.scrollTop,to:offset(index),navigate:()=>jump(index)});
-    }else jump(index,true,event.detail===0);
+    jump(index,true,event.detail===0);
   }
   function worldChange() {
     wheelNavigation.reset();
@@ -113,7 +103,6 @@ export function initProfessionalNavigation() {
   }
   function historyChange() { quietArrival=true;wheelNavigation.reset(); measure(); readHash();window.dispatchEvent(new CustomEvent('nur:chapter',{detail:{quiet:true}})); }
   function pointer(){quietArrival=false;}
-  function intent(event:Event){if((event.target as Element).closest('#work a[href^="#project-"]'))prepareTransfer();}
   function readWithinSection(delta: number) {
     if (!panels[current].classList.contains('pro-panel--flow')) return false;
     const top = scrollArea.scrollTop, start = offset(current), end = readingEnds[current];
@@ -126,7 +115,7 @@ export function initProfessionalNavigation() {
   }
   function keys(event: KeyboardEvent) {
     const target = event.target as Element;
-    if (event.altKey || event.metaKey || event.ctrlKey || event.shiftKey || target.closest('input,textarea,select,button,a,[contenteditable],dialog') || document.documentElement.dataset.world !== 'builder') return;
+    if (document.querySelector('#project-reader[open]') || event.altKey || event.metaKey || event.ctrlKey || event.shiftKey || target.closest('input,textarea,select,button,a,[contenteditable],dialog') || document.documentElement.dataset.world !== 'builder') return;
     const step = ['ArrowDown','PageDown',' '].includes(event.key) ? 1 : ['ArrowUp','PageUp'].includes(event.key) ? -1 : 0;
     if (!step && event.key !== 'Home' && event.key !== 'End') return;
     event.preventDefault(); wheelNavigation.reset();
@@ -159,19 +148,14 @@ export function initProfessionalNavigation() {
   scrollArea.addEventListener('scrollend', settle);
   scrollArea.addEventListener('wheel', wheel, { passive: false });
   scrollArea.addEventListener('pointerdown',pointer,{passive:true});
-  document.addEventListener('pointerover',intent,{passive:true});document.addEventListener('focusin',intent);
   document.addEventListener('click', links); document.addEventListener('keydown', keys);
   window.addEventListener('popstate', historyChange); window.addEventListener('hashchange', historyChange); window.addEventListener('nur:world', worldChange);
   const resize = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); });
   resize.observe(scrollArea); contents.forEach(content => resize.observe(content));
   document.fonts.ready.then(measure);
-  const work=scrollArea.querySelector('#work');
-  const nearby=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){prepareTransfer();nearby.disconnect();}},{root:scrollArea,rootMargin:'400px 0px'});
-  if(work)nearby.observe(work);
   return () => {
     disposed = true; clearTimeout(timer); cancelAnimationFrame(frame); resize.disconnect();
-    nearby.disconnect();transfer?.dispose();
-    scrollArea.removeEventListener('pointerdown',pointer);document.removeEventListener('pointerover',intent);document.removeEventListener('focusin',intent);
+    scrollArea.removeEventListener('pointerdown',pointer);
     scrollArea.removeEventListener('scroll', scroll); scrollArea.removeEventListener('scrollend', settle); scrollArea.removeEventListener('wheel', wheel);
     document.removeEventListener('click', links); document.removeEventListener('keydown', keys);
     window.removeEventListener('popstate', historyChange); window.removeEventListener('hashchange', historyChange); window.removeEventListener('nur:world', worldChange);

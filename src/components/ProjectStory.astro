@@ -1,0 +1,126 @@
+---
+import ExternalLink from './ExternalLink.astro';
+import ProjectArtwork from './ProjectArtwork';
+import {caseCopy, t, words, type Locale} from '../data/professional';
+import type {Project} from '../data/project-types';
+interface Props {
+  project: Project;
+  language: Locale;
+  standalone?: boolean;
+  hidden?: boolean;
+}
+const {project, language, standalone = false, hidden = false} = Astro.props;
+const study = project.caseStudy;
+const Title = standalone ? 'h1' : 'h2';
+const Heading = standalone ? 'h2' : 'h3';
+const Decision = standalone ? 'h3' : 'h4';
+---
+
+<article
+  id={project.id}
+  class="project-story"
+  data-project={project.id}
+  hidden={hidden}
+  aria-labelledby={`${project.id}-title`}
+>
+  <header class="project-story__hero">
+    <Title id={`${project.id}-title`} tabindex={-1}>
+      {project.name}
+    </Title>
+    <p class="project-story__kind">{t(project.kind, language)}</p>
+    <p class="project-story__summary">{t(project.summary, language)}</p>
+    <ul class="project-story__technology" aria-label={t(words.technology, language)}>
+      {project.technologies.map((technology) => (
+        <li>{technology}</li>
+      ))}
+    </ul>
+    <div class="project-story__material" aria-hidden="true">
+      <ProjectArtwork project={project} />
+    </div>
+  </header>
+  <div class="project-story__body">
+    <section>
+      <Heading>{t(caseCopy.problem, language)}</Heading>
+      <div>
+        <p>{t(study.problem, language)}</p>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.role, language)}</Heading>
+      <div>
+        <p>{t(words.responsibility, language)}</p>
+        <p>{t(study.role, language)}</p>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.constraints, language)}</Heading>
+      <div>
+        <p>{t(study.constraints, language)}</p>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.system, language)}</Heading>
+      <div>
+        <p>{t(study.system, language)}</p>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.decisions, language)}</Heading>
+      <div>
+        <ul class="project-story__decisions" role="list">
+          {study.decisions.map((decision) => (
+            <li>
+              <Decision>{t(decision.title, language)}</Decision>
+              <p>{t(decision.body, language)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.tradeoffs, language)}</Heading>
+      <div>
+        <p>{t(study.tradeoffs, language)}</p>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.outcome, language)}</Heading>
+      <div>
+        <p>{t(study.outcome, language)}</p>
+        {project.links.length > 0 && (
+          <ul class="project-story__links" role="list">
+            {project.links.map((link) => (
+              <li>
+                <ExternalLink url={link.url} label={t(link.label, language)} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+    {study.learning && (
+      <section>
+        <Heading>{t(caseCopy.learning, language)}</Heading>
+        <div>
+          <p>{t(study.learning, language)}</p>
+        </div>
+      </section>
+    )}
+    {project.image && (
+      <figure class="project-story__figure">
+        <a href={project.original} target="_blank" rel="noreferrer">
+          <img
+            src={project.thumbnail}
+            width={440}
+            height={Math.round((440 * (project.imageHeight || 860)) / (project.imageWidth || 1360))}
+            alt={
+              language === 'id' ? `Tampilan ${project.name}` : `${project.name} interface preview`
+            }
+            loading="lazy"
+          />
+          <span>{language === 'id' ? 'Perbesar gambar' : 'Enlarge image'}</span>
+        </a>
+      </figure>
+    )}
+  </div>
+</article>

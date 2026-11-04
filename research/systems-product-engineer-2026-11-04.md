@@ -273,17 +273,17 @@ Ketiga contoh berikut adalah draf editorial berbasis brief, konten portofolio, d
 
 **Problem.** A business product can span commerce, CRM, and ERP while still needing clear boundaries between its parts. Ocaty explores how those capabilities can be developed as modules with shared application infrastructure.
 
-**Context and constraints.** This is a personal product project. Its scope includes separately developed frontend modules and backend services; individual modules can be at different stages of development.
+**Context and constraints.** This is a personal product project. Early experiments explored React and Module Federation. The initial release approach focuses on commerce, with CRM and ERP remaining part of the wider platform scope.
 
 **My role.** I handle product planning, branding, development, deployment, and marketing. My technical work includes frontend modules, shared UI components, and account and notification services.
 
-**System design.** React modules are connected through Module Federation. FastAPI services and PostgreSQL handle the backend and data layer, with Docker used for deployment workflows.
+**System design.** The initial release approach uses a React/Vite interface and one FastAPI application. Identity, core, and commerce keep separate schemas in PostgreSQL. Docker supports deployment.
 
-**Technical decisions.** The architecture separates frontend modules from backend services while sharing selected application components. Module Federation is the integration mechanism for the frontend modules.
+**Technical decisions.** Frontend experiments explored Module Federation. The release approach then consolidates the backend into a modular monolith to avoid early cross-service session and authorization coordination, while retaining explicit domain interfaces.
 
-**Trade-offs.** Independent module boundaries create room for separate development, while shared contracts and dependencies still need coordination. Modularity does not remove integration work or prove scalability by itself.
+**Trade-offs.** One deployable reduces coordination between services while coupling their release lifecycle. Schema and domain interface boundaries still need discipline, and extracting services later would remain engineering work.
 
-**Result or outcome.** A modular business application platform under development, with inspectable frontend and service work. This case does not claim that every commerce, CRM, or ERP module is complete, or that the platform has a measured business impact.
+**Result or outcome.** A commerce-focused foundation under development with a React interface, modular FastAPI backend, and PostgreSQL. CRM and ERP remain part of the wider platform scope. No measured business impact is claimed.
 
 **What I learned.** I learned to understand what someone wants to achieve before judging their product idea by the competitors I know or the implementation I would prefer. Development can reveal an opportunity that was not obvious to me at the start. That makes understanding the other person's perspective part of the engineering work, alongside testing the assumptions behind the idea.
 
@@ -392,3 +392,17 @@ Paket ini tidak mengklaim volume pencarian, peningkatan ranking, peningkatan pel
 - Build/typecheck: 0 error, warning, atau hint. Pemeriksaan output: 109 lolos. Delapan kombinasi hero (EN/ID × 1440/768/390/320px) lolos: judul dua baris, tiga area, tautan terlihat, dan tanpa overflow horizontal. Navigasi wheel dari proyek terpilih ke ORCA juga diperiksa.
 - Inspector desain dijalankan pada 1440/768/390px. Pemeriksaan scoped lolos dengan pengecualian yang dinyatakan: jumlah gambar/video berada di luar perubahan copy dan fase gambar belum dikerjakan; renderer canvas serta scroller internal tidak terwakili oleh penghitung gerak umum; palet teks yang sudah disetujui dipertahankan. Ini bukan audit ulang seluruh desain atau validasi perangkat fisik.
 - Preview lokal menggunakan port 4173 untuk website dan 4174 untuk README. Publikasi repositori dan penerapan copy ke profil eksternal merupakan langkah terpisah; pemeriksaan lokal tidak membuktikan pengindeksan atau deployment.
+
+### Penerapan studi kasus di website — koreksi berikutnya pada 4 November
+
+Paket awal menyiapkan draf studi kasus tetapi belum menerapkannya pada bagian proyek di website. Setelah koreksi NurHabib, tiga detail proyek yang sudah ada (ORCA, Ocaty, Oxelot) menggunakan komponen studi kasus bersama: masalah, peran, desain sistem, hasil, serta disclosure untuk konteks, keputusan, trade-off, dan pelajaran bila terkonfirmasi. Tautan picker menjadi “Baca studi kasus” / “Read case study”.
+
+Ocaty secara khusus diperbarui setelah NurHabib memilih untuk menceritakan evolusi eksperimen frontend modular menuju pendekatan rilis awal. Konteks tambahan diperiksa dari ADR-0005 Ocaty, ADR-0002/0003 ORCA, serta ADR-01/05 Oxelot dan implementasi persistensinya. Klaim performa pada dokumen sumber tidak dipindahkan sebagai hasil pengukuran portofolio. Refleksi pribadi hanya diisi untuk Ocaty, sesuai cerita yang diberikan.
+
+Pemeriksaan studi kasus: 208 pemeriksaan browser untuk EN/ID pada 1440/768/390/320px, termasuk disclosure dengan keyboard, area baca konten panjang, tanpa JavaScript, dan melanjutkan dari Oxelot ke pengalaman. Sebanyak 59 pemeriksaan pemilih proyek serta 16 pemeriksaan persiapan animasi pertama/kunjungan kembali juga lolos. Build final dan 109 pemeriksaan output lolos; 22 unit test lolos dalam perubahan ini. Di layar sempit atau saat detail diperluas, bagian boleh tumbuh menjadi area baca agar isi tetap terjangkau.
+
+Pemeriksaan visual memakai screenshot tertutup/terbuka dan inspector pada desktop/tablet/mobile. Detector umum membaca heading di dalam disclosure tertutup sebagai tertutup elemen lain, serta menganggap child heading proyek sebelumnya sebagai eyebrow proyek berikutnya; kedua keterbatasan ini ditinjau dengan screenshot dan pemeriksaan disclosure terarah. Jumlah media, penghitung gerak canvas, dan palet lama tetap berada di luar perubahan konten ini. Pemeriksaan ini tidak membuktikan performa perangkat fisik atau deployment.
+
+### Perubahan interaksi berikutnya: galeri kartu
+
+Atas permintaan NurHabib selanjutnya, panel studi kasus/disclosure diganti dengan galeri kartu yang mengalir, respons hover, drag, dan transisi pembesaran menuju pembaca studi kasus yang lapang. Konten studi kasus tetap dipakai bersama; pembaca dan URL halaman tersendiri menggantikan studi kasus sebagai bagian scroll utama. Alur profesional kini mempunyai enam bagian. Lihat [catatan galeri kartu](kinetic-project-gallery-2026-11-04.md) untuk implementasi dan pemeriksaan versi ini; angka pemeriksaan panel di atas merupakan riwayat versi sebelumnya.

@@ -11,24 +11,12 @@
     "en": "A web application with a document editor, task boards and project calendars.",
     "id": "Aplikasi web dengan editor dokumen, papan tugas, dan kalender proyek."
   },
-  "context": {
-    "en": "The application includes a document editor, task boards and project calendars. It can be self-hosted.",
-    "id": "Fitur yang dikembangkan meliputi editor dokumen, papan tugas, dan kalender proyek. Aplikasi dapat dijalankan di server sendiri."
-  },
-  "focus": {
-    "en": "I develop the workspace, document editor, task boards and project calendar.",
-    "id": "Saya mengembangkan ruang kerja, editor dokumen, papan tugas, dan kalender proyek."
-  },
-  "reviewTitle": {
-    "en": "Demo",
-    "id": "Demo"
-  },
-  "evidence": {
-    "en": "The demo contains sample data and does not require an account.",
-    "id": "Demo berisi data contoh dan dapat dibuka tanpa membuat akun."
-  },
   "technologies": [
-    "TypeScript"
+    "TypeScript",
+    "SolidJS",
+    "Go",
+    "PostgreSQL",
+    "Docker"
   ],
   "links": [
     {
@@ -39,5 +27,53 @@
       "url": "https://orca.ocaty.com"
     }
   ],
-  "order": 0
+  "order": 0,
+  "caseStudy": {
+    "problem": {
+      "en": "Bring project documents, tasks, and schedules into a shared workspace, while keeping each activity connected to its project.",
+      "id": "Menyatukan dokumen, tugas, dan jadwal dalam ruang kerja yang tetap memperlihatkan hubungan setiap aktivitas dengan proyeknya."
+    },
+    "constraints": {
+      "en": "A personal application designed to be self-hosted. The public demo uses sample data and is separate from a complete server deployment.",
+      "id": "Aplikasi pribadi yang dirancang agar bisa dijalankan di server sendiri. Demo publik menggunakan data contoh dan terpisah dari pemasangan aplikasi lengkap."
+    },
+    "role": {
+      "en": "I handle product planning, development, and deployment, including the workspace, editor, boards, and calendar.",
+      "id": "Saya menangani perencanaan produk, pengembangan, dan deployment, termasuk ruang kerja, editor, papan tugas, dan kalender."
+    },
+    "system": {
+      "en": "A SolidJS and TypeScript interface communicates with a Go backend. PostgreSQL stores application data; the backend is organized into project, document, task, and calendar modules.",
+      "id": "Antarmuka SolidJS dan TypeScript terhubung ke backend Go. PostgreSQL menyimpan data aplikasi; backend dibagi menjadi modul proyek, dokumen, tugas, dan kalender."
+    },
+    "decisions": [
+      {
+        "title": {
+          "en": "Keep board cards browser-native",
+          "id": "Kartu papan memakai elemen HTML"
+        },
+        "body": {
+          "en": "The visual board uses HTML cards and SVG connectors, preserving native text selection and form controls instead of redrawing those interactions inside a canvas.",
+          "id": "Papan visual menggunakan kartu HTML dan konektor SVG. Pemilihan teks serta kontrol formulir tetap ditangani browser, tanpa membangun ulang interaksi itu di dalam canvas."
+        }
+      },
+      {
+        "title": {
+          "en": "Choose a Go modular monolith for self-hosting",
+          "id": "Backend Go untuk self-hosting"
+        },
+        "body": {
+          "en": "The backend stays in one deployable application with domain modules. This favors a simpler self-hosting setup, while frontend TypeScript and backend Go contracts need to be kept in agreement.",
+          "id": "Backend berada dalam satu aplikasi dengan modul per domain. Pendekatan ini menjaga pemasangan mandiri tetap sederhana, dengan konsekuensi kontrak antara frontend TypeScript dan backend Go perlu dijaga kesesuaiannya."
+        }
+      }
+    ],
+    "tradeoffs": {
+      "en": "The custom board requires maintaining pan, zoom, and coordinate handling. Separate TypeScript and Go code also require API contract coordination; self-hosting leaves updates and database maintenance with the operator.",
+      "id": "Papan yang dibangun sendiri membutuhkan pemeliharaan mekanisme pan, zoom, dan koordinat. Kode TypeScript dan Go juga memerlukan koordinasi kontrak API; pengguna yang melakukan self-hosting tetap mengurus pembaruan dan database."
+    },
+    "outcome": {
+      "en": "A public demo lets visitors try document, board, and calendar views with sample data, without creating an account.",
+      "id": "Demo publik menyediakan tampilan dokumen, papan, dan kalender yang dapat dicoba dengan data contoh, tanpa membuat akun."
+    }
+  }
 }

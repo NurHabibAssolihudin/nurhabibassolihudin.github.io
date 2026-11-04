@@ -14,10 +14,16 @@ const projects = defineCollection({
       original: z.string().startsWith('/assets/').optional(),
       kind: copy,
       summary: copy,
-      context: copy,
-      focus: copy,
-      reviewTitle: copy,
-      evidence: copy,
+      caseStudy: z.object({
+        problem: copy,
+        constraints: copy,
+        role: copy,
+        system: copy,
+        decisions: z.array(z.object({title: copy, body: copy})).min(1),
+        tradeoffs: copy,
+        outcome: copy,
+        learning: copy.optional()
+      }),
       technologies: z.array(z.string().min(1)),
       links: z.array(z.object({label: copy, url: z.url()}))
     })

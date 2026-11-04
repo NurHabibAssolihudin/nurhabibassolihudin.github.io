@@ -4,35 +4,83 @@
   "image": "../../../assets/ocaty.png",
   "original": "/assets/ocaty.png",
   "kind": {
-    "en": "Business applications",
-    "id": "Aplikasi bisnis"
+    "en": "Modular business application platform",
+    "id": "Platform aplikasi bisnis modular"
   },
   "summary": {
-    "en": "Business applications with commerce, CRM and ERP modules.",
-    "id": "Aplikasi bisnis dengan modul penjualan, CRM, dan ERP."
-  },
-  "context": {
-    "en": "The project covers commerce, CRM and ERP modules. Frontend modules and backend services are developed separately.",
-    "id": "Modul yang dikembangkan mencakup penjualan, CRM, dan ERP. Modul frontend dan layanan backend dikembangkan secara terpisah."
-  },
-  "focus": {
-    "en": "I develop the frontend modules, shared interface components, and account and notification services.",
-    "id": "Saya mengembangkan modul frontend, komponen antarmuka bersama, serta layanan akun dan notifikasi."
-  },
-  "reviewTitle": {
-    "en": "Technical overview",
-    "id": "Gambaran teknis"
-  },
-  "evidence": {
-    "en": "Module federation connects the frontend modules. The backend services use FastAPI and PostgreSQL.",
-    "id": "Modul antarmukanya terhubung melalui module federation, dengan FastAPI dan PostgreSQL pada sisi backend."
+    "en": "A business application platform with a modular backend, starting with commerce.",
+    "id": "Platform aplikasi bisnis dengan backend modular, dimulai dari kebutuhan penjualan."
   },
   "technologies": [
     "TypeScript",
     "React",
+    "Module Federation",
     "FastAPI",
-    "PostgreSQL"
+    "PostgreSQL",
+    "Docker"
   ],
   "links": [],
-  "order": 1
+  "order": 1,
+  "caseStudy": {
+    "problem": {
+      "en": "Develop a modular business product without taking on distributed-system complexity before its first release.",
+      "id": "Mengembangkan produk bisnis modular sambil membatasi kompleksitas sistem terdistribusi sebelum rilis pertama."
+    },
+    "constraints": {
+      "en": "A personal platform with a wider scope spanning commerce, CRM, and ERP. Early frontend experiments used React and Module Federation; the initial release approach focuses on commerce and a modular monolith backend.",
+      "id": "Platform pribadi dengan lingkup commerce, CRM, dan ERP. Eksperimen frontend awal menggunakan React dan Module Federation; pendekatan rilis awal berfokus pada commerce dan backend modular monolith."
+    },
+    "role": {
+      "en": "I handle planning, branding, development, deployment, and marketing, including frontend modules, shared components, and account and notification services.",
+      "id": "Saya menangani perencanaan, branding, pengembangan, deployment, dan pemasaran, termasuk modul frontend, komponen bersama, serta layanan akun dan notifikasi."
+    },
+    "system": {
+      "en": "The initial release uses a React/Vite interface and one FastAPI application. Identity, core, and commerce have separate schemas within PostgreSQL; Docker supports deployment.",
+      "id": "Rilis awal menggunakan antarmuka React/Vite dan satu aplikasi FastAPI. Domain identity, core, dan commerce memiliki schema terpisah di PostgreSQL; Docker digunakan untuk deployment."
+    },
+    "decisions": [
+      {
+        "title": {
+          "en": "Explore independently developed frontends",
+          "id": "Mengeksplorasi frontend modular"
+        },
+        "body": {
+          "en": "The early approach explored Module Federation for connecting React modules and shared components. This is part of the project’s development history.",
+          "id": "Pendekatan awal mengeksplorasi Module Federation untuk menghubungkan modul React dan komponen bersama. Eksperimen ini menjadi bagian dari perjalanan pengembangan proyek."
+        }
+      },
+      {
+        "title": {
+          "en": "Consolidate the first release",
+          "id": "Menyederhanakan rilis awal"
+        },
+        "body": {
+          "en": "The release approach moves to one FastAPI deployable, avoiding cross-service session and authorization coordination during this stage.",
+          "id": "Pendekatan rilis beralih ke satu aplikasi FastAPI agar tahap awal tidak terbebani koordinasi sesi dan otorisasi lintas layanan."
+        }
+      },
+      {
+        "title": {
+          "en": "Retain domain boundaries",
+          "id": "Mempertahankan batas domain"
+        },
+        "body": {
+          "en": "Identity, core, and commerce keep separate database schemas and communicate through domain interfaces. A single deployment still has explicit module boundaries.",
+          "id": "Identity, core, dan commerce menggunakan schema database terpisah dan berkomunikasi melalui antarmuka domain. Satu deployment tetap memiliki batas modul yang jelas."
+        }
+      }
+    ],
+    "tradeoffs": {
+      "en": "One deployable reduces the coordination needed between services, while coupling their release lifecycle. Schema and interface boundaries still require discipline; future service extraction would remain engineering work.",
+      "id": "Satu aplikasi mengurangi kebutuhan koordinasi antarlayanan, tetapi menyatukan siklus rilisnya. Batas schema dan antarmuka tetap perlu dijaga; pemisahan menjadi layanan mandiri di kemudian hari tetap membutuhkan pekerjaan teknis."
+    },
+    "outcome": {
+      "en": "A commerce-focused foundation is being developed with a React interface, modular FastAPI backend, and PostgreSQL. CRM and ERP remain part of the platform’s wider scope.",
+      "id": "Fondasi produk berfokus pada commerce, dengan antarmuka React, backend modular FastAPI, dan PostgreSQL. CRM dan ERP tetap menjadi bagian dari lingkup platform yang lebih luas."
+    },
+    "learning": {
+      "en": "I learned to understand the goal behind a product idea before judging it against competitors or the solution I would prefer. Development can reveal an opportunity I did not initially see from the other person’s perspective. That understanding still needs to be followed by testing the idea’s assumptions.",
+      "id": "Saya belajar memahami tujuan di balik sebuah ide sebelum menilainya berdasarkan kompetitor atau solusi yang menurut saya lebih baik. Selama pengembangan, saya bisa melihat peluang yang sebelumnya hanya terlihat dari sudut pandang orang yang membutuhkan produk. Pemahaman itu tetap perlu diikuti dengan pengujian asumsi idenya."
+    }
+  }
 }

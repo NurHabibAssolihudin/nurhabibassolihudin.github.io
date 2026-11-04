@@ -1,11 +1,10 @@
 /* Chapter motion reveals existing components; no decorative arrival layers. */
-:is(#summary,#work,[id^="project-"],#experience-work,#approach)[data-chapter-motion="prepared"]
-:is(.pro-summary__scope,.pro-project-picker,.pro-nojs,.pro-project-selection,.pro-case__intro>.pro-body,.pro-thumb,.pro-case__details,.pro-employment,.pro-approach-list) {
+:is(#summary,#work,#experience-work,#approach)[data-chapter-motion="prepared"]
+:is(.pro-summary__scope,.project-gallery__stage,.pro-employment,.pro-approach-list) {
   clip-path:inset(0% 0% 100% 0%);
 }
 #contact[data-chapter-motion="prepared"] :is(.pro-contact__email,.pro-contact__aside) { opacity:0; }
 @media(prefers-reduced-motion:reduce) {
-  [data-chapter-motion="prepared"] :is(.pro-summary__scope,.pro-project-picker,.pro-nojs,.pro-project-selection,.pro-case__intro>.pro-body,.pro-thumb,.pro-case__details,.pro-employment,.pro-approach-list) { clip-path:none; }
+  [data-chapter-motion="prepared"] :is(.pro-summary__scope,.project-gallery__stage,.pro-employment,.pro-approach-list) { clip-path:none; }
   #contact[data-chapter-motion="prepared"] :is(.pro-contact__email,.pro-contact__aside) { opacity:1; }
 }
-.project-transfer { position:fixed; left:0; top:0; margin:0; z-index:700; pointer-events:none; white-space:nowrap; transform-origin:0 0; line-height:1; }

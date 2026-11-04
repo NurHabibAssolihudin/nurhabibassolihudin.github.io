@@ -64,3 +64,9 @@ Reviewed the complete pending library/content pass and its subsequent motion cor
 The final build/typecheck has zero errors, warnings and hints; 21 unit tests and 109 static-output checks pass. Fresh browser suites pass 171 assertions: 23 review regressions, 59 picker, 56 first-visit/return, 21 locale/loading and 12 interruption/fallback. Tests include live preference changes during a reveal, external project restoration, malformed/encoded fragments, reload, language switching, reduced motion and complete world access. These are local browser checks, not physical-device performance or deployment validation.
 
 Preview runs at `http://127.0.0.1:4173/` after `npm run build` and `npm run preview`. Publishing uses the existing GitHub Actions workflow on pushes to `main`; generated output remains ignored.
+
+## Flowing project gallery — subsequent 4 November update
+
+The owner replaced the picker/background-preview composition and consecutive project chapters with flowing interactive cards that expand into a native case-study reader. This supersedes the shared-selection layout and scroll-linked project-name transfer described above; the old transfer module and panel CSS were removed. LazyMotion now uses `domAnimation` because direct pointer dragging updates a motion value and no shared-layout/drag features are required. The professional scroll has six sections, and complete static case studies also have six EN/ID standalone URLs. The full world crossing remains unchanged.
+
+See [the gallery interaction and verification record](research/kinetic-project-gallery-2026-11-04.md) for motion ownership, progressive enhancement, interruption behavior, source facts, and validation limits.

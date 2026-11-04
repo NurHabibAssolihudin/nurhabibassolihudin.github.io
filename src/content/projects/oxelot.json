@@ -10,27 +10,11 @@
     "en": "A TypeScript library for browser storage, background processing and data synchronization.",
     "id": "Library TypeScript untuk penyimpanan data di browser, pemrosesan di latar belakang, dan sinkronisasi data."
   },
-  "context": {
-    "en": "The library covers local storage, background processing and data synchronization for web applications, including offline use.",
-    "id": "Library ini menangani penyimpanan data di browser, pemrosesan di latar belakang, dan sinkronisasi data, termasuk penggunaan offline."
-  },
-  "focus": {
-    "en": "I develop storage using OPFS and SQLite through WebAssembly, worker pools and offline data synchronization.",
-    "id": "Saya mengembangkan penyimpanan berbasis OPFS dan SQLite melalui WebAssembly, pengelolaan worker, serta sinkronisasi data offline."
-  },
-  "reviewTitle": {
-    "en": "Source and documentation",
-    "id": "Kode dan dokumentasi"
-  },
-  "evidence": {
-    "en": "The source code and API documentation are available on GitHub to read and try.",
-    "id": "Kode sumber dan dokumentasi API tersedia di GitHub untuk dipelajari atau dicoba."
-  },
   "technologies": [
     "TypeScript",
-    "WASM",
     "OPFS",
-    "Workers"
+    "WASM SQLite",
+    "Web Workers"
   ],
   "links": [
     {
@@ -41,5 +25,53 @@
       "url": "https://github.com/NurHabibAssolihudin/Oxelot"
     }
   ],
-  "order": 2
+  "order": 2,
+  "caseStudy": {
+    "problem": {
+      "en": "Provide reusable storage, worker, and synchronization capabilities so application features do not have to manage every low-level browser API themselves.",
+      "id": "Menyediakan kemampuan penyimpanan, worker, dan sinkronisasi yang dapat digunakan ulang, agar setiap fitur aplikasi tidak perlu menangani seluruh API browser secara langsung."
+    },
+    "constraints": {
+      "en": "Personal developer infrastructure for web applications, including offline use. Its behavior must account for browser storage, worker lifecycles, and changes in connectivity.",
+      "id": "Infrastruktur pengembangan pribadi untuk aplikasi web, termasuk penggunaan offline. Perilakunya perlu memperhatikan penyimpanan browser, siklus hidup worker, dan perubahan koneksi."
+    },
+    "role": {
+      "en": "I handle planning and development, including the storage layer, worker management, and offline synchronization.",
+      "id": "Saya menangani perencanaan dan pengembangan, termasuk lapisan penyimpanan, pengelolaan worker, dan sinkronisasi data offline."
+    },
+    "system": {
+      "en": "A TypeScript library brings together OPFS storage, SQLite through WebAssembly, and Web Workers for background processing and synchronization.",
+      "id": "Library TypeScript menggabungkan penyimpanan OPFS, SQLite melalui WebAssembly, dan Web Workers untuk pemrosesan di latar belakang serta sinkronisasi."
+    },
+    "decisions": [
+      {
+        "title": {
+          "en": "Build a library rather than a UI framework",
+          "id": "Library yang tidak mengambil alih UI"
+        },
+        "body": {
+          "en": "The core leaves rendering to the consuming application. React bindings sit in a separate package, keeping storage and worker responsibilities independent of the UI framework.",
+          "id": "Core menyerahkan rendering kepada aplikasi pengguna. Binding React berada dalam paket terpisah, sehingga tanggung jawab storage dan worker tidak bergantung pada framework UI."
+        }
+      },
+      {
+        "title": {
+          "en": "Start SQLite persistence with database images",
+          "id": "Persistensi awal memakai image database"
+        },
+        "body": {
+          "en": "The initial implementation serializes SQLite to an OPFS file instead of implementing a complete SQLite file-system bridge. This narrows the initial implementation surface.",
+          "id": "Implementasi awal menyimpan hasil serialisasi SQLite ke file OPFS, sebelum membangun jembatan sistem file SQLite secara lengkap. Pendekatan ini membatasi luas implementasi pada tahap awal."
+        }
+      }
+    ],
+    "tradeoffs": {
+      "en": "Image-based persistence rewrites the database image after a mutation, so its write cost grows with database size. Framework-independent core code also requires UI adapters; browser lifecycle and synchronization constraints still need explicit handling.",
+      "id": "Persistensi berbasis image menulis ulang image database setelah perubahan, sehingga biaya penulisannya meningkat seiring ukuran data. Core yang independen dari framework juga membutuhkan adapter UI; siklus hidup browser dan sinkronisasi tetap perlu ditangani secara eksplisit."
+    },
+    "outcome": {
+      "en": "Source code, API documentation, and a development roadmap are available on GitHub for review.",
+      "id": "Kode sumber, dokumentasi API, dan rencana pengembangan tersedia di GitHub untuk dipelajari."
+    }
+  }
 }

@@ -1,0 +1,32 @@
+---
+import ProjectStory from './ProjectStory.astro';
+import type {Project} from '../data/project-types';
+import type {Locale} from '../data/professional';
+interface Props {
+  projects: Project[];
+  language: Locale;
+}
+const {projects, language} = Astro.props;
+---
+
+<dialog
+  id="project-reader"
+  class="project-reader"
+  aria-label={language === 'id' ? 'Studi kasus proyek' : 'Project case study'}
+>
+  <div class="project-reader__surface">
+    <div class="project-reader__scroll">
+      <div class="project-reader__toolbar">
+        <button type="button" data-reader-close autofocus>
+          {language === 'id' ? 'Kembali ke proyek' : 'Back to projects'}
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+        </button>
+      </div>
+      {projects.map((project) => (
+        <ProjectStory project={project} language={language} hidden />
+      ))}
+    </div>
+  </div>
+</dialog>

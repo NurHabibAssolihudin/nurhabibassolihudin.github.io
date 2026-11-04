@@ -5,10 +5,16 @@ export interface Project {
   name: string;
   kind: Copy;
   summary: Copy;
-  context: Copy;
-  focus: Copy;
-  reviewTitle: Copy;
-  evidence: Copy;
+  caseStudy: {
+    problem: Copy;
+    constraints: Copy;
+    role: Copy;
+    system: Copy;
+    decisions: {title: Copy; body: Copy}[];
+    tradeoffs: Copy;
+    outcome: Copy;
+    learning?: Copy;
+  };
   technologies: string[];
   links: {label: Copy; url: string}[];
   image: string | null;

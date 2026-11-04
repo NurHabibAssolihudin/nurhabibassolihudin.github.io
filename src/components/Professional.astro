@@ -2,6 +2,7 @@
 import Panel from './Panel.astro';
 import ExternalLink from './ExternalLink.astro';
 import WorkPicker from './WorkPicker';
+import ProjectReader from './ProjectReader.astro';
 import { sections, t, words, type Locale } from '../data/professional';
 import {projectContent} from '../lib/project-content';
 interface Props { language: Locale; planet: string }
@@ -26,16 +27,7 @@ const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWid
         <div class="pro-split"><div><h2 id="summary-title" class="pro-title" tabindex={-1}>{t(words.summary, language)}</h2><p class="pro-lead">{t(sections.summary.lead, language)}</p><p class="pro-body pro-summary__examples">{t(sections.summary.body, language)}</p><a class="pro-link" href="#work">{t(sections.summary.projects, language)}</a></div>
         <div class="pro-summary__scope"><h3 id="scope-title">{t(sections.summary.scopeTitle, language)}</h3><dl class="pro-scope-list" aria-labelledby="scope-title">{sections.summary.scope.map(item => <div><dt>{t(item.name, language)}</dt><dd>{t(item.description, language)}</dd></div>)}</dl></div></div>
       </Panel>
-      <section id="work" class="pro-panel pro-work" data-chapter aria-labelledby="work-title"><WorkPicker language={language} projects={pickerProjects} client:visible={{rootMargin:'400px'}} /></section>
-      {projects.map(project => <Panel section={project.id} class="pro-case">
-        <div class="pro-case__layout"><div class="pro-case__intro"><h2 class="pro-title" id={`${project.id}-title`} tabindex={-1}>{project.name}</h2><p class="pro-lead">{t(project.kind, language)}</p><p class="pro-body">{t(project.context, language)}</p>{project.image && <a class="pro-thumb" href={project.original} target="_blank" rel="noreferrer" aria-label={(id ? 'Perbesar tampilan ' : 'Enlarge preview of ') + project.name}><img src={project.thumbnail} width={440} height={Math.round(440*(project.imageHeight||860)/(project.imageWidth||1360))} alt={id ? `Tampilan ${project.name}` : `${project.name} interface preview`} loading="lazy" /><span>{id ? 'Perbesar gambar' : 'Enlarge image'}</span></a>}</div>
-        <div class="pro-case__details">
-          <div class="pro-case__group"><h3>{t(words.contribution, language)}</h3><p>{t(words.responsibility, language)}</p><p>{t(project.focus, language)}</p></div>
-          <div class="pro-case__group"><h3>{t(project.reviewTitle, language)}</h3><p>{t(project.evidence, language)}</p>{project.links.length > 0 && <ul class="pro-link-list" role="list">{project.links.map(link => <li><ExternalLink url={link.url} label={t(link.label, language)} /></li>)}</ul>}</div>
-          <div class="pro-case__group"><h3 id={`${project.id}-technology`}>{t(words.technology, language)}</h3><ul class="pro-tech-list" aria-labelledby={`${project.id}-technology`}>{project.technologies.map(technology => <li>{technology}</li>)}</ul></div>
-          <footer class="pro-case__return"><a class="pro-link" href="#work">{t(words.back, language)}</a></footer>
-        </div></div>
-      </Panel>)}
+      <section id="work" class="pro-panel pro-work" data-chapter aria-labelledby="work-title"><div class="pro-content"><WorkPicker language={language} projects={pickerProjects} client:visible={{rootMargin:'400px'}} /></div></section>
       <Panel section="experience-work" class="pro-experience-section">
         <div class="pro-split">
           <h2 class="pro-title" id="experience-work-title" tabindex={-1}>{t(words.experience, language)}</h2>
@@ -50,4 +42,5 @@ const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWid
       <Panel section="approach" class="pro-approach"><div class="pro-split"><div><h2 class="pro-title" id="approach-title" tabindex={-1}>{t(words.approach, language)}</h2><p class="pro-lead">{t(sections.approach.lead, language)}</p></div><ol class="pro-approach-list" role="list">{sections.approach.steps.map(step => <li><h3>{t(step.title, language)}</h3><p>{t(step.body, language)}</p></li>)}</ol></div></Panel>
       <Panel section="contact" class="pro-contact"><div class="pro-contact__layout"><div><h2 class="pro-title" id="contact-title" tabindex={-1}>{t(sections.contact.title, language)}</h2><p class="pro-lead">{t(sections.contact.lead, language)}</p><div class="pro-contact__email"><a class="pro-button" href="mailto:nurhabibassolihudin12@gmail.com">{t(sections.contact.email, language)}</a><a class="pro-email" href="mailto:nurhabibassolihudin12@gmail.com">nurhabibassolihudin12@gmail.com</a></div></div><aside class="pro-contact__aside" aria-labelledby="contact-profiles-title"><h3 id="contact-profiles-title">{t(sections.contact.profiles, language)}</h3><ul class="pro-contact__links" role="list"><li><ExternalLink url="https://github.com/NurHabibAssolihudin" label="GitHub" /></li><li><ExternalLink url="https://www.linkedin.com/in/nurhabib-assolihudin" label="LinkedIn" /></li></ul><p class="pro-signature">NurHabib Assolihudin</p></aside></div></Panel>
     </div>
+    <ProjectReader projects={projects} language={language}/>
   </div>

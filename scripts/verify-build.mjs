@@ -6,7 +6,7 @@ import {markupSnapshot} from './markup-snapshot.mjs';
 const root = resolve(import.meta.dirname, '..');
 const read = file => readFileSync(resolve(root, file), 'utf8');
 const creator = html => html.slice(html.indexOf('<div class="world world--creator"'), html.indexOf('</main>')).trim();
-const chapters = ['top', 'summary', 'work', 'project-orca', 'project-ocaty', 'project-oxelot', 'experience-work', 'approach', 'contact'];
+const chapters = ['top', 'summary', 'work', 'experience-work', 'approach', 'contact'];
 // Pinned before componentization: compare content, structure and links, allowing
 // only compiler whitespace and attribute-order differences.
 const creatorHashes = JSON.parse(read('scripts/creator-snapshots.json'));
@@ -14,7 +14,7 @@ let checks = 0;
 for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
   const html = read(`dist/${route}index.html`);
   assert.match(html, new RegExp(`<html[^>]*lang="${language}"`)); checks++;
-  assert.equal((html.match(/<section\b[^>]*\bdata-chapter(?=[\s=>])/g) || []).length, 9); checks++;
+  assert.equal((html.match(/<section\b[^>]*\bdata-chapter(?=[\s=>])/g) || []).length, chapters.length); checks++;
   for (const chapter of chapters) { assert.ok(html.includes(`id="${chapter}"`), `${route}: ${chapter} missing from static HTML`); checks++; }
   assert.ok(html.includes('PT Semesta Teknologi Informatika') && html.includes('mailto:nurhabibassolihudin12@gmail.com')); checks++;
   for (const match of html.matchAll(/(?:src|href)="(\/(?!\/)[^"?#]+)"/g)) {
@@ -29,6 +29,14 @@ for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
   assert.ok(!html.includes('/scenes.css') && !html.includes('.ttf'), 'Legacy scene CSS and TTF requests must not return'); checks++;
   assert.equal(createHash('sha256').update(markupSnapshot(creator(html))).digest('hex'), creatorHashes[language], `${language}: creator differs from expected content snapshot`); checks++;
   assert.ok(!html.includes('ipapi.co') && !html.includes('navigator.geolocation')); checks++;
+  assert.match(html,/<dialog[^>]+id="project-reader"/,'Project reader must use a native modal');checks++;
+}
+for(const language of ['en','id'])for(const slug of ['orca','ocaty','oxelot']){
+  const html=read(`dist/${language}/projects/${slug}/index.html`);
+  assert.match(html,/<h1[^>]*id="project-/,'Each case needs a standalone, readable title');checks++;
+  assert.ok(html.includes(`rel="canonical" href="https://nurhabibassolihudin.github.io/${language}/projects/${slug}/"`));checks++;
+  assert.ok(!html.includes('<astro-island'),'Case studies must remain readable without hydration');checks++;
+  assert.ok((html.match(/<section>/g)||[]).length>=7,'Complete case content must be in static HTML');checks++;
 }
 for (const font of ['bricolage', 'manrope']) {
   const path = resolve(root, `dist/assets/fonts/${font}.woff2`);

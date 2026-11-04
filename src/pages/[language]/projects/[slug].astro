@@ -1,0 +1,90 @@
+---
+import {projectContent} from '../../../lib/project-content';
+import ProjectStory from '../../../components/ProjectStory.astro';
+import type {Project} from '../../../data/project-types';
+import type {Locale} from '../../../data/professional';
+import {t} from '../../../data/professional';
+import '../../../styles/project-gallery.css';
+
+export async function getStaticPaths() {
+  const projects = await projectContent();
+  return ['en', 'id'].flatMap((language) =>
+    projects.map((project) => ({
+      params: {language, slug: project.id.replace('project-', '')},
+      props: {project, language}
+    }))
+  );
+}
+interface Props {
+  project: Project;
+  language: Locale;
+}
+const {project, language} = Astro.props;
+const slug = project.id.replace('project-', '');
+const canonical = `https://nurhabibassolihudin.github.io/${language}/projects/${slug}/`;
+const title = `${project.name} — ${language === 'id' ? 'Studi kasus' : 'Case study'} · NurHabib Assolihudin`;
+---
+
+<!doctype html>
+<html lang={language} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={t(project.summary, language)} />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href={`https://nurhabibassolihudin.github.io/en/projects/${slug}/`}
+    />
+    <link
+      rel="alternate"
+      hreflang="id"
+      href={`https://nurhabibassolihudin.github.io/id/projects/${slug}/`}
+    />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={t(project.summary, language)} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="article" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/assets/door.svg" />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('theme');
+        document.documentElement.dataset.theme =
+          theme === 'light' || theme === 'dark'
+            ? theme
+            : matchMedia('(prefers-color-scheme:light)').matches
+              ? 'light'
+              : 'dark';
+      } catch {}
+    </script>
+  </head>
+  <body class="project-page">
+    <header class="project-page__bar">
+      <a href={`/${language}/#work`}>
+        {language === 'id' ? 'Proyek NurHabib' : 'NurHabib’s projects'}
+      </a>
+      <nav aria-label={language === 'id' ? 'Bahasa' : 'Language'}>
+        <a
+          href={`/en/projects/${slug}/`}
+          lang="en"
+          aria-current={language === 'en' ? 'page' : undefined}
+        >
+          EN
+        </a>
+        <a
+          href={`/id/projects/${slug}/`}
+          lang="id"
+          aria-current={language === 'id' ? 'page' : undefined}
+        >
+          ID
+        </a>
+      </nav>
+    </header>
+    <main>
+      <ProjectStory project={project} language={language} standalone />
+    </main>
+  </body>
+</html>

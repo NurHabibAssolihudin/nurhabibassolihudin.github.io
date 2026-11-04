@@ -12,17 +12,31 @@ export const words = {
   contact: { en: 'Contact me', id: 'Hubungi saya' },
   summary: { en: 'About my work', id: 'Sekilas' }, work: { en: 'Selected projects', id: 'Proyek pilihan' },
   experience: { en: 'Work experience', id: 'Pengalaman kerja' }, approach: { en: 'How I work', id: 'Cara saya bekerja' },
-  view: { en: 'View selected projects', id: 'Lihat proyek pilihan' }, detail: { en: 'About this project', id: 'Tentang proyek ini' },
+  view: { en: 'View selected projects', id: 'Lihat proyek pilihan' }, detail: { en: 'Read case study', id: 'Baca studi kasus' },
   back: { en: 'Back to projects', id: 'Kembali ke daftar proyek' },
   personal: { en: 'Personal project', id: 'Proyek pribadi' },
   contribution: { en: 'My role', id: 'Peran saya' },
   technology: { en: 'Technology', id: 'Teknologi' },
   responsibility: { en: 'Personal project, developed independently.', id: 'Proyek pribadi yang saya kerjakan sendiri.' },
 };
+export const caseCopy = {
+  problem: { en: 'Problem', id: 'Masalah yang dikerjakan' },
+  role: { en: 'My role', id: 'Peran saya' },
+  system: { en: 'System design', id: 'Desain sistem' },
+  outcome: { en: 'Outcome', id: 'Hasil pengembangan' },
+  more: { en: 'Context, decisions and trade-offs', id: 'Konteks, keputusan, dan kompromi teknis' },
+  constraints: { en: 'Context and constraints', id: 'Konteks dan batasan' },
+  decisions: { en: 'Technical decisions', id: 'Keputusan teknis' },
+  tradeoffs: { en: 'Trade-offs', id: 'Kompromi teknis' },
+  learning: { en: 'What I learned', id: 'Pelajaran dari proyek ini' },
+};
 // Keep picker-only copy separate so the island does not ship all static sections.
 export const workCopy = {
-  instruction: { en: 'Select a project for its description and development details.', id: 'Pilih proyek untuk melihat deskripsi dan rincian pengembangannya.' },
+  instruction: { en: 'Pick a project. Open the story behind it.', id: 'Pilih proyek untuk membaca cerita pengembangannya.' },
   select: { en: 'Select a project', id: 'Pilih proyek' },
+  pause: { en: 'Pause movement', id: 'Jeda gerakan' },
+  resume: { en: 'Resume movement', id: 'Lanjutkan gerakan' },
+  gesture: { en: 'Drag to browse. Select a card to read.', id: 'Geser untuk memilih. Buka kartu untuk membaca.' },
 };
 // Each language is written for its readers rather than matched word for word.
 export const sections = {

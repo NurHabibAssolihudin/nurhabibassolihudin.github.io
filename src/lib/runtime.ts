@@ -2,6 +2,7 @@ import { chooseLanguage, supported } from './language.mjs';
 import { initProfessionalNavigation } from './professional-navigation';
 import { createMenuMotion } from './menu-motion';
 import {initChapterMotion} from './chapter-motion';
+import {initProjectReader} from './project-reader';
 import {decodeFragment} from './url-fragment';
 import {chapterAliases as aliases} from '../data/navigation';
 
@@ -115,6 +116,7 @@ async function startArtwork() {
 }
 initProfessionalNavigation();
 initChapterMotion();
+initProjectReader();
 root.dataset.navigationReady='true';
 artworkReady = startArtwork();
 for (const event of ['pointerover', 'focusin']) document.addEventListener(event, event => {

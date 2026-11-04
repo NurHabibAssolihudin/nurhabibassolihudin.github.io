@@ -2,10 +2,11 @@
 import Professional from '../components/Professional.astro';
 import Creator from '../components/Creator.astro';
 import { worldMarkup, type Language } from '../lib/world-markup';
-import {chapterIds,creatorIds,chapterAliases} from '../data/navigation';
+import {chapterIds,projectSectionIds,creatorIds,chapterAliases} from '../data/navigation';
 import '../styles/professional.css';
 import '../styles/chapter-motion.css';
 import '../styles/navigation.css';
+import '../styles/project-gallery.css';
 interface Props { language: Language; auto?: boolean }
 const { language, auto = false } = Astro.props;
 const id = language === 'id', markup = worldMarkup(language);
@@ -24,7 +25,7 @@ const header = markup.header.replace('<div class="bar__actions">', '<div class="
   <head>
     <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <style is:inline>@view-transition { navigation:auto; }</style>
-    <script is:inline define:vars={{professionalIds:chapterIds,creatorIds,chapterAliases}}>
+    <script is:inline define:vars={{professionalIds:[...chapterIds,...projectSectionIds],creatorIds,chapterAliases}}>
       const root=document.documentElement;
       root.classList.add('js','pro-ready');
       try{const theme=localStorage.getItem('theme');root.dataset.theme=theme==='light'||theme==='dark'?theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){}
@@ -39,13 +40,13 @@ const header = markup.header.replace('<div class="bar__actions">', '<div class="
       window.addEventListener('pagereveal',event=>{
         if(!event.viewTransition)return;
         event.viewTransition.ready.catch(()=>{});
-        const picker=document.querySelector('.pro-work__island');
+        const picker=document.querySelector('.project-gallery');
         const hash=fragment();
         const target=document.getElementById(chapterAliases[hash]||hash);
         const scroller=document.getElementById('professional-scroll');
         // Static chapters can be positioned synchronously, without waiting for React.
         if(root.dataset.navigationReady!=='true'&&root.dataset.world==='builder'&&target?.hasAttribute('data-chapter')&&scroller)scroller.scrollTo({top:target.offsetTop-scroller.offsetTop,behavior:'instant'});
-        if((root.dataset.world==='creator'&&root.dataset.navigationReady!=='true')||(hash==='work'&&picker?.dataset.pickerReady!=='true')||matchMedia('(prefers-reduced-motion: reduce)').matches)event.viewTransition.skipTransition();
+        if((root.dataset.world==='creator'&&root.dataset.navigationReady!=='true')||(hash.startsWith('project-')&&root.dataset.navigationReady!=='true')||(hash==='work'&&picker?.dataset.pickerReady!=='true')||matchMedia('(prefers-reduced-motion: reduce)').matches)event.viewTransition.skipTransition();
       });
       window.addEventListener('pageswap',event=>event.viewTransition?.ready.catch(()=>{}));
     </script>
