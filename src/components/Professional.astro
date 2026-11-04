@@ -21,7 +21,7 @@ const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWid
         </div>
       </Panel>
       <Panel section="summary" class="pro-summary">
-        <div class="pro-split"><div><h2 id="summary-title" class="pro-title" tabindex={-1}>{t(words.summary, language)}</h2><p class="pro-lead">{t(sections.summary.lead, language)}</p><p class="pro-body pro-summary__examples">{t(sections.summary.body, language)}</p><a class="pro-link" href="#experience-work">{t(sections.summary.background, language)}</a></div>
+        <div class="pro-split"><div><h2 id="summary-title" class="pro-title" tabindex={-1}>{t(words.summary, language)}</h2><p class="pro-lead">{t(sections.summary.lead, language)}</p><p class="pro-body pro-summary__examples">{t(sections.summary.body, language)}</p><a class="pro-link" href="#work">{t(sections.summary.projects, language)}</a></div>
         <div class="pro-summary__scope"><h3 id="scope-title">{t(sections.summary.scopeTitle, language)}</h3><dl class="pro-scope-list" aria-labelledby="scope-title">{sections.summary.scope.map(item => <div><dt>{t(item.name, language)}</dt><dd>{t(item.description, language)}</dd></div>)}</dl></div></div>
       </Panel>
       <section id="work" class="pro-panel pro-work" data-chapter aria-labelledby="work-title"><WorkPicker language={language} projects={pickerProjects} client:visible={{rootMargin:'400px'}} /></section>

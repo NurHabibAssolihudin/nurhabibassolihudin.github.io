@@ -54,8 +54,8 @@ Ini merupakan sintesis untuk brief pemilik. Kasus proyek yang lebih mendalam dap
 
 | Bagian lama | Masalah pada konteks portofolio | Perubahan |
 | --- | --- | --- |
-| Sekilas menonjolkan seluruh tahap yang dikerjakan sendiri | Ringkasan cakupan yang benar tetapi generik; konteks kerja dan proyek pribadi kurang mendapat tempat | Posisi R&D Developer dan perusahaan dinyatakan langsung, disusul keterangan bahwa ORCA, Ocaty dan Oxelot adalah proyek pribadi. |
-| Lingkup Produk/Teknis/Pemasaran | Mengulang tanggung jawab luas, belum membantu memahami fokus pengembangan | Fokus teknis diuraikan menjadi aplikasi web, integrasi sistem dan library. Dasarnya bidang yang sudah tercantum dalam pengantar/proyek. |
+| Sekilas menonjolkan seluruh tahap yang dikerjakan sendiri | Ringkasan cakupan yang benar tetapi generik | Menjelaskan aktivitas pengembangan aplikasi/backend, integrasi melalui API, alat bantu pengembang dan prototipe, lintas konteks pekerjaan. |
+| Lingkup Produk/Teknis/Pemasaran | Belum menjadi pengelompokan teknis yang membantu pembaca | Lingkup lebih luas: pengembangan perangkat lunak, integrasi/otomatisasi, serta riset/prototipe. Bidangnya mencakup pekerjaan yang ditunjukkan, tidak disalin satu per satu dari fitur tiga proyek. |
 | Ajakan ORCA menyatukan semuanya dalam satu tempat | Gaya product pitch, bukan penjelasan pekerjaan | Ringkasan menyebut editor dokumen, papan tugas dan kalender; detail menerangkan aplikasi web serta kemampuan self-host yang sudah tercantum sebelumnya. |
 | Paragraf peran generik di ketiga detail proyek | Mengulang branding, planning, coding, release dan marketing di setiap proyek | Kepemilikan dijelaskan singkat; paragraf kontribusi berikutnya menyebut komponen yang dikembangkan. |
 | “Coba langsung” sebagai heading | Ajakan lebih dominan daripada penanda jenis bukti | Heading menjadi “Demo”; kalimat menerangkan data contoh dan akses tanpa akun. Tombol “Buka demo” tetap merupakan aksi yang jelas. |
@@ -63,6 +63,8 @@ Ini merupakan sintesis untuk brief pemilik. Kasus proyek yang lebih mendalam dap
 | Metadata generik | Identitas dan isi dapat dijelaskan lebih spesifik | Nama lengkap/peran aktual pada title; deskripsi lokal menyebut jenis proyek, kontribusi dan pengalaman. |
 
 Ringkasan Ocaty yang sudah menjelaskan aplikasi bisnis dengan modul penjualan, CRM dan ERP tetap dipertahankan. Heading standar dan petunjuk interaksi tidak dihapus hanya karena singkat. EN dan ID mengikuti fakta yang sama, dengan susunan yang wajar pada masing-masing bahasa.
+
+Koreksi pemilik setelah revisi pertama: memasukkan jabatan/perusahaan dan keterangan “di luar pekerjaan” ke Sekilas membuatnya mengulang Pengalaman dan membatasi gambaran aktivitas. Sekilas sekarang menjelaskan apa yang dikerjakan, terlepas dari konteks pekerjaan atau proyek pribadi; jabatan/perusahaan tetap berada di Pengalaman. Kategori teknis adalah payung yang mencakup kegiatan tersebut, bukan daftar fitur persis dari ORCA, Ocaty dan Oxelot. Arah tautan Sekilas menjadi Proyek sebagai contoh pekerjaan. Dasar aktivitas diambil dari brief serta profil GitHub yang sudah ada, bukan klaim baru tentang tanggung jawab di perusahaan.
 
 ## Batas dan pemeriksaan
 

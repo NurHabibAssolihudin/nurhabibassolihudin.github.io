@@ -20,14 +20,14 @@ export const workCopy = {
 // Each language is written for its readers rather than matched word for word.
 export const sections = {
   summary: {
-    lead: { en: 'R&D Developer at PT Semesta Teknologi Informatika.', id: 'R&D Developer di PT Semesta Teknologi Informatika.' },
-    body: { en: 'Outside work, I develop ORCA, Ocaty and Oxelot as personal projects.', id: 'Di luar pekerjaan, saya mengembangkan ORCA, Ocaty, dan Oxelot sebagai proyek pribadi.' },
-    background: { en: 'View my experience', id: 'Lihat pengalaman saya' },
-    scopeTitle: { en: 'Technical focus', id: 'Fokus teknis' },
+    lead: { en: 'I develop applications and backend services, connect systems through APIs, and build tools for developers.', id: 'Saya mengembangkan aplikasi dan layanan backend, menghubungkan sistem melalui API, serta membuat alat bantu untuk pengembang.' },
+    body: { en: 'I also build prototypes to test ideas and technical approaches.', id: 'Saya juga membuat prototipe untuk menguji ide dan pendekatan teknis.' },
+    projects: { en: 'View selected projects', id: 'Lihat proyek pilihan' },
+    scopeTitle: { en: 'Technical scope', id: 'Lingkup teknis' },
     scope: [
-      { name: { en: 'Web applications', id: 'Aplikasi web' }, description: { en: 'Interfaces and backend services', id: 'Antarmuka dan layanan backend' } },
-      { name: { en: 'System integration', id: 'Integrasi sistem' }, description: { en: 'Data exchange between applications', id: 'Pertukaran data antaraplikasi' } },
-      { name: { en: 'Developer libraries', id: 'Library untuk pengembang' }, description: { en: 'Local storage and data synchronization', id: 'Penyimpanan lokal dan sinkronisasi data' } },
+      { name: { en: 'Software development', id: 'Pengembangan perangkat lunak' }, description: { en: 'Applications, backend services and developer tooling', id: 'Aplikasi, layanan backend, dan alat bantu pengembangan' } },
+      { name: { en: 'Integration and automation', id: 'Integrasi dan otomatisasi' }, description: { en: 'APIs, service communication and automated workflows', id: 'API, komunikasi antarlayanan, dan alur kerja otomatis' } },
+      { name: { en: 'Research and prototyping', id: 'Riset dan prototipe' }, description: { en: 'Experiments and evaluation of technical approaches', id: 'Eksperimen dan evaluasi pendekatan teknis' } },
     ],
   },
   experience: {
