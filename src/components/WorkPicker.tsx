@@ -43,6 +43,7 @@ export default function WorkPicker({
   const [ready, setReady] = useState(false),
     [selected, setSelected] = useState(0),
     [hovered, setHovered] = useState<number | null>(null),
+    [browsing, setBrowsing] = useState(false),
     [primary, setPrimary] = useState(1);
   const stage = useRef<HTMLDivElement>(null),
     track = useRef<HTMLDivElement>(null);
@@ -55,18 +56,55 @@ export default function WorkPicker({
     focus: false,
     reader: false,
     hidden: false,
+    browsing: false,
     reduced: false
   });
   const drag = useRef<Drag | null>(null),
     velocity = useRef(0),
     suppressClick = useRef(false);
+  const hoverIdentity = useRef<number | null>(null),
+    pointer = useRef<{x: number; y: number} | null>(null),
+    wheelTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function highlight(identity: number | null) {
+    activity.current.hover = identity !== null;
+    if (hoverIdentity.current === identity) return;
+    hoverIdentity.current = identity;
+    setHovered(identity);
+  }
+  function beginBrowsing() {
+    if (!activity.current.browsing) setBrowsing(true);
+    activity.current.browsing = true;
+    highlight(null);
+    if (stage.current) {
+      stage.current.dataset.browsing = 'true';
+      stage.current.dispatchEvent(new Event('nur:gallery-move'));
+    }
+  }
+  function finishBrowsing() {
+    if (drag.current || wheelTimer.current || Math.abs(velocity.current) > 8) return;
+    if (activity.current.browsing) setBrowsing(false);
+    activity.current.browsing = false;
+    if (stage.current) delete stage.current.dataset.browsing;
+    const point = pointer.current;
+    if (!point || activity.current.reader || activity.current.hidden) return;
+    // The track may have moved under a stationary cursor. Read the current hit
+    // once at rest instead of retaining the old card or hit-testing every frame.
+    const card = document.elementFromPoint(point.x, point.y)?.closest<HTMLElement>('[data-card-project]');
+    if (card && stage.current?.contains(card))
+      highlight(Number(card.dataset.cardCopy) * projects.length + Number(card.dataset.cardIndex));
+  }
   const normalize = (value: number) => {
     const cycle = geometry.current.cycle;
     return cycle ? -cycle + (((value % cycle) + cycle) % cycle) : value;
   };
   useEffect(() => {
     activity.current.reduced = reduce;
-    if (reduce) velocity.current = 0;
+    if (reduce) {
+      velocity.current = 0;
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
+      wheelTimer.current = null;
+      finishBrowsing();
+    }
   }, [reduce]);
   useEffect(() => {
     function restore() {
@@ -91,7 +129,7 @@ export default function WorkPicker({
     function measure() {
       const card = track.current?.querySelector<HTMLElement>('.project-card-slot');
       if (!card) return;
-      const width = card.offsetWidth,
+      const width = card.getBoundingClientRect().width,
         gap = parseFloat(getComputedStyle(card.parentElement!).columnGap) || 0,
         pitch = width + gap;
       const previousCycle = geometry.current.cycle,
@@ -126,6 +164,12 @@ export default function WorkPicker({
       const gesture = drag.current;
       drag.current = null;
       velocity.current = 0;
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
+      wheelTimer.current = null;
+      if (activity.current.browsing) setBrowsing(false);
+      activity.current.browsing = false;
+      delete element.dataset.browsing;
+      highlight(null);
       delete element.dataset.dragging;
       if (gesture && element.hasPointerCapture(gesture.id))
         element.releasePointerCapture(gesture.id);
@@ -137,8 +181,6 @@ export default function WorkPicker({
     const reader = (event: Event) => {
       activity.current.reader = (event as CustomEvent).detail.open;
       cancelDrag();
-      setHovered(null);
-      activity.current.hover = false;
     };
     const world = () => {
       activity.current.visible =
@@ -149,8 +191,15 @@ export default function WorkPicker({
     const wheel = (event: WheelEvent) => {
       if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) || activity.current.reader) return;
       event.preventDefault();
+      pointer.current = {x: event.clientX, y: event.clientY};
+      beginBrowsing();
       phase.set(normalize(phase.get() - event.deltaX));
       velocity.current = 0;
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
+      wheelTimer.current = setTimeout(() => {
+        wheelTimer.current = null;
+        finishBrowsing();
+      }, motionTiming.gallery.wheelIdle * 1000);
     };
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('nur:reader', reader);
@@ -162,6 +211,7 @@ export default function WorkPicker({
       window.removeEventListener('nur:reader', reader);
       window.removeEventListener('nur:world', world);
       element.removeEventListener('wheel', wheel);
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
     };
   }, [phase]);
   useAnimationFrame((_time, delta) => {
@@ -180,8 +230,11 @@ export default function WorkPicker({
     if (Math.abs(velocity.current) > 8) {
       phase.set(normalize(phase.get() + velocity.current * dt));
       velocity.current *= Math.exp(-dt / 0.28);
-    } else if (!state.hover && !state.focus)
-      phase.set(normalize(phase.get() - motionTiming.gallery.speed * dt));
+    } else {
+      if (state.browsing) finishBrowsing();
+      if (!state.browsing && !state.hover && !state.focus)
+        phase.set(normalize(phase.get() - motionTiming.gallery.speed * dt));
+    }
   });
   function pointerDown(event: PointerEvent<HTMLDivElement>) {
     if (event.button !== 0 || !event.isPrimary) return;
@@ -198,6 +251,7 @@ export default function WorkPicker({
     if (event.pointerType === 'mouse') event.preventDefault();
   }
   function pointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === 'mouse') pointer.current = {x: event.clientX, y: event.clientY};
     const gesture = drag.current;
     if (!gesture || gesture.id !== event.pointerId) return;
     if (!gesture.moved) {
@@ -209,6 +263,7 @@ export default function WorkPicker({
       }
       if (Math.abs(dx) < 8) return;
       gesture.moved = true;
+      beginBrowsing();
       suppressClick.current = true;
       event.currentTarget.setPointerCapture(event.pointerId);
       event.currentTarget.dataset.dragging = 'true';
@@ -238,15 +293,16 @@ export default function WorkPicker({
     delete event.currentTarget.dataset.dragging;
     if (event.currentTarget.hasPointerCapture(event.pointerId))
       event.currentTarget.releasePointerCapture(event.pointerId);
+    finishBrowsing();
   }
   function focusCard(element: HTMLAnchorElement) {
     activity.current.focus = true;
     velocity.current = 0;
     const area = stage.current;
     if (!area) return;
-    const rect = element.getBoundingClientRect(),
+    const rect = element.parentElement!.getBoundingClientRect(),
       bounds = area.getBoundingClientRect();
-    if (rect.left < bounds.left + 12 || rect.right > bounds.right - 12)
+    if (element.matches(':focus-visible') || rect.left < bounds.left + 12 || rect.right > bounds.right - 12)
       phase.set(phase.get() + bounds.left + bounds.width / 2 - (rect.left + rect.width / 2));
     area.scrollLeft = 0;
   }
@@ -298,6 +354,8 @@ export default function WorkPicker({
             onLostPointerCapture={pointerEnd}
             onPointerLeave={(event) => {
               if (!drag.current?.moved) pointerEnd(event);
+              pointer.current = null;
+              highlight(null);
             }}
             onClickCapture={(event) => {
               if (suppressClick.current) {
@@ -348,7 +406,7 @@ export default function WorkPicker({
                           initial={false}
                           animate={{transform: move}}
                           transition={
-                            reduce
+                            reduce || browsing
                               ? {duration: 0}
                               : {
                                   type: 'spring',
@@ -357,22 +415,23 @@ export default function WorkPicker({
                                 }
                           }
                           onPointerEnter={(event) => {
-                            if (event.pointerType !== 'mouse') return;
-                            setHovered(identity);
-                            activity.current.hover = true;
+                            if (event.pointerType !== 'mouse' || activity.current.browsing || drag.current?.moved) return;
+                            pointer.current = {x: event.clientX, y: event.clientY};
+                            highlight(identity);
                             void prepareProjectImage(project);
                           }}
                           onPointerLeave={(event) => {
                             if (event.pointerType !== 'mouse') return;
-                            setHovered(null);
-                            activity.current.hover = false;
+                            if (hoverIdentity.current === identity) highlight(null);
                           }}
                           onFocus={(event) => {
-                            setHovered(identity);
+                            highlight(identity);
                             focusCard(event.currentTarget);
                             void prepareProjectImage(project);
                           }}
-                          onBlur={() => setHovered(null)}
+                          onBlur={() => {
+                            if (hoverIdentity.current === identity) highlight(null);
+                          }}
                           onKeyDown={(event) => key(event, group, index)}
                           onClick={() => choose(group, index)}
                           draggable={false}

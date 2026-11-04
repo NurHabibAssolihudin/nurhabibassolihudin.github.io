@@ -29,7 +29,7 @@ export default function ProjectPointerCue({
     const card = (target: EventTarget | null) =>
       target instanceof Element ? target.closest('[data-card-project]') : null;
     function enter(event: PointerEvent) {
-      if (event.pointerType !== 'mouse' || !fine.matches || event.buttons) return;
+      if (event.pointerType !== 'mouse' || !fine.matches || event.buttons || area!.dataset.browsing) return;
       const target = card(event.target);
       if (!target || target === card(event.relatedTarget)) return;
       stop();
@@ -59,6 +59,7 @@ export default function ProjectPointerCue({
     area.addEventListener('pointerout', leave);
     area.addEventListener('pointerleave', stop);
     area.addEventListener('pointerdown', stop);
+    area.addEventListener('nur:gallery-move', stop);
     fine.addEventListener('change', stop);
     window.addEventListener('blur', stop);
     window.addEventListener('resize', stop);
@@ -73,6 +74,7 @@ export default function ProjectPointerCue({
       area.removeEventListener('pointerout', leave);
       area.removeEventListener('pointerleave', stop);
       area.removeEventListener('pointerdown', stop);
+      area.removeEventListener('nur:gallery-move', stop);
       fine.removeEventListener('change', stop);
       window.removeEventListener('blur', stop);
       window.removeEventListener('resize', stop);
