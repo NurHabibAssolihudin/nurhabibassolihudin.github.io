@@ -61,15 +61,6 @@ html.js[data-world="builder"] #experience>.foot { display:none; }
 .pro-approach-list>li::marker { font-size:var(--pro-type-body); font-weight:700; }
 .pro-approach-list h3 { margin-bottom:var(--pro-related); }
 .pro-approach-list p { font-size:var(--pro-type-body); line-height:1.6; max-width:45ch; }
-.pro-contact { background:#dce6e0; color:#13231e; }
-[data-theme="dark"] .pro-contact { background:#152722; color:#edf3ef; }
-.pro-contact__layout { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr); gap:60px; align-items:end; }
-.pro-contact .pro-lead { margin-top:24px; }
-.pro-contact__email { display:grid; justify-items:start; gap:var(--pro-related); margin-top:var(--pro-group); }
-.pro-email { display:block; width:fit-content; font-size:var(--pro-type-meta); overflow-wrap:anywhere; }
-.pro-contact__aside { display:grid; gap:16px; }
-.pro-contact__links { display:flex; flex-wrap:wrap; gap:8px 24px; }
-.pro-signature { margin-top:8px; font-size:var(--pro-type-meta); }
 .menu__preferences { display:none; }
 .bar .menu { position:absolute; right:var(--gutter); top:calc(100% + 8px); width:min(380px,calc(100vw - var(--gutter)*2)); max-height:calc(100svh - 100px); overflow:auto; padding:20px 0; }
 .bar .menu>.wrap { width:calc(100% - 40px); }
@@ -99,7 +90,7 @@ html:not(.js) [data-theme-toggle] { display:none; }
   html:not(.js) .menu[hidden] { display:block; position:static; width:100%; max-height:none; }
   html:not(.js) [data-menu],html:not(.js) .menu__preferences>[data-theme-toggle] { display:none; }
   .pro-experience { --pro-type-section:clamp(2.25rem,9vw,3rem); --pro-type-item:1.5rem; --pro-type-subheading:1.25rem; --pro-type-lead:1.25rem; --pro-type-body:1rem; --pro-group:28px; }
-  .pro-split,.pro-contact__layout { grid-template-columns:1fr; gap:28px; }
+  .pro-split { grid-template-columns:1fr; gap:28px; }
   .pro-split>div>.pro-lead { margin-top:16px; }
   .pro-hero .hero__grid { grid-template-columns:1fr; grid-template-rows:auto auto; gap:0; }
   .pro-hero .pro-hero__copy { display:contents; }
@@ -113,8 +104,6 @@ html:not(.js) [data-theme-toggle] { display:none; }
   .pro-summary__scope { gap:16px; }
   .pro-scope-list { gap:16px; }
   .pro-scope-list>div { font-size:var(--pro-type-body); }
-  .pro-contact__layout { gap:36px; }
-  .pro-contact .pro-lead { margin-top:20px; }
 }
 @media(max-height:700px) and (min-width:701px) {
   .pro-experience { --pro-type-section:clamp(2.2rem,4.5vw,3.5rem); }

@@ -3,7 +3,9 @@ import { initProfessionalNavigation } from './professional-navigation';
 import { createMenuMotion } from './menu-motion';
 import {initChapterMotion} from './chapter-motion';
 import {initProjectReader} from './project-reader';
+import {initContactForm} from './contact-form';
 import {decodeFragment} from './url-fragment';
+import {initInterfaceMotion} from './interface-motion';
 import {chapterAliases as aliases} from '../data/navigation';
 
 const root = document.documentElement, id = root.lang === 'id';
@@ -17,6 +19,7 @@ function syncThemeControls() {
   });
 }
 syncThemeControls();
+const interfaceMotion=initInterfaceMotion();
 const worlds = { builder: document.querySelector<HTMLElement>('.world--builder')!, creator: document.querySelector<HTMLElement>('.world--creator')! };
 let current: 'builder' | 'creator' = root.dataset.world === 'creator' ? 'creator' : 'builder', busy = false;
 let artworkReady: Promise<void> | null = null, creatorReady: Promise<void> | null = null;
@@ -29,9 +32,8 @@ function prepareTransit() {
   return transitReady;
 }
 function prepareCreator() {
-  const file = '/components.js';
-  if (!creatorReady) creatorReady = import(/* @vite-ignore */ file).then(() => {
-    worlds.creator.querySelectorAll<HTMLElement>('.h2').forEach(heading => heading.classList.add('is-seen'));
+  if (!creatorReady) creatorReady = import('./creator-interactions.js').then(() => {
+
   }).catch(error => { console.warn('Creator interactions could not start:', error); creatorReady = null; });
   return creatorReady;
 }
@@ -83,7 +85,7 @@ document.addEventListener('click', async event => {
   const target = event.target as Element;
   if (menuMotion.isOpen && !document.querySelector('.bar')!.contains(target)) closeMenu();
   const theme = target.closest('[data-theme-toggle]');
-  if (theme) { const next = root.dataset.theme === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; storage.save('theme', next); syncThemeControls(); }
+  if (theme) { const next = root.dataset.theme === 'dark' ? 'light' : 'dark'; interfaceMotion.changeTheme(()=>{root.dataset.theme = next; storage.save('theme', next); syncThemeControls();},event.detail===0); }
   if (target.closest('[data-menu]')) menuMotion.setOpen(!menuMotion.isOpen, event.detail === 0);
   if (target.closest('a[href^="#"]')) closeMenu();
   const cross = target.closest<HTMLButtonElement>('[data-cross]');
@@ -117,6 +119,7 @@ async function startArtwork() {
 initProfessionalNavigation();
 initChapterMotion();
 initProjectReader();
+initContactForm();
 root.dataset.navigationReady='true';
 artworkReady = startArtwork();
 for (const event of ['pointerover', 'focusin']) document.addEventListener(event, event => {

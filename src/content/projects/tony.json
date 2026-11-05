@@ -1,0 +1,92 @@
+{
+  "id": "project-tony",
+  "order": 3,
+  "name": "Tony",
+  "image": null,
+  "kind": {
+    "en": "Self-hosted AI integration",
+    "id": "Integrasi AI self-hosted"
+  },
+  "summary": {
+    "en": "A self-hosted setup around Letta Code, with container packaging, persistent state and checks for upstream changes.",
+    "id": "Penyiapan Letta Code untuk dijalankan sendiri, dengan container, penyimpanan state, dan pemeriksaan perubahan upstream."
+  },
+  "technologies": [
+    "Letta Code",
+    "Docker",
+    "Bun",
+    "TypeScript",
+    "GitHub Actions"
+  ],
+  "links": [
+    {
+      "label": {
+        "en": "View repository",
+        "id": "Lihat kode di GitHub"
+      },
+      "url": "https://github.com/NurHabibAssolihudin/Tony"
+    },
+    {
+      "label": {
+        "en": "Read integration decisions",
+        "id": "Baca keputusan integrasi"
+      },
+      "url": "https://github.com/NurHabibAssolihudin/Tony/blob/main/docs/09-adr.md"
+    },
+    {
+      "label": {
+        "en": "Read data-egress review",
+        "id": "Baca tinjauan aliran data"
+      },
+      "url": "https://github.com/NurHabibAssolihudin/Tony/blob/main/docs/13-security-audit.md"
+    }
+  ],
+  "caseStudy": {
+    "problem": {
+      "en": "Prepare an existing stateful AI agent to run on personal infrastructure, with explicit control over its runtime, stored state and upstream updates.",
+      "id": "Menyiapkan agent AI yang sudah memiliki memori agar dapat dijalankan di infrastruktur sendiri, dengan pengaturan runtime, state, dan pembaruan upstream yang jelas."
+    },
+    "role": {
+      "en": "My work covers container packaging, runtime configuration, deployment documentation and checks around the vendored engine. Letta Code supplies the agent engine, memory capabilities and CLI; these are upstream features.",
+      "id": "Pekerjaan saya mencakup pengemasan container, konfigurasi runtime, dokumentasi pemasangan, dan pemeriksaan engine yang disalin ke repo. Mesin agent, kemampuan memori, serta CLI berasal dari Letta Code."
+    },
+    "constraints": {
+      "en": "The current scope is the first self-hosted phase. A custom web interface and an additional automation engine are not part of the delivered integration. Calls to a configured cloud model still leave the host.",
+      "id": "Cakupan saat ini adalah fase awal self-hosting. UI web khusus dan engine otomatisasi tambahan belum menjadi bagian dari integrasi ini. Jika memakai model cloud, permintaan ke model tetap keluar dari server."
+    },
+    "system": {
+      "en": "A Docker image runs the vendored Letta Code source with Bun. Compose provides a workspace mount and a persistent state volume. Repository scripts check upstream version references and documented data-egress surfaces.",
+      "id": "Image Docker menjalankan source Letta Code menggunakan Bun. Compose menyediakan mount ruang kerja dan volume state yang persisten. Script repo memeriksa kesesuaian versi upstream serta jalur pengiriman data yang didokumentasikan."
+    },
+    "decisions": [
+      {
+        "title": {
+          "en": "Keep engine ownership explicit",
+          "id": "Membedakan engine dan integrasi"
+        },
+        "body": {
+          "en": "The engine remains attributed to Letta Code. Tony keeps its container, entrypoint, integration scripts and operational documentation alongside the upstream source.",
+          "id": "Atribusi engine tetap kepada Letta Code. Container, entrypoint, script integrasi, dan dokumentasi operasional Tony diletakkan berdampingan dengan source upstream."
+        }
+      },
+      {
+        "title": {
+          "en": "Make upstream changes reviewable",
+          "id": "Memeriksa perubahan upstream"
+        },
+        "body": {
+          "en": "A vendor manifest and pin checks track the engine version. An egress inventory and audit script make changes to telemetry and external destinations easier to review.",
+          "id": "Manifest vendor dan pemeriksaan pin mencatat versi engine. Inventaris aliran data dan script audit membantu meninjau perubahan telemetri serta tujuan koneksi eksternal."
+        }
+      }
+    ],
+    "tradeoffs": {
+      "en": "Vendoring provides access to engine changes but adds maintenance work. Container packaging and telemetry defaults do not by themselves guarantee an isolated runtime or prevent an agent from accessing mounted files.",
+      "id": "Menyalin source engine memudahkan penyesuaian, tetapi menambah pekerjaan pemeliharaan. Container dan pengaturan telemetri saja tidak menjamin isolasi runtime atau membatasi seluruh akses agent ke file yang di-mount."
+    },
+    "outcome": {
+      "en": "The repository provides a container setup, integration documentation and automated checks for the first self-hosted phase. Additional automation and a custom web interface remain outside the current scope.",
+      "id": "Repo menyediakan konfigurasi container, dokumentasi integrasi, dan pemeriksaan otomatis untuk fase awal self-hosting. Otomatisasi tambahan dan UI web khusus belum menjadi bagian dari cakupan saat ini."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+/* Motion owns these transforms; CSS remains the no-JS fallback. */
+.motion-interface body,.motion-interface .bar,.motion-interface .menu,.motion-interface .pro-panel { transition:none; }
+.motion-interface :is(.pro-button:not(.contact-form__send),.bar .icon,.pro-link,.pro-contact__aside a,.world--creator .btn,.world--creator .quiet) { transition:none; }
+.motion-interface .pro-button:active { transform:none; }
+.motion-interface .icon--burger span { transition:none; }
+.motion-interface .nav { position:relative; }
+.motion-nav-marker { position:absolute; left:0; top:0; width:1px; height:2px; background:currentColor; color:#c7c7cf; transform-origin:0 50%; pointer-events:none; opacity:0; }
+.motion-interface .bar .nav .nav__set a.is-current { text-decoration:none; }
+.motion-interface .pro-contact__aside a { width:fit-content; }
+.motion-interface .project-card :is(.project-card__light,.project-card__window,.project-card__sheet,.project-card__domain,.project-card__storage) { transition:none; }
+.motion-interface .has-heading-motion .heading-mask>span { transition:none!important; }
+.motion-interface .project-card__worker { animation:none!important; }

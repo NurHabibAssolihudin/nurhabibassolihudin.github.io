@@ -1,0 +1,65 @@
+---
+import {Image} from 'astro:assets';
+import Panel from './Panel.astro';
+import ExternalLink from './ExternalLink.astro';
+import ContactSend from './ContactSend';
+import ContactTopics from './ContactTopics';
+import photo from '../../assets/contact-afternoon.jpg';
+import {sections, t, type Locale} from '../data/professional';
+
+interface Props {language: Locale}
+const {language} = Astro.props;
+const copy = sections.contact;
+const topics = copy.topics[language];
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT?.trim() || '';
+if (endpoint) {
+  const url = new URL(endpoint);
+  const local = ['localhost', '127.0.0.1'].includes(url.hostname);
+  if (url.username || url.password || url.hash ||
+      (url.protocol !== 'https:' && !(url.protocol === 'http:' && local)) ||
+      (process.env.GITHUB_ACTIONS === 'true' && local))
+    throw new Error('PUBLIC_CONTACT_ENDPOINT must be a public HTTPS URL; localhost is only allowed for local development');
+}
+---
+<Panel section="contact" class="pro-contact">
+  <div class="pro-contact__layout">
+    <div class="pro-contact__room">
+      <h2 class="pro-title" id="contact-title" tabindex={-1}>{t(copy.title, language)}</h2>
+      <p class="pro-lead">{t(copy.lead, language)}</p>
+      <figure class="pro-contact__scene">
+        <Image src={photo} alt={t(copy.photoAlt, language)} widths={[480, 960, 1200]} sizes="(max-width: 700px) calc(100vw - 40px), 52vw" format="webp" quality={85} loading="lazy" decoding="async" />
+        <figcaption><a href="https://unsplash.com/photos/two-chairs-and-a-table-with-sunlight-streaming-in-EClL92YshcE" target="_blank" rel="noreferrer">Maximilian Bungart / Unsplash</a></figcaption>
+      </figure>
+    </div>
+    <div class="pro-contact__conversation">
+      <form class="contact-form" data-contact-form data-endpoint={endpoint} data-language={language} aria-labelledby="contact-title">
+        <div class="contact-form__fields">
+          <label for="contact-name">{t(copy.name, language)}<input id="contact-name" name="name" autocomplete="name" maxlength="100" required /></label>
+          <label for="contact-email">{t(copy.replyEmail, language)}<input id="contact-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required /></label>
+        </div>
+        <label for="contact-message">
+          <span class="contact-prompt" data-contact-prompt data-topics={JSON.stringify(topics)}>
+            <span>{t(copy.greeting, language)}</span>
+            <span class="visually-hidden">{' '}{t(copy.topicFallback, language)}</span>
+            <span class="contact-prompt__rotator" aria-hidden="true">
+              {topics.map(topic => <span class="contact-prompt__sizer">{topic}</span>)}
+              <ContactTopics topics={topics} client:visible={{rootMargin:'300px'}} />
+            </span>
+          </span>
+          <textarea id="contact-message" name="message" rows="4" maxlength="5000" required></textarea>
+        </label>
+        <label class="contact-form__trap" aria-hidden="true">Website<input name="website" autocomplete="off" tabindex="-1" /></label>
+        <ContactSend language={language} available={Boolean(endpoint)} client:visible={{rootMargin:'400px'}} />
+        <p class="contact-form__status" data-contact-status role="status" aria-live="polite" aria-atomic="true">{!endpoint && t(copy.unavailable, language)}</p>
+        <noscript><p>{t(copy.noScript, language)}</p></noscript>
+      </form>
+      <div class="pro-contact__aside">
+        <a class="pro-email" href="mailto:nurhabibassolihudin12@gmail.com">nurhabibassolihudin12@gmail.com</a>
+        <ul class="pro-contact__links" role="list" aria-label={t(copy.profiles, language)}>
+          <li><ExternalLink url="https://github.com/NurHabibAssolihudin" label="GitHub" /></li>
+          <li><ExternalLink url="https://www.linkedin.com/in/nurhabib-assolihudin" label="LinkedIn" /></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Panel>

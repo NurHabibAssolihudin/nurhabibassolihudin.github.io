@@ -10,7 +10,7 @@ test('reordered, missing, duplicate or unknown project IDs fail before publishin
   for (const ids of [
     [...projectSectionIds].reverse(),
     projectSectionIds.slice(1),
-    [projectSectionIds[0], projectSectionIds[0], projectSectionIds[2]],
+    projectSectionIds.map((id,index)=>index===1?projectSectionIds[0]:id),
     [...projectSectionIds, 'project-unknown']
   ])
     assert.throws(

@@ -13,7 +13,6 @@ const generated = {
   'planet.css': 'src/styles/planet.css',
   'field.js': 'src/artwork/field.js',
   'world-objects.js': 'src/artwork/world-objects.js',
-  'components.js': 'src/lib/creator-interactions.js',
 };
 const assets = ['robots.txt', 'sitemap.xml', 'assets/door.svg', 'assets/ocaty.png', 'assets/orca-workspace.png', 'assets/fonts/bricolage.woff2', 'assets/fonts/manrope.woff2', 'assets/fonts/Bricolage-OFL.txt', 'assets/fonts/Manrope-OFL.txt'];
 for (const file of assets) generated[file] = file;

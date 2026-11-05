@@ -1,6 +1,8 @@
 import { chapterIds, projectSectionIds, chapterAliases as aliases } from '../data/navigation';
 import { createWheelNavigation } from './wheel-navigation';
 import {decodeFragment} from './url-fragment';
+import {animate} from 'motion';
+import {motionEase, motionTiming} from './motion-settings';
 
 export function initProfessionalNavigation() {
   const parent = document.querySelector<HTMLElement>('.pro-experience');
@@ -13,6 +15,19 @@ export function initProfessionalNavigation() {
   let current = 0, offsets: number[] = [], readingEnds: number[] = [], width = 0, height = 0, frame = 0, disposed = false;
   let timer: ReturnType<typeof setTimeout>;
   let quietArrival=true;
+  let travel: ReturnType<typeof animate> | undefined;
+  let travelRevision = 0;
+  const originalSnap = scrollArea.style.scrollSnapType;
+  const originalBehavior = scrollArea.style.scrollBehavior;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  function stopTravel() {
+    travelRevision++;
+    travel?.stop();
+    travel = undefined;
+    scrollArea.style.scrollSnapType = originalSnap;
+    scrollArea.style.scrollBehavior = originalBehavior;
+    delete shell.dataset.travelling;
+  }
   const offset = (index: number) => offsets[index] ?? panels[index].offsetTop - scrollArea.offsetTop;
   const activate = (index: number) => { current = index; shell.dataset.active = chapterIds[index]; };
 
@@ -24,13 +39,45 @@ export function initProfessionalNavigation() {
   }
   function jump(index: number, addHistory = true, focus = false) {
     if (!panels[index]) return;
+    stopTravel();
+    const from = scrollArea.scrollTop, to = offset(index), direction = Math.sign(to - from) || 1;
     quietArrival=focus;
-    window.dispatchEvent(new CustomEvent('nur:chapter-start',{detail:{id:chapterIds[index],quiet:focus}}));
-    scrollArea.scrollTo({ top: offset(index), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches || focus ? 'instant' : 'smooth' });
+    window.dispatchEvent(new CustomEvent('nur:chapter-start',{detail:{id:chapterIds[index],quiet:focus,direction}}));
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || focus || Math.abs(to - from) < 1) {
+      scrollArea.scrollTo({top: to, behavior: 'instant'});
+      settle();
+    } else {
+      const ticket = travelRevision;
+      let revealed = false;
+      shell.dataset.travelling = chapterIds[index];
+      scrollArea.style.scrollSnapType = 'none';
+      scrollArea.style.scrollBehavior = 'auto';
+      travel = animate(from, to, {
+        duration: motionTiming.chapter.travel, ease: motionEase('--ease-in-out'),
+        onUpdate(value) {
+          if (ticket !== travelRevision) return;
+          scrollArea.scrollTop = value;
+          if (!revealed && Math.abs(value - from) / Math.abs(to - from) >= .18) {
+            revealed = true;
+            window.dispatchEvent(new CustomEvent('nur:chapter-reveal', {detail:{id:chapterIds[index]}}));
+          }
+        },
+        onComplete() {
+          if (ticket !== travelRevision) return;
+          travel = undefined;
+          scrollArea.scrollTop = to;
+          scrollArea.style.scrollSnapType = originalSnap;
+          scrollArea.style.scrollBehavior = originalBehavior;
+          delete shell.dataset.travelling;
+          settle();
+        }
+      });
+    }
     if (addHistory) history.pushState(null, '', '#' + chapterIds[index]);
     if (focus) panels[index].querySelector<HTMLElement>('h1,h2')?.focus({ preventScroll: true });
   }
   function readHash() {
+    stopTravel();
     const hash = decodeFragment(location.hash);
     const project = projectSectionIds.indexOf(hash);
     const index = chapterIds.indexOf(project >= 0 ? 'work' : aliases[hash] || hash);
@@ -63,11 +110,13 @@ export function initProfessionalNavigation() {
     // Content measurement never routes through readHash. Only a structural layout
     // change may preserve an already aligned section at its new position.
     if (viewportChanged || modeChanged) {
+      stopTravel();
       wheelNavigation.reset();
       if (aligned) scrollArea.scrollTo({ top: offset(current), behavior: 'instant' });
     }
   }
   function settle(event?: Event) {
+    if (travel) return;
     if(event && event.target !== scrollArea)return;
     if (document.documentElement.dataset.world !== 'builder' || !offsets.length) return;
     const top = scrollArea.scrollTop;
@@ -95,6 +144,7 @@ export function initProfessionalNavigation() {
     jump(index,true,event.detail===0);
   }
   function worldChange() {
+    stopTravel();
     wheelNavigation.reset();
     quietArrival=true;
     if (document.documentElement.dataset.world === 'builder') {
@@ -102,7 +152,11 @@ export function initProfessionalNavigation() {
     }
   }
   function historyChange() { quietArrival=true;wheelNavigation.reset(); measure(); readHash();window.dispatchEvent(new CustomEvent('nur:chapter',{detail:{quiet:true}})); }
-  function pointer(){quietArrival=false;}
+  function preferenceChange() {if(reduced.matches&&travel){wheelNavigation.reset();readHash();settle();}}
+  function pointer(){
+    quietArrival=false;
+    if (travel) {stopTravel(); wheelNavigation.reset(); settle();}
+  }
   function readWithinSection(delta: number) {
     if (!panels[current].classList.contains('pro-panel--flow')) return false;
     const top = scrollArea.scrollTop, start = offset(current), end = readingEnds[current];
@@ -148,12 +202,15 @@ export function initProfessionalNavigation() {
   scrollArea.addEventListener('scrollend', settle);
   scrollArea.addEventListener('wheel', wheel, { passive: false });
   scrollArea.addEventListener('pointerdown',pointer,{passive:true});
+  reduced.addEventListener('change',preferenceChange);
   document.addEventListener('click', links); document.addEventListener('keydown', keys);
   window.addEventListener('popstate', historyChange); window.addEventListener('hashchange', historyChange); window.addEventListener('nur:world', worldChange);
   const resize = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); });
   resize.observe(scrollArea); contents.forEach(content => resize.observe(content));
   document.fonts.ready.then(measure);
   return () => {
+    stopTravel();
+    reduced.removeEventListener('change',preferenceChange);
     disposed = true; clearTimeout(timer); cancelAnimationFrame(frame); resize.disconnect();
     scrollArea.removeEventListener('pointerdown',pointer);
     scrollArea.removeEventListener('scroll', scroll); scrollArea.removeEventListener('scrollend', settle); scrollArea.removeEventListener('wheel', wheel);

@@ -1,10 +1,5 @@
-/* Chapter motion reveals existing components; no decorative arrival layers. */
-:is(#summary,#work,#experience-work,#approach)[data-chapter-motion="prepared"]
-:is(.pro-summary__scope,.project-gallery__stage,.pro-employment,.pro-approach-list) {
-  clip-path:inset(0% 0% 100% 0%);
-}
-#contact[data-chapter-motion="prepared"] :is(.pro-contact__email,.pro-contact__aside) { opacity:0; }
-@media(prefers-reduced-motion:reduce) {
-  [data-chapter-motion="prepared"] :is(.pro-summary__scope,.project-gallery__stage,.pro-employment,.pro-approach-list) { clip-path:none; }
-  #contact[data-chapter-motion="prepared"] :is(.pro-contact__email,.pro-contact__aside) { opacity:1; }
+/* First visits are composed by Motion during travel. Returned sections remain still.
+   Parts are marked only after JS has captured their original inline styles. */
+@media (prefers-reduced-motion: reduce) {
+  [data-chapter-part] { opacity: 1 !important; transform: none !important; }
 }

@@ -1,8 +1,10 @@
+import {animate} from 'motion/mini';
+import {motionEase} from './motion-settings';
 /* Real controls: tool-to-project navigation, interruptible native details, section state. */
 (function(){
   'use strict';
   const root=document.documentElement,reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  const easing=getComputedStyle(root).getPropertyValue('--ease').trim();
+  const easing=motionEase();
   const widgets=document.querySelectorAll('[data-toolbox]');
   widgets.forEach(widget=>{
     const controls=[...widget.querySelectorAll('[data-tool]')],title=widget.querySelector('.toolbox__title'),links=widget.querySelector('.toolbox__links'),path=widget.querySelector('.toolbox__connection'),result=widget.querySelector('.toolbox__result');
@@ -19,7 +21,7 @@
         link.href='#'+project.id;link.textContent=project.querySelector('.panel__title,.more__name').textContent+' ';arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');link.append(arrow);item.append(link);links.append(item);
       });
       path.setAttribute('d',`M${+button.dataset.x*6} ${+button.dataset.y*4.2}Q300 340 300 210`);
-      if(interactive&&!reduced.matches){feedback?.cancel();feedback=result.animate([{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,easing});}
+      if(interactive&&!reduced.matches){feedback?.cancel();feedback=animate(result,{opacity:[.65,1],transform:['translateY(5px)','translateY(0)']},{duration:.18,ease:easing});}
     }
     controls.forEach(button=>button.addEventListener('click',()=>select(button,true)));
     reduced.addEventListener('change',()=>{if(reduced.matches)feedback?.cancel();});
@@ -41,7 +43,7 @@
       const edges=parseFloat(style.paddingTop)+parseFloat(style.paddingBottom)+parseFloat(style.borderTopWidth)+parseFloat(style.borderBottomWidth);
       const target=state.target?details.scrollHeight+parseFloat(style.borderTopWidth)+parseFloat(style.borderBottomWidth):summary.getBoundingClientRect().height+edges;
       details.style.overflow='hidden';summary.setAttribute('aria-expanded',String(state.target));
-      const animation=details.animate([{height:height+'px'},{height:target+'px'}],{duration:220,easing});state.animation=animation;
+      const animation=animate(details,{height:[height+'px',target+'px']},{duration:.28,ease:easing});state.animation=animation;
       animation.finished.then(()=>{if(state.animation===animation)settle();},()=>{});
     });
     details.addEventListener('toggle',()=>{if(!state.animation){state.target=details.open;summary.setAttribute('aria-expanded',String(details.open));}});
@@ -58,7 +60,7 @@
   });
   root.classList.add('has-components');
   if('IntersectionObserver' in window){
-    const entrances=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-seen');entrances.unobserve(entry.target);}}),{threshold:.15});headings.forEach(heading=>entrances.observe(heading));
+    const entrances=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-seen');if(!reduced.matches)animate(entry.target.querySelector('.heading-mask>span'),{transform:['translateY(110%)','translateY(0%)']},{duration:.55,ease:easing});entrances.unobserve(entry.target);}}),{threshold:.15});headings.forEach(heading=>entrances.observe(heading));
     const nav=new IntersectionObserver(entries=>{
       const visible=entries.filter(entry=>entry.isIntersecting&&entry.target.closest('.world.is-live')).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
       if(!visible.length)return;

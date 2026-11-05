@@ -436,8 +436,8 @@ export default function WorkPicker({
                           onClick={() => choose(group, index)}
                           draggable={false}
                         >
-                          <span className="project-card__light" aria-hidden="true" />
-                          <ProjectArtwork project={project} />
+                          <m.span className="project-card__light" aria-hidden="true" initial={false} animate={{opacity:active?1:0,transform:active?'translate3d(25%,0,0)':'translate3d(-24%,0,0)'}} transition={{duration:reduce||browsing?0:.64}} />
+                          <ProjectArtwork project={project} active={active} still={reduce||browsing} />
                           <div className="project-card__copy">
                             <h3 data-card-title>{project.name}</h3>
                             <p>{t(project.kind, language)}</p>

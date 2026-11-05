@@ -92,6 +92,17 @@
   background: #143b32;
   color: #e1efdc;
 }
+.project-card[data-project='project-tony'] { background:#382442; color:#f1dff3; }
+.project-card__art--tony { display:flex; align-items:center; justify-content:center; }
+.project-card__connection { position:absolute; width:210px; height:110px; border:1px solid currentColor; border-radius:50%; opacity:.35; transform:rotate(-20deg); }
+.project-card__module { position:absolute; width:132px; height:164px; padding:16px; background:#654474; border:1px solid #b693c4; transform:translate3d(-42px,-6px,0) rotate(-10deg); }
+.project-card__module:last-child { background:#e5c9ec; color:#382442; transform:translate3d(42px,6px,0) rotate(10deg); }
+.project-card__module-mark { display:block; font:700 38px/1.1 Bricolage,sans-serif; letter-spacing:-.04em; }
+.project-card__module-label { display:block; font-size:12px; margin-top:8px; }
+.project-card__module-lines { display:grid; gap:6px; margin-top:17px; }
+.project-card__module-lines i { display:block; height:3px; background:currentColor; opacity:.35; }
+.project-card__module-lines i:nth-child(2) { width:76%; }
+.project-card__module-lines i:nth-child(3) { width:58%; }
 .project-card::after {
   content: '';
   position: absolute;

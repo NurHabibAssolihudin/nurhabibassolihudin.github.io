@@ -60,8 +60,23 @@ export const sections = {
   },
   contact: {
     title: { en: "Let's talk.", id: 'Mari ngobrol.' },
-    lead: { en: 'Have a project in mind, a role to discuss, or a question about my work? Send me an email.', id: 'Ada proyek, peluang kerja, atau hal lain yang ingin dibahas? Kirim email dan ceritakan kebutuhanmu.' },
-    email: { en: 'Send me an email', id: 'Kirim email' },
+    lead: { en: 'Tell me what’s on your mind. We can take it from there.', id: 'Ceritakan apa yang sedang kamu pikirkan. Kita bisa mulai dari sana.' },
+    name: { en: 'What should I call you?', id: 'Boleh tahu namamu?' },
+    replyEmail: { en: 'Where can I email you?', id: 'Ke email mana saya membalas?' },
+    greeting: { en: 'Hi, let’s talk about', id: 'Hai, mari bicara tentang' },
+    topicFallback: { en: 'your message.', id: 'pesanmu.' },
+    topics: {
+      en: ['your next idea.', 'a project.', 'working together.', 'what’s on your mind.'],
+      id: ['ide barumu.', 'proyek berikutnya.', 'kolaborasi.', 'hal yang kamu suka.']
+    },
+    send: { en: 'Send to me', id: 'Kirim ke saya' },
+    sending: { en: 'Sending message', id: 'Mengirim pesan' },
+    sent: { en: 'Your message has been received. Thank you for sharing it with me.', id: 'Pesanmu sudah diterima. Terima kasih sudah bercerita.' },
+    failed: { en: 'Your message hasn’t gone through yet. Your words are still here; try again or send me an email.', id: 'Belum berhasil terkirim. Ceritamu masih ada di sini. Coba lagi sebentar, atau hubungi saya lewat email.' },
+    unavailable: { en: 'I can’t receive messages here just yet. You can still say hello by email.', id: 'Belum bisa mengirim lewat sini. Kamu tetap bisa menyapa saya lewat email.' },
+    limited: { en: 'Give it a few minutes, then try again. Your message is still here.', id: 'Beri jeda beberapa menit, ya. Ceritamu tetap ada di sini.' },
+    noScript: { en: 'If this form isn’t available, you can always reach me at the email below.', id: 'Kalau form ini tidak aktif, saya tetap bisa dihubungi lewat email di bawah.' },
+    photoAlt: { en: 'Two empty armchairs facing one another beside a small table, with afternoon light falling across the room.', id: 'Dua kursi kosong saling berhadapan di sisi meja kecil, dengan cahaya sore masuk ke ruangan.' },
     profiles: { en: 'Professional profiles', id: 'Profil profesional' },
   },
 };
