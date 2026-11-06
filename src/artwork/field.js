@@ -105,15 +105,17 @@
   const surface=gl?canvas:context.canvas;
   function measure(){
     const world=document.querySelector('.world.is-live')||document.querySelector('.world');
-    const orb=world.querySelector('.core').getBoundingClientRect();
-    const hero=world.querySelector('.hero').getBoundingClientRect();
-    const work=world.querySelector('.work,#work').getBoundingClientRect();
+    const core=world?.querySelector('.core'),heading=world?.querySelector('.hero');
+    if(!core||!heading){geometry.heroVisible=false;return;}
+    const orb=core.getBoundingClientRect();
+    const hero=heading.getBoundingClientRect();
+    const work=world.querySelector('.work,#work,#worlds')?.getBoundingClientRect()||{top:0,bottom:0};
     geometry.orb=[orb.left+orb.width/2,orb.top+orb.height/2,Math.max(100,orb.width*.37)];
     geometry.heroBottom=hero.bottom;
     geometry.heroVisible=hero.bottom>(document.querySelector('.bar')?.getBoundingClientRect().bottom||0)+1&&hero.top<height;
     geometry.quiet=[work.top,work.bottom];
     geometry.protect.fill(0);
-    ['.hero__h1','.hero__copy,.pro-hero .hero__lead','.hero__corecap'].forEach((selector,index)=>{
+    ['.hero__h1,.cv-wordmark','.hero__copy,.pro-hero .hero__lead,.cv-hero-bottom>p','.hero__corecap'].forEach((selector,index)=>{
       const element=world.querySelector(selector);
       if(!element)return;
       const box=element.getBoundingClientRect();

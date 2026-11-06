@@ -16,7 +16,7 @@ Node 24 is used for local verification and CI. Dependencies are pinned by `packa
 ## Editing
 
 - `src/components/Professional.astro`, `Panel.astro`: static professional sections.
-- `src/components/WorkPicker.tsx`: the only hydrated React island; loads near the selected-work section.
+- `src/components/WorkPicker.tsx`: the professional gallery React island; loads near the selected-work section.
 - `src/components/ProjectArtwork.tsx`: shared project illustrations; server rendered in case-study covers and included in the gallery island.
 - `src/components/ProjectReader.astro`, `ProjectStory.astro`, `src/lib/project-reader.ts`: native dialog, complete static case studies, and interruptible card expansion with focus/history ownership.
 - `src/lib/professional-navigation.ts`: cached section geometry, anchors, keyboard, history and gesture wiring.
@@ -70,3 +70,7 @@ The runner's `dist/` directory is temporary and Pages cannot automatically read 
 ## Shared interface motion
 
 Motion also controls the active navigation underline, staggered mobile menu and burger, interruptible theme palette/icon changes, button press feedback, card artwork/light layers, and creator accordion/tool feedback/heading entries. `src/lib/interface-motion.ts` enhances static Astro controls without extra React islands. Canvas/WebGL artwork and native dialog/scroll semantics remain specialized. See `research/motion-integration-2026-11-05.md` for the ownership boundaries and source references.
+
+## Crimson Violet
+
+The creative world is an independent cinematic/poster composition, implemented in one deferred React island under src/components/crimson/. Official React Bits BlurText and ScrollVelocity provide the wordmark and scroll-reactive ribbon. Motion owns poster/dialog/process/contact choreography. Original SVG visual studies are labelled as concept art, not game screenshots; the contact scene is original artwork, not a film clip. World-switch emblems and the professional experience remain intact. Contact uses the same accounts and an honest mailto-draft fallback until an endpoint is configured. See [the redesign record](research/crimson-violet-2026-11-05.md) for source attribution, behavior and verification limits.

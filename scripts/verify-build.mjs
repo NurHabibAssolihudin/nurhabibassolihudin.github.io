@@ -8,8 +8,8 @@ const root = resolve(import.meta.dirname, '..');
 const read = file => readFileSync(resolve(root, file), 'utf8');
 const creator = html => html.slice(html.indexOf('<div class="world world--creator"'), html.indexOf('</main>')).trim();
 const chapters = ['top', 'summary', 'work', 'experience-work', 'approach', 'contact'];
-// Pinned before componentization: compare content, structure and links, allowing
-// only compiler whitespace and attribute-order differences.
+// Reviewed creator design: pin visible SSR content, structure and links while
+// excluding Astro's volatile island compilation metadata.
 const creatorHashes = JSON.parse(read('scripts/creator-snapshots.json'));
 let checks = 0;
 for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
@@ -23,12 +23,15 @@ for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
     if (/\.[a-z\d]+$/i.test(path)) { assert.ok(existsSync(resolve(root, 'dist', path.slice(1))), `Missing build asset ${path}`); checks++; }
   }
   assert.ok(html.includes('hreflang="x-default"') && html.includes('property="og:url"')); checks++;
-  assert.equal((html.match(/<astro-island\b/g) || []).length, 3, 'Only gallery, React Bits topic and Motion send control need hydration'); checks++;
+  assert.equal((html.match(/<astro-island\b/g) || []).length, 4, 'Professional gallery/contact and the deferred Crimson Violet experience need hydration'); checks++;
   assert.ok(/srcset="[^"]+\.webp 480w[^\"]+\.webp 960w/i.test(html),'Project preview needs generated responsive WebP assets'); checks++;
   assert.match(html,/data-astro-prefetch="hover"/, 'Locale links should prefetch on intent'); checks++;
   assert.ok(/<astro-island\b[^>]*client="visible"/.test(html), 'Work picker must defer hydration until needed'); checks++;
   assert.ok(!html.includes('/scenes.css') && !html.includes('.ttf'), 'Legacy scene CSS and TTF requests must not return'); checks++;
   assert.equal(createHash('sha256').update(markupSnapshot(creator(html))).digest('hex'), creatorHashes[language], `${language}: creator differs from expected content snapshot`); checks++;
+  assert.ok(html.includes('data-crimson-experience')&&html.includes('data-creator-form'),'Crimson Violet must include its scene and contact form in SSR');checks++;
+  for(const anchor of ['ctop','worlds','craft','tools','play']){assert.ok(html.includes(`id="${anchor}"`),`Missing creator anchor ${anchor}`);checks++;}
+  assert.ok(html.includes('Original concept artwork')||html.includes('Studi visual')||html.includes('Visual study'),'Original artwork must not be presented as game screenshots');checks++;
   assert.ok(!html.includes('ipapi.co') && !html.includes('navigator.geolocation')); checks++;
   assert.match(html,/<dialog[^>]+id="project-reader"/,'Project reader must use a native modal');checks++;
   const contactStart = html.indexOf('<section id="contact"');

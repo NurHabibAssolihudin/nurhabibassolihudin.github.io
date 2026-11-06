@@ -1,5 +1,6 @@
 {
-  "sourceCommit": "b5559d54391464fad7f98a0668b9944949472a96",
-  "en": "f993e68c72a586e09f75f4214c188b7594add70822c368d0cfb14d7fe43f99fe",
-  "id": "efe7cda9d854f8a04099ff8b5f1577d00bcff05bd13ca0b88ad53047067947c1"
+  "reviewBaseCommit": "8ad8c6f",
+  "scope": "User-authorized Crimson Violet redesign, original artwork and deferred React scene; 2026-11-05",
+  "en": "3174ad24ab77dd818d1bacda88ec8863cd0215a7ca7d977e911adff6a19e7bc2",
+  "id": "0d5bb031fbe908d627bfc33cc3de0d8c0d24789056fe96375ce0003d7179ec04"
 }

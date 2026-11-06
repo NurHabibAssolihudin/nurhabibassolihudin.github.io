@@ -57,6 +57,7 @@ export function initInterfaceMotion() {
   let navFrame=0;
   window.addEventListener('scroll',()=>{if(root.dataset.world!=='creator')return;cancelAnimationFrame(navFrame);navFrame=requestAnimationFrame(sync);},{passive:true});
   const resize=()=>navigation(true);window.addEventListener('resize',resize);window.addEventListener('nur:world',sync);document.fonts.ready.then(resize);navigation(true);
+  window.addEventListener('nur:creator-section',sync);
 
   // Capture real computed palettes before/after the theme switch, including contact fields.
   const themeNodes=[...document.querySelectorAll<HTMLElement>('body,.bar,.menu,.pro-panel,.contact-form input,.contact-form textarea,.project-reader__surface')];

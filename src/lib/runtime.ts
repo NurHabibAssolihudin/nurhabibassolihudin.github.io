@@ -32,9 +32,7 @@ function prepareTransit() {
   return transitReady;
 }
 function prepareCreator() {
-  if (!creatorReady) creatorReady = import('./creator-interactions.js').then(() => {
-
-  }).catch(error => { console.warn('Creator interactions could not start:', error); creatorReady = null; });
+  if (!creatorReady) creatorReady = Promise.all([import('./creator-interactions.js'),import('../components/crimson/CreatorExperience')]).then(() => {}).catch(error => { console.warn('Creator interactions could not start:', error); creatorReady = null; });
   return creatorReady;
 }
 const menu = document.querySelector<HTMLElement>('#menu')!, menuButton = document.querySelector<HTMLButtonElement>('[data-menu]')!;
@@ -64,7 +62,8 @@ if (root.hasAttribute('data-auto-language')) {
 }
 document.querySelectorAll<HTMLAnchorElement>('[data-language]').forEach(link => link.addEventListener('click', () => { storage.save('nur-language', link.dataset.language!); link.hash = location.hash; saveWorld(); menuMotion.setOpen(false,true); window.NurTransit?.finish(); window.dispatchEvent(new Event('nur:transition-start')); }));
 try { const saved = JSON.parse(sessionStorage.getItem('nur-world-state') || '{}'); if (saved.world === 'creator') current = 'creator'; } catch {}
-function routeWorld() {
+function routeWorld(event?:Event) {
+  const previousWorld=root.dataset.world;
   const requestedHash = location.hash;
   const hash = decodeFragment(requestedHash);
   window.NurTransit?.finish();
@@ -72,10 +71,11 @@ function routeWorld() {
   const owner = document.getElementById(aliases[hash] || hash)?.closest<HTMLElement>('.world')?.dataset.world;
   if (owner === 'builder' || owner === 'creator') {
     setWorld(owner);
+    if(previousWorld!==owner)window.dispatchEvent(new Event('nur:world'));
     if (artworkReady) artworkReady.then(() => window.NurPlanet?.prepare(owner));
     if (owner === 'creator') prepareCreator();
   }
-  if (owner === 'creator') requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'instant' }));
+  if (owner === 'creator'&&(!event||previousWorld!==owner)) requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'instant' }));
   saveWorld();
 }
 setWorld(current); routeWorld();

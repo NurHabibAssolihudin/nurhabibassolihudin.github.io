@@ -21,12 +21,12 @@ export const creatorCopy = {
       "id": "Kembali ke dunia profesional"
     },
     "caption": {
-      "en": "Web projects.",
-      "id": "Proyek web."
+      "en": "The other side:",
+      "id": "Sisi lainnya:"
     },
     "open": {
-      "en": "Open software work ↗",
-      "id": "Buka proyek web ↗"
+      "en": "NurHabib",
+      "id": "NurHabib"
     }
   },
   "work": {

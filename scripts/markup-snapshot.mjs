@@ -12,7 +12,9 @@ export function markupSnapshot(html) {
     const [,closing,name,rest]=tag;
     if(closing){tokens.push(['close',name.toLowerCase()]);continue;}
     const attrs=[...rest.matchAll(/([^\s=/'"<>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g)].map(([,key,a,b,c])=>[key.toLowerCase(),decode(a??b??c??'').replace(/\s+/g,' ').trim()]).sort(([a],[b])=>a.localeCompare(b));
-    tokens.push(['open',name.toLowerCase(),attrs]);
+    // The visible SSR content remains pinned. Astro's compiled chunk URLs,
+    // serialized props and UID are build/configuration details, not content.
+    tokens.push(['open',name.toLowerCase(),name.toLowerCase()==='astro-island'?attrs.filter(([key])=>key==='client'):attrs]);
   }
   return JSON.stringify(tokens);
 }
