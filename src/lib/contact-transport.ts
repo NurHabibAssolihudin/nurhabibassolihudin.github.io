@@ -1,49 +1,48 @@
-interface Turnstile {
-  render(container:HTMLElement,options:Record<string,unknown>):string;
-  execute(id:string):void;
-  remove(id:string):void;
+type Draft={at:number;key:string;payload:Record<string,string>;returnTo:string};
+const ttl=15*60*1000;
+function hostedEndpoint(endpoint:string){
+  const url=new URL(endpoint);
+  url.pathname=url.pathname.replace(/^\/v1\/forms\/([^/]+)\/messages$/,'/f/$1');
+  if(!/^\/f\/[a-f0-9-]{36}$/.test(url.pathname)||url.username||url.password||url.search||url.hash||!(url.protocol==='https:'||(url.protocol==='http:'&&['localhost','127.0.0.1'].includes(url.hostname))))throw Error('invalid_endpoint');
+  return url;
 }
-let loading:Promise<Turnstile>|undefined;
-function loadTurnstile():Promise<Turnstile>{
-  const api=()=> (window as Window & {turnstile?:Turnstile}).turnstile;
-  if(api())return Promise.resolve(api()!);
-  if(!loading)loading=new Promise<Turnstile>((resolve,reject)=>{
-    const script=document.createElement('script');
-    script.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';script.async=true;
-    const timer=setTimeout(()=>{script.remove();reject(new Error('verification_timeout'));},20000);
-    script.onload=()=>{clearTimeout(timer);api()?resolve(api()!):reject(new Error('verification_unavailable'));};
-    script.onerror=()=>{clearTimeout(timer);script.remove();reject(new Error('verification_unavailable'));};
-    document.head.append(script);
-  }).catch(error=>{loading=undefined;throw error;});
-  return loading;
-}
-async function challenge(form:HTMLFormElement,formId:string,signal?:AbortSignal){
-  const sitekey=import.meta.env.PUBLIC_CONTACT_TURNSTILE_SITE_KEY?.trim();
-  if(!sitekey)throw new Error('verification_not_configured');
-  const api=await loadTurnstile();signal?.throwIfAborted();
-  const host=document.createElement('div');host.className='contact-verification';
-  host.setAttribute('aria-label','Cloudflare verification');form.append(host);
-  return new Promise<string>((resolve,reject)=>{
-    let widget:string|undefined,finished=false;
-    const finish=(token?:string)=>{if(finished)return;finished=true;clearTimeout(timer);signal?.removeEventListener('abort',cancel);if(widget)api.remove(widget);host.remove();token?resolve(token):reject(new Error('verification_failed'));};
-    const cancel=()=>finish();
-    const timer=setTimeout(cancel,120000);
-    signal?.addEventListener('abort',cancel,{once:true});
-    try{widget=api.render(host,{sitekey,action:'sendme',cData:formId,execution:'execute',appearance:'interaction-only',size:'flexible',callback:(token:string)=>finish(token),'error-callback':()=>{finish();return true;},'expired-callback':cancel,'timeout-callback':cancel});api.execute(widget);}catch{finish();}
-  });
-}
-const receipts=new WeakMap<HTMLFormElement,{fingerprint:string;key:string}>();
-/** Both worlds use the same public Sendme protocol; no private key reaches the browser. */
+const storageKey=(endpoint:string,fragment:string)=>'sendme-draft:'+hostedEndpoint(endpoint).href+':'+fragment;
+const read=(key:string):Draft|undefined=>{try{const value=JSON.parse(sessionStorage.getItem(key)||'null');if(value&&Number.isFinite(value.at)&&value.at<=Date.now()&&value.at>Date.now()-ttl&&value.payload&&typeof value.key==='string')return value;sessionStorage.removeItem(key);}catch{}return undefined;};
+/** Native top-level navigation: customer sites never mount a Turnstile widget. */
 export async function sendContact(form:HTMLFormElement,endpoint:string,payload:Record<string,string>,signal?:AbortSignal){
-  const formId=new URL(endpoint).pathname.match(/^\/v1\/forms\/([^/]+)\/messages$/)?.[1];
-  const fingerprint=JSON.stringify([endpoint,payload]);
-  let receipt=receipts.get(form);
-  if(!receipt||receipt.fingerprint!==fingerprint){receipt={fingerprint,key:crypto.randomUUID()};receipts.set(form,receipt);}
-  const token=formId?await challenge(form,formId,signal):undefined;
-  const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},credentials:'omit',referrerPolicy:'origin',signal:signal?AbortSignal.any([signal,AbortSignal.timeout(15000)]):AbortSignal.timeout(15000),body:JSON.stringify({...payload,...(formId?{turnstileToken:token,_submissionId:receipt.key}:{})})});
-  const result:unknown=await response.json();
-  const ok=response.ok&&typeof result==='object'&&result!==null&&'ok'in result&&result.ok===true;
-  if(ok)receipts.delete(form);
-  return {ok,status:response.status};
+  signal?.throwIfAborted();
+  const url=hostedEndpoint(endpoint),fragment=form.hasAttribute('data-creator-form')?'#play':'#contact';
+  const back=new URL(location.href);back.search='';back.hash=fragment;
+  const storage=storageKey(endpoint,fragment),previous=read(storage);
+  const key=previous&&JSON.stringify(previous.payload)===JSON.stringify(payload)?previous.key:crypto.randomUUID();
+  try{sessionStorage.setItem(storage,JSON.stringify({at:Date.now(),key,payload,returnTo:back.href}));}catch{}
+  const transport=document.createElement('form');transport.method='POST';transport.action=url.href;transport.hidden=true;
+  for(const [name,value] of Object.entries({...payload,_submissionId:key,_returnTo:back.href})){
+    const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;transport.append(input);
+  }
+  document.body.append(transport);HTMLFormElement.prototype.submit.call(transport);
+  return {ok:false,status:0,navigating:true};
 }
-
+/** A URL parameter alone cannot show success. */
+export async function resumeContact(form:HTMLFormElement,endpoint:string):Promise<'accepted'|'draft'|undefined>{
+  const fragment=form.hasAttribute('data-creator-form')?'#play':'#contact',key=storageKey(endpoint,fragment),draft=read(key);
+  const here=new URL(location.href),receipt=here.searchParams.get('__sendme');
+  if(here.hash!==fragment)return;
+  for(const [name,value] of Object.entries(draft?.payload??{})){
+    const field=form.elements.namedItem(name);
+    if((field instanceof HTMLInputElement||field instanceof HTMLTextAreaElement)&&!field.value)field.value=value;
+  }
+  if(!receipt)return draft?'draft':undefined;
+  here.searchParams.delete('__sendme');history.replaceState(history.state,'',here.href);
+  const match=/^([a-f0-9-]{36})\.(sm_[a-f0-9]{64})$/.exec(receipt);
+  if(!match)return 'draft';
+  try{
+    const response=await fetch(new URL('/api/submission-receipts/'+match[1],hostedEndpoint(endpoint)),{headers:{'X-Sendme-Receipt':match[2]},credentials:'omit',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(10000)});
+    const result=await response.json();
+    if(response.ok&&result.ok===true&&result.accepted===true&&result.formId===hostedEndpoint(endpoint).pathname.split('/').pop()){
+      if(draft&&Object.entries(draft.payload).filter(([name])=>['name','email','message'].includes(name)).every(([name,value])=>(form.elements.namedItem(name) as HTMLInputElement|null)?.value===value))form.reset();
+      try{sessionStorage.removeItem(key);}catch{}return 'accepted';
+    }
+  }catch{}
+  return 'draft';
+}

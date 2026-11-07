@@ -1,4 +1,4 @@
-import {sendContact} from '../../lib/contact-transport';
+import {sendContact,resumeContact} from '../../lib/contact-transport';
 import {useEffect,useRef,useState,type SubmitEvent} from 'react';
 import {AnimatePresence,motion,useInView} from 'motion/react';
 import Confrontation from './Confrontation';
@@ -12,6 +12,7 @@ export default function CreatorContact({language,endpoint,still,active}:{languag
   const [shot,setShot]=useState(0),[state,setState]=useState<'idle'|'sending'|'sent'|'error'|'draft'>('idle'),[draft,setDraft]=useState('');
   const [ready,setReady]=useState(false);
   useEffect(()=>{alive.current=true;setReady(true);return()=>{alive.current=false;abort.current?.abort();};},[]);
+  useEffect(()=>{const resume=()=>{busy.current=false;if(!endpoint||!form.current)return;setState('idle');void resumeContact(form.current,endpoint).then(result=>{if(alive.current&&result)setState(result==='accepted'?'sent':'error');});};resume();const show=(event:PageTransitionEvent)=>{if(event.persisted)resume();};window.addEventListener('pageshow',show);return()=>window.removeEventListener('pageshow',show);},[endpoint]);
   async function submit(event:SubmitEvent<HTMLFormElement>){
     event.preventDefault();if(busy.current||!form.current?.reportValidity())return;
     const node=form.current,fields=new FormData(node);
@@ -25,6 +26,7 @@ export default function CreatorContact({language,endpoint,still,active}:{languag
 
       try{
         const result=await sendContact(node,endpoint,{...snapshot,website:'',language},controller.signal);
+        if(result.navigating)return;
         outcome=result.ok?'sent':'error';
       }catch{outcome='error';}finally{abort.current=null;}
     }else{

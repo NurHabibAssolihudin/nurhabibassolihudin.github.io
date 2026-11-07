@@ -2,24 +2,42 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {stripTypeScriptTypes} from 'node:module';
-const source=readFileSync(new URL('../src/lib/contact-transport.ts',import.meta.url),'utf8').replace('import.meta.env.PUBLIC_CONTACT_TURNSTILE_SITE_KEY',"'test-public-key'");
-const {sendContact}=await import('data:text/javascript;base64,'+Buffer.from(stripTypeScriptTypes(source)).toString('base64'));
-test('Sendme uses fresh challenges and keeps the receipt for unchanged failed retries',async()=>{
-  const originals={window:globalThis.window,document:globalThis.document,fetch:globalThis.fetch};
-  let options,token=0,status=502;const requests=[];
-  globalThis.window={turnstile:{render:(_,value)=>{options=value;return 'widget';},execute:()=>queueMicrotask(()=>options.callback('token-'+ ++token)),remove:()=>{}}};
-  globalThis.document={createElement:()=>({setAttribute(){},remove(){}})};
-  globalThis.fetch=async(url,init)=>{requests.push({url,body:JSON.parse(init.body)});return new Response(JSON.stringify({ok:status===202}),{status});};
+const source=readFileSync(new URL('../src/lib/contact-transport.ts',import.meta.url),'utf8');
+const {sendContact,resumeContact}=await import('data:text/javascript;base64,'+Buffer.from(stripTypeScriptTypes(source)).toString('base64'));
+test('hosted handoff preserves unchanged draft key without loading customer Turnstile',async()=>{
+  const names=['document','location','sessionStorage','HTMLFormElement','HTMLInputElement','HTMLTextAreaElement','history','fetch'];
+  const original=Object.fromEntries(names.map(name=>[name,globalThis[name]]));
+  const stored=new Map(),posted=[];
+  class Input{value='';name='';type='';}class Textarea extends Input{}
+  class Form{children=[];append(input){this.children.push(input);}submit(){posted.push({action:this.action,fields:Object.fromEntries(this.children.map(i=>[i.name,i.value]))});}}
+  globalThis.HTMLFormElement=Form;globalThis.HTMLInputElement=Input;globalThis.HTMLTextAreaElement=Textarea;
+  globalThis.document={createElement:tag=>tag==='form'?new Form():new Input(),body:{append(){}}};
+  globalThis.location={href:'https://portfolio.example/id/?utm_source=campaign#contact'};
+  globalThis.sessionStorage={getItem:key=>stored.get(key),setItem:(key,value)=>stored.set(key,value),removeItem:key=>stored.delete(key)};
   try{
-    const form={append(){}},endpoint='http://127.0.0.1:8787/v1/forms/example/messages',payload={name:'QA',email:'qa@example.net',message:'hello'};
-    assert.equal((await sendContact(form,endpoint,payload)).ok,false);
-    status=202;assert.equal((await sendContact(form,endpoint,payload)).ok,true);
-    assert.equal(options.action,'sendme');assert.equal(options.cData,'example');
-    assert.equal(requests[0].body._submissionId,requests[1].body._submissionId);
-    assert.notEqual(requests[0].body.turnstileToken,requests[1].body.turnstileToken);
+    const endpoint='https://sendme.example/v1/forms/12345678-1234-1234-1234-123456789abc/messages';
+    const form={hasAttribute:()=>false},payload={name:'QA',email:'qa@example.net',message:'hello'};
+    assert.equal((await sendContact(form,endpoint,payload)).navigating,true);
+    await sendContact(form,endpoint,payload);
+    assert.equal(posted[0].action,'https://sendme.example/f/12345678-1234-1234-1234-123456789abc');
+    assert.equal(posted[0].fields._submissionId,posted[1].fields._submissionId);
+    assert.equal(posted[0].fields._returnTo,'https://portfolio.example/id/#contact');
+    assert.equal('turnstileToken' in posted[0].fields,false);
     await sendContact(form,endpoint,{...payload,message:'changed'});
-    assert.notEqual(requests[1].body._submissionId,requests[2].body._submissionId);
-    status=200;globalThis.fetch=async()=>new Response(JSON.stringify({ok:false}),{status});
-    assert.equal((await sendContact(form,endpoint,payload)).ok,false);
-  }finally{for(const [key,value] of Object.entries(originals)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}}
+    assert.notEqual(posted[1].fields._submissionId,posted[2].fields._submissionId);
+    const inputs=Object.fromEntries(Object.entries({...payload,message:'changed'}).map(([k,v])=>{const i=new Input();i.value=v;return[k,i];}));
+    const returning={...form,elements:{namedItem:name=>inputs[name]},reset(){throw Error('must not reset unverified receipt');}};
+    location.href='https://portfolio.example/id/?__sendme=12345678-1234-1234-1234-123456789abc.sm_'+'a'.repeat(64)+'#contact';
+    globalThis.history={state:null,replaceState(){}};globalThis.fetch=async()=>new Response(JSON.stringify({ok:false}),{status:403});
+    assert.equal(await resumeContact(returning,endpoint),'draft');
+    assert.equal(inputs.message.value,'changed');
+    globalThis.fetch=async()=>new Response(JSON.stringify({ok:true,accepted:true,formId:'another-form'}));
+    assert.equal(await resumeContact(returning,endpoint),'draft');
+    let reset=0;returning.reset=()=>{reset++;};
+    globalThis.fetch=async()=>new Response(JSON.stringify({ok:true,accepted:true,formId:'12345678-1234-1234-1234-123456789abc'}));
+    assert.equal(await resumeContact(returning,endpoint),'accepted');assert.equal(reset,1);assert.equal(stored.size,0);
+    // A blocked storage API does not prevent server-verified status confirmation.
+    globalThis.sessionStorage={getItem(){throw Error('blocked');},removeItem(){throw Error('blocked');}};
+    assert.equal(await resumeContact(returning,endpoint),'accepted');
+  }finally{for(const [name,value] of Object.entries(original)){if(value===undefined)delete globalThis[name];else globalThis[name]=value;}}
 });

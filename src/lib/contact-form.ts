@@ -1,4 +1,4 @@
-import {sendContact} from './contact-transport';
+import {sendContact,resumeContact} from './contact-transport';
 import {sections,t,type Locale} from '../data/professional';
 
 export function initContactForm() {
@@ -10,6 +10,9 @@ export function initContactForm() {
   const language:Locale=form.dataset.language==='id'?'id':'en';
   const copy=sections.contact;
   if(!endpoint)return;
+  const resume=()=>resumeContact(form,endpoint).then(result=>{if(result==='accepted'){status.textContent=t(copy.sent,language);form.dataset.state='sent';}else if(result==='draft'){status.textContent=language==='id'?'Isianmu dipulihkan. Pengiriman belum dikonfirmasi.':'Your draft is restored. Sending has not been confirmed.';}});
+  void resume();
+  window.addEventListener('pageshow',event=>{if(event.persisted){pending=false;form.removeAttribute('aria-busy');void resume();}});
   let pending=false,keyboard=false;
   form.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')keyboard=true;});
   form.addEventListener('pointerdown',()=>{keyboard=false;});
@@ -22,6 +25,7 @@ export function initContactForm() {
     const fields=new FormData(form);
     try{
       const result=await sendContact(form,endpoint,{name:String(fields.get('name')||'').trim(),email:String(fields.get('email')||'').trim(),message:String(fields.get('message')||'').trim(),website:String(fields.get('website')||''),language});
+      if(result.navigating)return;
       if(!result.ok){status.textContent=t(result.status===429?copy.limited:copy.failed,language);publish('error');return;}
       const latest=new FormData(form);
       if(['name','email','message'].every(field=>latest.get(field)===fields.get(field)))form.reset();
