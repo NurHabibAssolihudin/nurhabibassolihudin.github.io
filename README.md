@@ -74,3 +74,9 @@ Motion also controls the active navigation underline, staggered mobile menu and 
 ## Crimson Violet
 
 The creative world is an independent cinematic/poster composition, implemented in one deferred React island under src/components/crimson/. Official React Bits BlurText and ScrollVelocity provide the wordmark and scroll-reactive ribbon. Motion owns poster/dialog/process/contact choreography. Original SVG visual studies are labelled as concept art, not game screenshots; the contact scene is original artwork, not a film clip. World-switch emblems and the professional experience remain intact. Contact uses the same accounts and an honest mailto-draft fallback until an endpoint is configured. See [the redesign record](research/crimson-violet-2026-11-05.md) for source attribution, behavior and verification limits.
+
+### Sendme contact transport
+
+Both contact forms share `src/lib/contact-transport.ts`. Set `PUBLIC_CONTACT_ENDPOINT` and `PUBLIC_CONTACT_TURNSTILE_SITE_KEY` in ignored `.env.local`, then rebuild. Sendme URLs use a fresh Turnstile challenge (`action=sendme`, `cData=formId`) per attempt and retain `_submissionId` for unchanged retries. Register the exact portfolio origin in Sendme and its hostname in the Turnstile widget. Local testing uses `http://localhost:3000`; keep localhost endpoints out of production builds. The public site key is not a secret; private form/provider keys must never be shipped to the browser. Turnstile loads only when a valid form is submitted. See https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/.
+
+Production uses the public endpoint and site key in .env.production; GitHub Actions builds from that file. Both values are public configuration. Use .env.local for local overrides (never secrets in PUBLIC_ variables).

@@ -1,3 +1,4 @@
+import {sendContact} from '../../lib/contact-transport';
 import {useEffect,useRef,useState,type SubmitEvent} from 'react';
 import {AnimatePresence,motion,useInView} from 'motion/react';
 import Confrontation from './Confrontation';
@@ -21,12 +22,11 @@ export default function CreatorContact({language,endpoint,still,active}:{languag
     let outcome:'sent'|'error'|'draft'='draft';
     if(endpoint){
       const controller=new AbortController();abort.current=controller;
-      const timeout=setTimeout(()=>controller.abort(),15000);
+
       try{
-        const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...snapshot,website:'',language}),signal:controller.signal,credentials:'omit',referrerPolicy:'origin'});
-        const result:unknown=await response.json();
-        outcome=response.ok&&typeof result==='object'&&result!==null&&'ok' in result&&result.ok===true?'sent':'error';
-      }catch{outcome='error';}finally{clearTimeout(timeout);abort.current=null;}
+        const result=await sendContact(node,endpoint,{...snapshot,website:'',language},controller.signal);
+        outcome=result.ok?'sent':'error';
+      }catch{outcome='error';}finally{abort.current=null;}
     }else{
       setDraft(`mailto:${email}?subject=${encodeURIComponent('Crimson Violet — '+snapshot.name)}&body=${encodeURIComponent(`${snapshot.message}\n\n${snapshot.name}\n${snapshot.email}`)}`);
     }

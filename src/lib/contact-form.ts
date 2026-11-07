@@ -1,3 +1,4 @@
+import {sendContact} from './contact-transport';
 import {sections,t,type Locale} from '../data/professional';
 
 export function initContactForm() {
@@ -20,9 +21,8 @@ export function initContactForm() {
     publish('sending');status.textContent=t(copy.sending,language);
     const fields=new FormData(form);
     try{
-      const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},credentials:'omit',referrerPolicy:'origin',signal:AbortSignal.timeout(15000),body:JSON.stringify({name:String(fields.get('name')||'').trim(),email:String(fields.get('email')||'').trim(),message:String(fields.get('message')||'').trim(),website:String(fields.get('website')||''),language})});
-      const result:unknown=await response.json();
-      if(!response.ok||!result||typeof result!=='object'||!('ok'in result)||result.ok!==true){status.textContent=t(response.status===429?copy.limited:copy.failed,language);publish('error');return;}
+      const result=await sendContact(form,endpoint,{name:String(fields.get('name')||'').trim(),email:String(fields.get('email')||'').trim(),message:String(fields.get('message')||'').trim(),website:String(fields.get('website')||''),language});
+      if(!result.ok){status.textContent=t(result.status===429?copy.limited:copy.failed,language);publish('error');return;}
       const latest=new FormData(form);
       if(['name','email','message'].every(field=>latest.get(field)===fields.get(field)))form.reset();
       status.textContent=t(copy.sent,language);publish('sent');
