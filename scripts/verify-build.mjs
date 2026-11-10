@@ -12,6 +12,20 @@ const chapters = ['top', 'summary', 'work', 'experience-work', 'approach', 'cont
 // excluding Astro's volatile island compilation metadata.
 const creatorHashes = JSON.parse(read('scripts/creator-snapshots.json'));
 let checks = 0;
+const sitemap = read('dist/sitemap.xml');
+assert.match(sitemap, /xmlns:xhtml="http:\/\/www\.w3\.org\/1999\/xhtml"/); checks++;
+const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+const expectedUrls = ['/', '/en/', '/id/', ...['en', 'id'].flatMap(language => projectSectionIds.map(id => `/${language}/projects/${id.replace('project-', '')}/`))]
+  .map(path => `https://nurhabibassolihudin.github.io${path}`);
+assert.deepEqual([...sitemapUrls].sort(), expectedUrls.sort(), 'Sitemap must list every canonical public page exactly once'); checks++;
+for (const entry of sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+  for (const language of ['en', 'id', 'x-default']) {
+    assert.ok(entry[1].includes(`hreflang="${language}"`), 'Every sitemap URL needs reciprocal language alternatives'); checks++;
+  }
+  const url = new URL(entry[1].match(/<loc>([^<]+)<\/loc>/)[1]);
+  assert.ok(existsSync(resolve(root, `dist/${url.pathname.slice(1)}index.html`)), 'Sitemap URL must exist in the static build'); checks++;
+}
+assert.ok(read('dist/robots.txt').includes('Sitemap: https://nurhabibassolihudin.github.io/sitemap.xml')); checks++;
 for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
   const html = read(`dist/${route}index.html`);
   assert.match(html, new RegExp(`<html[^>]*lang="${language}"`)); checks++;

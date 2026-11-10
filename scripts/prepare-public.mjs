@@ -14,7 +14,7 @@ const generated = {
   'field.js': 'src/artwork/field.js',
   'world-objects.js': 'src/artwork/world-objects.js',
 };
-const assets = ['robots.txt', 'sitemap.xml', 'assets/door.svg', 'assets/ocaty.png', 'assets/orca-workspace.png', 'assets/fonts/bricolage.woff2', 'assets/fonts/manrope.woff2', 'assets/fonts/Bricolage-OFL.txt', 'assets/fonts/Manrope-OFL.txt'];
+const assets = ['robots.txt', 'assets/door.svg', 'assets/ocaty.png', 'assets/orca-workspace.png', 'assets/fonts/bricolage.woff2', 'assets/fonts/manrope.woff2', 'assets/fonts/Bricolage-OFL.txt', 'assets/fonts/Manrope-OFL.txt'];
 for (const file of assets) generated[file] = file;
 for (const [file, source] of Object.entries(generated)) {
   const destination = resolve(output, file);
