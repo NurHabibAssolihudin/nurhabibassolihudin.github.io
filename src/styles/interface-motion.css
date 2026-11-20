@@ -7,6 +7,6 @@
 .motion-nav-marker { position:absolute; left:0; top:0; width:1px; height:2px; background:currentColor; color:#c7c7cf; transform-origin:0 50%; pointer-events:none; opacity:0; }
 .motion-interface .bar .nav .nav__set a.is-current { text-decoration:none; }
 .motion-interface .pro-contact__aside a { width:fit-content; }
-.motion-interface .project-card :is(.project-card__light,.project-card__window,.project-card__sheet,.project-card__domain,.project-card__storage) { transition:none; }
+.motion-interface .project-card :is(.project-card__domain,.project-card__storage) { transition:none; }
 .motion-interface .has-heading-motion .heading-mask>span { transition:none!important; }
 .motion-interface .project-card__worker { animation:none!important; }

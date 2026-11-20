@@ -38,7 +38,7 @@ export function initChapterMotion() {
     const rect = panel.getBoundingClientRect(), viewport = scroller!.getBoundingClientRect();
     if (!visible && rect.bottom > viewport.top + 1 && rect.top < viewport.bottom - 1) return;
     const selectors: Record<string,string> = {
-      top: '.pro-hero__copy,.pro-portal',
+      top: '.pro-hero__heading,.pro-hero__copy,.pro-portal',
       summary: '.pro-summary .pro-split>div:first-child,.pro-summary__scope',
       // The Astro wrapper owns entry motion. React owns card/gallery styles;
       // hydration or the first hover must not overwrite an entrance frame.

@@ -17,7 +17,7 @@ export default function ProjectArtwork({project,active,still=false}: {project: P
   if (project.id === 'project-orca')
     return (
       <div className="project-card__art project-card__art--orca" aria-hidden="true">
-        <m.div className="project-card__window" initial={false} animate={active===undefined?undefined:{transform:active?'translate3d(-7px,-5px,20px) rotate(-10deg) rotateY(-7deg)':'rotate(-7deg) rotateY(-12deg)'}} transition={transition}>
+        <div className="project-card__window">
           {project.image && (
             <img
               src={project.image}
@@ -30,7 +30,7 @@ export default function ProjectArtwork({project,active,still=false}: {project: P
               loading="lazy"
             />
           )}
-        </m.div>
+        </div>
         <i className="project-card__sheet" />
         <m.i className="project-card__sheet" initial={false} animate={active===undefined?undefined:{transform:active?'translate3d(10px,5px,0) rotate(19deg)':'rotate(13deg)'}} transition={transition} />
       </div>

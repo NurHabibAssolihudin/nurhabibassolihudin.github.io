@@ -377,16 +377,8 @@ export default function WorkPicker({
                   aria-hidden={group !== primary ? true : undefined}
                 >
                   {projects.map((project, index) => {
-                    const identity = group * projects.length + index,
-                      distance = hovered === null ? 99 : identity - hovered,
-                      active = distance === 0;
-                    const move = reduce
-                      ? 'translate3d(0,0,0) scale(1)'
-                      : active
-                        ? 'translate3d(0,-16px,0) scale(1.09)'
-                        : Math.abs(distance) === 1
-                          ? `translate3d(${distance * 24}px,6px,0) scale(.97)`
-                          : 'translate3d(0,0,0) scale(1)';
+                    const identity = group * projects.length + index;
+                    const active = hovered === identity;
                     return (
                       <div
                         className="project-card-slot"
@@ -404,16 +396,6 @@ export default function WorkPicker({
                           data-selected={selected === index}
                           tabIndex={group === primary ? 0 : -1}
                           initial={false}
-                          animate={{transform: move}}
-                          transition={
-                            reduce || browsing
-                              ? {duration: 0}
-                              : {
-                                  type: 'spring',
-                                  duration: motionTiming.gallery.hover,
-                                  bounce: 0.12
-                                }
-                          }
                           onPointerEnter={(event) => {
                             if (event.pointerType !== 'mouse' || activity.current.browsing || drag.current?.moved) return;
                             pointer.current = {x: event.clientX, y: event.clientY};
@@ -436,11 +418,10 @@ export default function WorkPicker({
                           onClick={() => choose(group, index)}
                           draggable={false}
                         >
-                          <m.span className="project-card__light" aria-hidden="true" initial={false} animate={{opacity:active?1:0,transform:active?'translate3d(25%,0,0)':'translate3d(-24%,0,0)'}} transition={{duration:reduce||browsing?0:.64}} />
                           <ProjectArtwork project={project} active={active} still={reduce||browsing} />
                           <div className="project-card__copy">
                             <h3 data-card-title>{project.name}</h3>
-                            <p>{t(project.kind, language)}</p>
+                            <p>{t(project.id === 'project-orca' ? project.summary : project.kind, language)}</p>
                             <span className="project-card__action">
                               {t(words.detail, language)}
                             </span>

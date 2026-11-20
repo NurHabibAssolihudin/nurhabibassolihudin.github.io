@@ -14,6 +14,7 @@ const study = project.caseStudy;
 const Title = standalone ? 'h1' : 'h2';
 const Heading = standalone ? 'h2' : 'h3';
 const Decision = standalone ? 'h3' : 'h4';
+const orcaPreview = project.id === 'project-orca' && project.image;
 ---
 
 <article
@@ -34,22 +35,33 @@ const Decision = standalone ? 'h3' : 'h4';
         <li>{technology}</li>
       ))}
     </ul>
-    <div class="project-story__material" aria-hidden="true">
-      <ProjectArtwork project={project} />
-    </div>
+    {orcaPreview ? (
+      <figure class="project-story__workspace">
+        <a href={project.original} target="_blank" rel="noreferrer">
+          <img src={project.image!} srcset={project.imageSet} sizes="(max-width: 700px) 85vw, 400px"
+            width={project.imageWidth} height={project.imageHeight} loading="lazy" decoding="async"
+            alt={language === 'id' ? 'Perbesar cuplikan ruang kerja ORCA' : 'Enlarge the ORCA workspace screenshot'} />
+        </a>
+        <figcaption>{language === 'id' ? 'Ruang kerja ORCA' : 'ORCA workspace'}</figcaption>
+      </figure>
+    ) : (
+      <div class="project-story__material" aria-hidden="true">
+        <ProjectArtwork project={project} />
+      </div>
+    )}
   </header>
   <div class="project-story__body">
-    <section>
-      <Heading>{t(caseCopy.problem, language)}</Heading>
-      <div>
-        <p>{t(study.problem, language)}</p>
-      </div>
-    </section>
     <section>
       <Heading>{t(caseCopy.role, language)}</Heading>
       <div>
         <p>{t(words.responsibility, language)}</p>
         <p>{t(study.role, language)}</p>
+      </div>
+    </section>
+    <section>
+      <Heading>{t(caseCopy.problem, language)}</Heading>
+      <div>
+        <p>{t(study.problem, language)}</p>
       </div>
     </section>
     <section>
@@ -106,7 +118,7 @@ const Decision = standalone ? 'h3' : 'h4';
         </div>
       </section>
     )}
-    {project.image && (
+    {project.image && !orcaPreview && (
       <figure class="project-story__figure">
         <a href={project.original} target="_blank" rel="noreferrer">
           <img

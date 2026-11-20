@@ -2,13 +2,7 @@ export type Locale = 'en' | 'id';
 export type Copy = { en: string; id: string };
 export const t = (value: Copy, language: Locale) => value[language];
 export const words = {
-  introduction: { en: "I'm NurHabib. I build modular web applications, backend services, and tools for developers.", id: 'Saya NurHabib. Saya membangun aplikasi web modular, layanan backend, dan alat bantu untuk pengembang.' },
-  expertise: { en: 'Areas of work', id: 'Bidang yang saya kerjakan' },
-  areas: [
-    { en: 'Modular applications', id: 'Aplikasi modular' },
-    { en: 'Backend & integration', id: 'Backend & integrasi sistem' },
-    { en: 'Developer infrastructure', id: 'Infrastruktur pengembangan' },
-  ],
+  introduction: { en: 'I build modular web applications, backend services, and tools for developers.', id: 'Saya membangun aplikasi web modular, layanan backend, dan alat bantu untuk pengembang.' },
   contact: { en: 'Contact me', id: 'Hubungi saya' },
   summary: { en: 'About my work', id: 'Sekilas' }, work: { en: 'Selected projects', id: 'Proyek pilihan' },
   experience: { en: 'Work experience', id: 'Pengalaman kerja' }, approach: { en: 'How I work', id: 'Cara saya bekerja' },
