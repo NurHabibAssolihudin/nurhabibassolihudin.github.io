@@ -3,9 +3,6 @@ import {projectSectionIds} from '../data/navigation';
 import {decodeFragment} from './url-fragment';
 import {motionTiming, motionEase} from './motion-settings';
 
-const cutSurface = 'polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%)';
-const fullSurface = 'polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%)';
-
 export function initProjectReader() {
   const dialog = document.querySelector<HTMLDialogElement>('#project-reader');
   if (!dialog || typeof dialog.showModal !== 'function') return;
@@ -63,7 +60,6 @@ export function initProjectReader() {
     phase = 'open';
     dialog!.dataset.phase = 'open';
     surface.style.removeProperty('transform');
-    surface.style.removeProperty('clip-path');
     parts().forEach((element) => element.style.removeProperty('opacity'));
     if (active) active.inert = false;
   }
@@ -80,7 +76,6 @@ export function initProjectReader() {
       article.inert = false;
     });
     surface.style.removeProperty('transform');
-    surface.style.removeProperty('clip-path');
     notify(false);
     if (restoreFocus) {
       returnFocus = source?.isConnected ? source : document.getElementById('work-title');
@@ -126,9 +121,7 @@ export function initProjectReader() {
       controls.push(
         animate(
           surface,
-          active?.id === 'project-orca'
-            ? {transform: destination, clipPath: [fullSurface, cutSurface]}
-            : {transform: destination},
+          {transform: destination},
           {duration: motionTiming.gallery.close, ease: motionEase('--ease-preview')}
         )
       );
@@ -186,7 +179,7 @@ export function initProjectReader() {
     }
     const title = article.querySelector<HTMLElement>('[id$="-title"]')!,
       cardTitle = card?.querySelector<HTMLElement>('[data-card-title]');
-    if (cardTitle && id !== 'project-orca') {
+    if (cardTitle) {
       const a = cardTitle.getBoundingClientRect(),
         b = title.getBoundingClientRect(),
         style = getComputedStyle(cardTitle);
@@ -227,9 +220,7 @@ export function initProjectReader() {
     controls.push(
       animate(
         surface,
-        id === 'project-orca'
-          ? {transform: 'translate3d(0,0,0) scale(1,1)', clipPath: [cutSurface, fullSurface]}
-          : {transform: 'translate3d(0,0,0) scale(1,1)'},
+        {transform: 'translate3d(0,0,0) scale(1,1)'},
         {duration: motionTiming.gallery.open, ease: motionEase('--ease-preview')}
       )
     );

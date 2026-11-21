@@ -22,9 +22,9 @@ if (endpoint) {
 <Panel section="contact" class="pro-contact">
   <div class="pro-contact__layout">
     <div class="pro-contact__intro">
-      <h2 class="pro-title" id="contact-title" tabindex={-1} data-chapter-entry="facet">{t(copy.title, language)}</h2>
-      <p class="pro-lead">{t(copy.lead, language)}</p>
-      <div class="pro-contact__aside">
+      <h2 class="pro-title pro-text-mask" id="contact-title" tabindex={-1}><span data-chapter-entry="line">{t(copy.title, language)}</span></h2>
+      <p class="pro-lead" data-chapter-entry="rise">{t(copy.lead, language)}</p>
+      <div class="pro-contact__aside" data-chapter-entry="slide">
         <p>{t(copy.emailDirect, language)}</p>
         <a class="pro-email" href="mailto:nurhabibassolihudin12@gmail.com">nurhabibassolihudin12@gmail.com</a>
         <ul class="pro-contact__links" role="list" aria-label={t(copy.profiles, language)}>
@@ -34,9 +34,9 @@ if (endpoint) {
       </div>
     </div>
     <div class="pro-contact__conversation">
-      <h3 id="contact-write-title">{t(copy.write, language)}</h3>
+      <h3 id="contact-write-title" data-chapter-entry="rise">{t(copy.write, language)}</h3>
       <form class="contact-form" data-contact-form data-endpoint={endpoint} data-language={language} aria-labelledby="contact-write-title">
-        <fieldset class="contact-form__topics">
+        <fieldset class="contact-form__topics" data-chapter-entry="rise">
           <legend>{t(copy.topicLabel, language)}</legend>
           <div class="contact-form__choices">
             {copy.topics.map(topic => (
@@ -65,7 +65,7 @@ if (endpoint) {
       </form>
     </div>
     <figure class="pro-contact__scene">
-      <div class="pro-contact__frame" data-chapter-entry="facet">
+      <div class="pro-contact__frame" data-chapter-entry="unfold">
         <Image src={photo} alt={t(copy.photoAlt, language)} widths={[480, 960, 1200]} sizes="(max-width: 760px) calc(100vw - 40px), 43vw" format="webp" quality={85} loading="lazy" decoding="async" />
       </div>
       <figcaption><a href="https://unsplash.com/photos/two-chairs-and-a-table-with-sunlight-streaming-in-EClL92YshcE" target="_blank" rel="noreferrer">Maximilian Bungart / Unsplash</a></figcaption>

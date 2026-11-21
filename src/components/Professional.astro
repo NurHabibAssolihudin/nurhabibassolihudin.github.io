@@ -17,37 +17,64 @@ const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWid
       <Panel section="top" class="hero pro-hero">
         <div class="hero__grid pro-hero__grid">
           <div class="pro-hero__heading">
-            <p class="pro-hero__name">NurHabib Assolihudin</p>
+            <p class="pro-hero__name" data-chapter-entry="rise">NurHabib Assolihudin</p>
             <h1 class="hero__h1" id="top-title" tabindex={-1}>
               <span class="pro-hero__line"><span data-chapter-entry="line">Systems &amp;</span></span>
-              <span class="pro-hero__line"><span data-chapter-entry="line">Product</span></span>
-              <span class="pro-hero__line"><span data-chapter-entry="line">Engineer</span></span>
+              <span class="pro-hero__line"><span data-chapter-entry="line">Product Engineer</span></span>
             </h1>
           </div>
-          <div class="hero__core pro-portal" data-chapter-entry="facet"><Fragment set:html={planet} /></div>
-          <div class="pro-hero__copy" data-chapter-entry="lift">
-            <p class="hero__lead">{t(words.introduction, language)}</p>
-            <div class="pro-actions"><a href="#work" class="pro-button">{t(words.view, language)}</a><a href="#contact" class="pro-link">{t(words.contact, language)}</a></div>
+          <div class="hero__core pro-portal" data-chapter-entry="orbit"><Fragment set:html={planet} /></div>
+          <div class="pro-hero__copy">
+            <p class="hero__lead" data-chapter-entry="rise">{t(words.introduction, language)}</p>
+            <div class="pro-actions" data-chapter-entry="rise"><a href="#work" class="pro-button">{t(words.view, language)}</a><a href="#contact" class="pro-link">{t(words.contact, language)}</a></div>
           </div>
         </div>
       </Panel>
       <Panel section="summary" class="pro-summary">
-        <div class="pro-split"><div><h2 id="summary-title" class="pro-title" tabindex={-1} data-chapter-entry="facet">{t(words.summary, language)}</h2><p class="pro-lead">{t(sections.summary.lead, language)}</p><p class="pro-body pro-summary__examples">{t(sections.summary.body, language)}</p><a class="pro-link" href="#work">{t(sections.summary.projects, language)}</a></div>
-        <div class="pro-summary__scope" data-chapter-entry="lift"><h3 id="scope-title">{t(sections.summary.scopeTitle, language)}</h3><dl class="pro-scope-list" aria-labelledby="scope-title">{sections.summary.scope.map(item => <div><dt>{t(item.name, language)}</dt><dd>{t(item.description, language)}</dd></div>)}</dl></div></div>
+        <div class="pro-summary__layout">
+          <div>
+            <h2 id="summary-title" class="pro-title" tabindex={-1} data-chapter-entry="rise">{t(words.summary, language)}</h2>
+            <p class="pro-lead" data-chapter-entry="rise">{t(sections.summary.lead, language)}</p>
+            <p class="pro-body pro-summary__examples" data-chapter-entry="rise">{t(sections.summary.body, language)}</p>
+            <a class="pro-link" href="#work">{t(sections.summary.projects, language)}</a>
+          </div>
+          <div class="pro-summary__scope">
+            <h3 id="scope-title" data-chapter-entry="rise">{t(sections.summary.scopeTitle, language)}</h3>
+            <dl class="pro-scope-list" aria-labelledby="scope-title">
+              {sections.summary.scope.map(item => (
+                <div data-chapter-entry="slide"><dt>{t(item.name, language)}</dt><dd>{t(item.description, language)}</dd></div>
+              ))}
+            </dl>
+          </div>
+        </div>
       </Panel>
       <section id="work" class="pro-panel pro-work" data-chapter aria-labelledby="work-title"><div class="pro-content"><WorkPicker language={language} projects={pickerProjects} client:visible={{rootMargin:'400px'}} /></div></section>
       <Panel section="experience-work" class="pro-experience-section">
-        <div class="pro-split">
-          <h2 class="pro-title" id="experience-work-title" tabindex={-1} data-chapter-entry="facet">{t(words.experience, language)}</h2>
-          <article class="pro-employment" aria-labelledby="employment-role" data-chapter-entry="lift">
-            <h3 id="employment-role">{sections.experience.role}</h3>
-            <p class="pro-employment__company">{sections.experience.employer}</p>
-            <dl><div><dt>{t(sections.experience.durationLabel, language)}</dt><dd>{t(sections.experience.duration, language)}</dd></div></dl>
-            <ExternalLink url="https://www.linkedin.com/in/nurhabib-assolihudin" label={t(sections.experience.profile, language)} />
+        <div class="pro-experience__layout">
+          <h2 class="pro-title" id="experience-work-title" tabindex={-1} data-chapter-entry="rise">{t(words.experience, language)}</h2>
+          <article class="pro-employment" aria-labelledby="employment-role">
+            <div>
+              <h3 id="employment-role" class="pro-text-mask"><span data-chapter-entry="line">{sections.experience.role}</span></h3>
+              <p class="pro-employment__company" data-chapter-entry="rise">{sections.experience.employer}</p>
+            </div>
+            <div class="pro-employment__detail" data-chapter-entry="slide">
+              <dl><div><dt>{t(sections.experience.durationLabel, language)}</dt><dd>{t(sections.experience.duration, language)}</dd></div></dl>
+              <ExternalLink url="https://www.linkedin.com/in/nurhabib-assolihudin" label={t(sections.experience.profile, language)} />
+            </div>
           </article>
         </div>
       </Panel>
-      <Panel section="approach" class="pro-approach"><div class="pro-split"><div><h2 class="pro-title" id="approach-title" tabindex={-1} data-chapter-entry="facet">{t(words.approach, language)}</h2><p class="pro-lead">{t(sections.approach.lead, language)}</p></div><ol class="pro-approach-list" role="list" data-chapter-entry="lift">{sections.approach.steps.map(step => <li><h3>{t(step.title, language)}</h3><p>{t(step.body, language)}</p></li>)}</ol></div></Panel>
+      <Panel section="approach" class="pro-approach">
+        <div class="pro-approach__intro">
+          <h2 class="pro-title" id="approach-title" tabindex={-1} data-chapter-entry="rise">{t(words.approach, language)}</h2>
+          <p class="pro-lead" data-chapter-entry="rise">{t(sections.approach.lead, language)}</p>
+        </div>
+        <ol class="pro-approach-list" role="list">
+          {sections.approach.steps.map(step => (
+            <li data-chapter-entry="rise"><h3>{t(step.title, language)}</h3><p>{t(step.body, language)}</p></li>
+          ))}
+        </ol>
+      </Panel>
       <ContactSection language={language}/>
     </div>
     <ProjectReader projects={projects} language={language}/>

@@ -73,8 +73,7 @@
   padding: 26px;
   background: #e9eae4;
   color: #11131a;
-  --card-cut: 26px;
-  clip-path: polygon(0 0, calc(100% - var(--card-cut)) 0, 100% var(--card-cut), 100% 100%, 0 100%);
+  border-radius: 18px;
   text-decoration: none;
   isolation: isolate;
   transform-origin: center center;
@@ -104,8 +103,8 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: #fff;
-  clip-path: polygon(0 0, 100% 0, 100% 3px, 3px 3px, 3px 100%, 0 100%);
+  border: 2px solid currentColor;
+  border-radius: inherit;
   opacity: 0;
   pointer-events: none;
   transition: opacity 180ms ease;
@@ -133,7 +132,7 @@
   inset: 10px 18px 17px 0;
   background: #151c35;
   overflow: hidden;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
+  border-radius: 8px;
   z-index: 2;
   transition: transform 180ms var(--ease);
 }
@@ -148,7 +147,7 @@
   position: absolute;
   inset: 18px 4px 7px 12px;
   background: #aab9f7;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
+  border-radius: 8px;
   z-index: 1;
   transition: transform 180ms var(--ease);
 }
@@ -327,9 +326,6 @@
   overflow: hidden;
   transform-origin: 0 0;
 }
-.project-reader[data-project='project-orca'] .project-reader__surface {
-  border-radius: 0;
-}
 .project-reader__scroll {
   --reader-toolbar-padding: 12px;
   height: 100%;
@@ -462,7 +458,6 @@
   display: block;
   width: 100%;
   height: auto;
-  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
 }
 .project-story__workspace figcaption {
   margin-top: 8px;
@@ -603,7 +598,6 @@ html[data-theme='light'] .project-page {
   .project-card {
     height: 360px;
     padding: 22px;
-    --card-cut: 20px;
   }
   .project-card__art {
     height: 170px;

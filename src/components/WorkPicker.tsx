@@ -340,12 +340,13 @@ export default function WorkPicker({
       <LazyMotion features={loadFeatures} strict>
         <div className="project-gallery" data-picker-ready={ready}>
           <div className="project-gallery__heading">
-            <h2 id="work-title" className="pro-title" tabIndex={-1} data-chapter-entry="facet">
-              {t(words.work, language)}
+            <h2 id="work-title" className="pro-title pro-text-mask" tabIndex={-1}>
+              <span data-chapter-entry="line">{t(words.work, language)}</span>
             </h2>
           </div>
           <div
             className="project-gallery__stage"
+            data-chapter-entry="spread"
             ref={stage}
             onPointerDown={pointerDown}
             onPointerMove={pointerMove}
