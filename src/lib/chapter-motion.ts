@@ -1,8 +1,25 @@
 import {animate} from 'motion/mini';
 import {motionEase, motionTiming} from './motion-settings';
 
-interface Part {node: HTMLElement; opacity: string; transform: string; delay: number}
-interface Entry {id: string; panel: HTMLElement; direction: number; parts: Part[]; controls: ReturnType<typeof animate>[]; started: boolean}
+type Frame = {clipPath?: string; opacity?: string; transform?: string};
+interface Part {node: HTMLElement; original: Frame; from: Frame; to: Frame; delay: number}
+interface Entry {id: string; panel: HTMLElement; parts: Part[]; controls: ReturnType<typeof animate>[]; started: boolean}
+
+function entryFrames(kind: string | undefined, direction: number): [Frame, Frame] {
+  if (kind === 'line') {
+    return [{transform: 'translate3d(0,135%,0)'}, {transform: 'translate3d(0,0,0)'}];
+  }
+  if (kind === 'facet') {
+    return [
+      {clipPath: 'polygon(-24% -16%, -18% -16%, -42% 120%, -24% 120%)'},
+      {clipPath: 'polygon(-24% -16%, 152% -16%, 128% 120%, -24% 120%)'}
+    ];
+  }
+  return [
+    {opacity: '.4', transform: `translate3d(0,${direction * 16}px,0)`},
+    {opacity: '1', transform: 'translate3d(0,0,0)'}
+  ];
+}
 
 /** One first-visit composition, started during travel rather than after arrival. */
 export function initChapterMotion() {
@@ -24,8 +41,7 @@ export function initChapterMotion() {
   function restore(entry: Entry) {
     entry.controls.forEach(control => control.cancel());
     for (const part of entry.parts) {
-      part.node.style.opacity = part.opacity;
-      part.node.style.transform = part.transform;
+      Object.assign(part.node.style, part.original);
       delete part.node.dataset.chapterPart;
     }
     delete entry.panel.dataset.chapterMotion;
@@ -37,25 +53,18 @@ export function initChapterMotion() {
     if (!panel) return;
     const rect = panel.getBoundingClientRect(), viewport = scroller!.getBoundingClientRect();
     if (!visible && rect.bottom > viewport.top + 1 && rect.top < viewport.bottom - 1) return;
-    const selectors: Record<string,string> = {
-      top: '.pro-hero__heading,.pro-hero__copy,.pro-portal',
-      summary: '.pro-summary .pro-split>div:first-child,.pro-summary__scope',
-      // The Astro wrapper owns entry motion. React owns card/gallery styles;
-      // hydration or the first hover must not overwrite an entrance frame.
-      work: '.pro-work>.pro-content',
-      'experience-work': '#experience-work-title,.pro-employment',
-      approach: '#approach-title,.pro-approach .pro-lead,.pro-approach-list',
-      contact: '#contact-title,.pro-contact__room>.pro-lead,.pro-contact__scene,.pro-contact__conversation'
-    };
-    const nodes = [...panel.querySelectorAll<HTMLElement>(selectors[id] || '.pro-content')];
-    const parts = nodes.map((node,index) => ({node, opacity: node.style.opacity, transform: node.style.transform, delay: Math.min(index,3) * motionTiming.chapter.workStagger}));
+    const nodes = [...panel.querySelectorAll<HTMLElement>('[data-chapter-entry]')];
+    const parts = nodes.map((node, index) => {
+      const [from, to] = entryFrames(node.dataset.chapterEntry, direction);
+      const {clipPath, opacity, transform} = node.style;
+      return {node, from, to, original: {clipPath, opacity, transform}, delay: Math.min(index, 3) * motionTiming.chapter.entryStagger};
+    });
     for (const part of parts) {
-      part.node.style.opacity = '0';
-      part.node.style.transform = `translate3d(0,${direction * 28}px,0)`;
+      Object.assign(part.node.style, part.from);
       part.node.dataset.chapterPart = '';
     }
     panel.dataset.chapterMotion = 'prepared';
-    entries.set(id,{id,panel,direction,parts,controls:[],started:false});
+    entries.set(id,{id,panel,parts,controls:[],started:false});
   }
   function play(id: string) {
     const entry = entries.get(id);
@@ -63,9 +72,12 @@ export function initChapterMotion() {
     entry.started = true;
     remember(id);
     entry.panel.dataset.chapterMotion = 'running';
-    for (const part of entry.parts) entry.controls.push(animate(part.node, {
-      opacity:[0,1], transform:[`translate3d(0,${entry.direction * 28}px,0)`,'translate3d(0,0,0)']
-    }, {duration:motionTiming.chapter.reveal,delay:part.delay,ease:motionEase('--ease-preview')}));
+    const ease = motionEase('--ease-preview');
+    for (const part of entry.parts) entry.controls.push(animate(part.node, part.to, {
+      duration: motionTiming.chapter.reveal,
+      delay: part.delay,
+      ease
+    }));
     void Promise.allSettled(entry.controls.map(control=>control.finished)).then(()=>{
       if (entries.get(id) === entry) {restore(entry);entries.delete(id);}
     });

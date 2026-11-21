@@ -57,7 +57,7 @@ export function initProfessionalNavigation() {
         onUpdate(value) {
           if (ticket !== travelRevision) return;
           scrollArea.scrollTop = value;
-          if (!revealed && Math.abs(value - from) / Math.abs(to - from) >= .18) {
+          if (!revealed && Math.abs(to - value) <= scrollArea.clientHeight * .7) {
             revealed = true;
             window.dispatchEvent(new CustomEvent('nur:chapter-reveal', {detail:{id:chapterIds[index]}}));
           }

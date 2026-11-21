@@ -9,6 +9,17 @@ export function initContactForm() {
   const endpoint=form.dataset.endpoint;
   const language:Locale=form.dataset.language==='id'?'id':'en';
   const copy=sections.contact;
+  const hint=form.querySelector<HTMLElement>('[data-contact-hint]')!;
+  const updateHint=()=>{
+    const topic=form.querySelector<HTMLInputElement>('[data-contact-topic]:checked');
+    hint.textContent=topic?.dataset.prompt||t(copy.messageHint,language);
+  };
+  form.addEventListener('change',event=>{
+    if(event.target instanceof HTMLInputElement&&event.target.hasAttribute('data-contact-topic'))updateHint();
+  });
+  form.addEventListener('reset',()=>queueMicrotask(updateHint));
+  window.addEventListener('pageshow',updateHint);
+  updateHint();
   if(!endpoint)return;
   const resume=()=>resumeContact(form,endpoint).then(result=>{if(result==='accepted'){status.textContent=t(copy.sent,language);form.dataset.state='sent';}else if(result==='draft'){status.textContent=language==='id'?'Isianmu dipulihkan. Pengiriman belum dikonfirmasi.':'Your draft is restored. Sending has not been confirmed.';}});
   void resume();

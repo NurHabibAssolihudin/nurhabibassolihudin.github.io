@@ -56,8 +56,8 @@ html.js[data-world="builder"] #experience>.foot { display:none; }
   line-height:.85;
   margin:0;
 }
-.pro-hero .hero__h1 span { display:block; white-space:normal; overflow-wrap:anywhere; }
-.pro-hero .hero__h1 span:last-child { color:#a5b5ff; }
+.pro-hero__line, .pro-hero__line > span { display:block; white-space:normal; overflow-wrap:anywhere; }
+.pro-hero__line:last-child { color:#a5b5ff; }
 .pro-hero__copy { grid-area:2 / 2; justify-self:end; width:min(100%,430px); }
 .pro-hero .hero__lead { margin:0; max-width:38ch; color:#dedee3; }
 .pro-hero .pro-actions { margin-top:clamp(14px,3svh,26px); gap:12px 22px; }

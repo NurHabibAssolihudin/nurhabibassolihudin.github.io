@@ -3,8 +3,7 @@ export const motionTiming = {
   world: {gather: .46, signatureHold: .44, reveal: .54, quietEnter: .12, quietHold: .22, quietExit: .16},
   gallery: {hover: .34, open: .64, close: .46, content: .24, speed: 32, cue: .74, cueStagger: .18, wheelIdle: .16},
   // Portfolio content reveals need a readable sweep; they are not button feedback.
-  chapter: {travel: 1.02, reveal: .96, sequence: .96, contact: .8, workStagger: .09},
-  contact: {topicHold: 3.6, topicSwap: .3},
+  chapter: {travel: 1.02, reveal: .7, entryStagger: .07},
 } as const;
 
 /** Read the existing CSS motion tokens so canvas-adjacent and UI motion agree. */

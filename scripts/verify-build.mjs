@@ -37,7 +37,7 @@ for (const [route, language] of [['', 'en'], ['en/', 'en'], ['id/', 'id']]) {
     if (/\.[a-z\d]+$/i.test(path)) { assert.ok(existsSync(resolve(root, 'dist', path.slice(1))), `Missing build asset ${path}`); checks++; }
   }
   assert.ok(html.includes('hreflang="x-default"') && html.includes('property="og:url"')); checks++;
-  assert.equal((html.match(/<astro-island\b/g) || []).length, 4, 'Professional gallery/contact and the deferred Crimson Violet experience need hydration'); checks++;
+  assert.equal((html.match(/<astro-island\b/g) || []).length, 3, 'Professional gallery, contact send button and the deferred creator experience need hydration'); checks++;
   assert.ok(/srcset="[^"]+\.webp 480w[^\"]+\.webp 960w/i.test(html),'Project preview needs generated responsive WebP assets'); checks++;
   assert.match(html,/data-astro-prefetch="hover"/, 'Locale links should prefetch on intent'); checks++;
   assert.ok(/<astro-island\b[^>]*client="visible"/.test(html), 'Work picker must defer hydration until needed'); checks++;

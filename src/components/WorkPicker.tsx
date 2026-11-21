@@ -340,7 +340,7 @@ export default function WorkPicker({
       <LazyMotion features={loadFeatures} strict>
         <div className="project-gallery" data-picker-ready={ready}>
           <div className="project-gallery__heading">
-            <h2 id="work-title" className="pro-title" tabIndex={-1}>
+            <h2 id="work-title" className="pro-title" tabIndex={-1} data-chapter-entry="facet">
               {t(words.work, language)}
             </h2>
           </div>

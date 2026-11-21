@@ -1,5 +1,10 @@
 /* First visits are composed by Motion during travel. Returned sections remain still.
    Parts are marked only after JS has captured their original inline styles. */
+[data-chapter-motion] .pro-hero__line {
+  overflow: clip;
+  overflow-clip-margin: .18em;
+}
 @media (prefers-reduced-motion: reduce) {
-  [data-chapter-part] { opacity: 1 !important; transform: none !important; }
+  [data-chapter-part] { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  [data-chapter-motion] .pro-hero__line { overflow: visible; }
 }
