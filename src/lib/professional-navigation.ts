@@ -99,7 +99,8 @@ export function initProfessionalNavigation() {
     // A long translation must not disable section navigation for the whole page.
     // Only the section that needs extra reading space grows beyond the viewport.
     contents.forEach((content, index) => {
-      const overflow = content.scrollHeight > available;
+      // Entrance transforms can add to scrollHeight without changing layout.
+      const overflow = content.getBoundingClientRect().height > available + 1;
       if (panels[index].classList.contains('pro-panel--flow') !== overflow) modeChanged = true;
       panels[index].classList.toggle('pro-panel--flow', overflow);
     });
@@ -165,7 +166,9 @@ export function initProfessionalNavigation() {
     if (top < start - 1 || top > end + 1) return false;
     if (delta > 0 ? top >= end - 1 : top <= start + 1) return false;
     scrollArea.scrollTo({ top: Math.max(start, Math.min(end, top + delta)), behavior: 'instant' });
-    return true;
+    // At a fractional snap boundary, an instant scroll can land back where it
+    // started. Let the input advance the chapter if there was no reading movement.
+    return Math.sign(delta) * (scrollArea.scrollTop - top) > 0;
   }
   function keys(event: KeyboardEvent) {
     const target = event.target as Element;

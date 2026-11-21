@@ -74,7 +74,6 @@ export const sections = {
     unavailable: { en: 'I can’t receive messages here just yet. You can still say hello by email.', id: 'Belum bisa mengirim lewat sini. Kamu tetap bisa menyapa saya lewat email.' },
     limited: { en: 'Give it a few minutes, then try again. Your message is still here.', id: 'Beri jeda beberapa menit, ya. Ceritamu tetap ada di sini.' },
     noScript: { en: 'You can reach me directly using the email address listed here.', id: 'Kamu bisa langsung menghubungi saya lewat alamat email yang tertera.' },
-    photoAlt: { en: 'Two empty armchairs facing one another beside a small table, with afternoon light falling across the room.', id: 'Dua kursi kosong saling berhadapan di sisi meja kecil, dengan cahaya sore masuk ke ruangan.' },
     profiles: { en: 'Professional profiles', id: 'Profil profesional' },
   },
 };

@@ -20,6 +20,9 @@ if (endpoint) {
 }
 ---
 <Panel section="contact" class="pro-contact">
+  <div slot="background" class="pro-contact__scene" aria-hidden="true">
+    <Image src={photo} alt="" widths={[480, 960, 1200]} sizes="(max-width: 760px) 100vw, 58vw" format="webp" quality={85} loading="lazy" decoding="async" />
+  </div>
   <div class="pro-contact__layout">
     <div class="pro-contact__intro">
       <h2 class="pro-title pro-text-mask" id="contact-title" tabindex={-1}><span data-chapter-entry="line">{t(copy.title, language)}</span></h2>
@@ -64,11 +67,6 @@ if (endpoint) {
         <noscript><p>{t(copy.noScript, language)}</p></noscript>
       </form>
     </div>
-    <figure class="pro-contact__scene">
-      <div class="pro-contact__frame" data-chapter-entry="unfold">
-        <Image src={photo} alt={t(copy.photoAlt, language)} widths={[480, 960, 1200]} sizes="(max-width: 760px) calc(100vw - 40px), 43vw" format="webp" quality={85} loading="lazy" decoding="async" />
-      </div>
-      <figcaption><a href="https://unsplash.com/photos/two-chairs-and-a-table-with-sunlight-streaming-in-EClL92YshcE" target="_blank" rel="noreferrer">Maximilian Bungart / Unsplash</a></figcaption>
-    </figure>
+    <p class="pro-contact__credit"><a href="https://unsplash.com/photos/two-chairs-and-a-table-with-sunlight-streaming-in-EClL92YshcE" target="_blank" rel="noreferrer">Maximilian Bungart / Unsplash</a></p>
   </div>
 </Panel>

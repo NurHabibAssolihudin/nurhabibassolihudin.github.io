@@ -25,8 +25,6 @@ function entryFrames(kind: string | undefined, direction: number): [Frame, Frame
       return [{opacity: '.2', transform: 'scale(.87)'}, {opacity: '1', transform: 'scale(1)'}, surface];
     case 'spread':
       return [{clipPath: 'inset(0 44% 0 44%)'}, {clipPath: 'inset(0 0% 0 0%)'}, surface];
-    case 'unfold':
-      return [{clipPath: 'inset(48% 0 48% 0)'}, {clipPath: 'inset(0% 0 0% 0)'}, surface];
     default:
       return [{opacity: '.45', transform: `translate3d(0,${direction * 14}px,0)`}, rest, detail];
   }

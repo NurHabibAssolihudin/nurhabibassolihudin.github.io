@@ -76,9 +76,10 @@ html.js[data-world="builder"] #experience>.foot { display:none; }
 .pro-approach__intro { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.7fr); gap:clamp(16px,6vw,92px); align-items:end; }
 .pro-approach .pro-title { max-width:12ch; }
 .pro-approach .pro-lead { font-size:var(--pro-type-body); max-width:38ch; }
-.pro-approach-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(18px,4vw,60px); margin-top:clamp(22px,7svh,68px); padding:0; list-style:decimal inside; }
-.pro-approach-list>li::marker { font-size:.9375rem; font-weight:700; }
-.pro-approach-list h3 { margin:6px 0 8px; font-size:var(--pro-type-item); line-height:1.12; }
+.pro-approach-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(16px,3vw,48px); margin-top:clamp(20px,6svh,56px); padding:0; list-style:none; }
+.pro-approach-list>li { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.55em; align-items:baseline; font-size:var(--pro-type-item); }
+.pro-approach-list__number { font-size:.65em; font-weight:750; font-variant-numeric:tabular-nums; }
+.pro-approach-list h3 { margin:0 0 6px; font-size:inherit; line-height:1.12; }
 .pro-approach-list p { font-size:var(--pro-type-body); line-height:1.6; max-width:45ch; }
 .menu__preferences { display:none; }
 .bar .menu { position:absolute; right:var(--gutter); top:calc(100% + 8px); width:min(380px,calc(100vw - var(--gutter)*2)); max-height:calc(100svh - 100px); overflow:auto; padding:20px 0; }

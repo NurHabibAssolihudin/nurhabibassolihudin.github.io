@@ -70,8 +70,11 @@ const pickerProjects=projects.map(({id,name,kind,summary,image,imageSet,imageWid
           <p class="pro-lead" data-chapter-entry="rise">{t(sections.approach.lead, language)}</p>
         </div>
         <ol class="pro-approach-list" role="list">
-          {sections.approach.steps.map(step => (
-            <li data-chapter-entry="rise"><h3>{t(step.title, language)}</h3><p>{t(step.body, language)}</p></li>
+          {sections.approach.steps.map((step, index) => (
+            <li data-chapter-entry="rise">
+              <span class="pro-approach-list__number" aria-hidden="true">{index + 1}.</span>
+              <div><h3>{t(step.title, language)}</h3><p>{t(step.body, language)}</p></div>
+            </li>
           ))}
         </ol>
       </Panel>
